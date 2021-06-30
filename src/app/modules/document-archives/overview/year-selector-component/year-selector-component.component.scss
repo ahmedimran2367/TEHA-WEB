@@ -1,0 +1,14 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/deep";
+
+.year-menu {
+  min-width: 200px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.link {
+  cursor: pointer;
+}

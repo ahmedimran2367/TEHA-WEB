@@ -1,0 +1,115 @@
+<!-- <app-language-translation></app-language-translation> -->
+
+
+<div *ngIf="viewGrid" fxLayout="column" fxLayoutGap="40px">
+  <div fxFlex="100" fxFlexGap="1" class=" ">
+    <mat-card class="mat-dashboard-card p-8">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex>
+          <mat-card-header>
+
+            <mat-card-title>
+              <span fxLayout="row" fxLayoutAlign="center center">
+                <button mat-icon-button>
+                  <!-- <mat-icon>arrow_back</mat-icon> -->
+                </button>
+                {{'admin.languageSettings'| translate}}
+              </span>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+        <div fxFlexAlign="end end">
+          <app-search-bar placeHolder="{{'admin.lngSearchPlaceholder' | translate}}" (backspace)="$event === '' ? languagetableComponent.applyFilter(''): null"  (enterPressed)="freeSearch = $event; languagetableComponent.applyFilter($event)"></app-search-bar>
+        </div>
+        <div fxFlexAlign="end end">
+          <mat-form-field appearance="fill">
+            <mat-label>{{'admin.filterByCategory'| translate}}</mat-label>
+            <mat-select matNativeControl name="categorySelect" (selectionChange)="onChange($event)" [(value)]="category">
+              <mat-option [selected]="true" value="all">{{'accounting.all' | translate}}</mat-option>
+              <mat-option value="home">{{'miscellaneous.home' | translate}}</mat-option>
+              <mat-option value="stockoverview">{{'stockOverview.stockOverviewLabel' | translate}}</mat-option>
+              <mat-option value="accounting">{{'documentArchives.accountingDoc' | translate}}</mat-option>
+              <mat-option value="order">{{'miscellaneous.myOrders' | translate}}</mat-option>
+              <mat-option value="documentArchives">{{'miscellaneous.documentArchives' | translate}}</mat-option>
+              <mat-option value="admin">{{'admin.langAdmin' | translate}}</mat-option>
+              <mat-option value="account">{{'admin.langAccount' | translate}}</mat-option>
+              <!-- <mat-option value="info">{{'admin.langInfo' | translate}}</mat-option> -->
+              <mat-option value="miscellaneous">{{'miscellaneous.miscellaneousLabel' | translate}}</mat-option>
+              <mat-option value="lookup">{{'miscellaneous.lookupLabel' | translate}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <mat-card-content>
+        <app-language-table [isEdited]="isEdited" #languagetableComponent  (editEvent)="reciveItem($event)"  [category]="category" [freeSearch]="freeSearch">
+        </app-language-table>
+
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+
+</div>
+
+
+
+
+<div *ngIf="!viewGrid" fxLayout="column" fxLayoutGap="40px">
+  <div fxFlex="100" fxFlexGap="1" class=" ">
+    <mat-card class="mat-dashboard-card p-8">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex>
+          <mat-card-header>
+
+            <mat-card-title>
+              <span fxLayout="row" fxLayoutAlign="center center">
+                <button mat-icon-button (click)="goBack()">
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+                {{'admin.edit'| translate}}
+              </span>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+
+        <div fxFlexAlign="end end">
+
+        </div>
+
+      </div>
+
+      <mat-card-content>
+
+        <mat-form-field appearance="standard">
+          <mat-label>{{'admin.code'| translate}}</mat-label>
+          <input matInput placeholder="Code" [(ngModel)]="languageSetting.code" disabled>
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="standard">
+          <mat-label>{{'admin.category'| translate}}</mat-label>
+          <input matInput placeholder="Category" [(ngModel)]="languageSetting.category" disabled>
+
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="standard">
+          <mat-label>{{'admin.english'| translate}}</mat-label>
+          <input matInput placeholder="{{'admin.english'| translate}}" [(ngModel)]="languageSetting.english" disabled>
+
+        </mat-form-field>
+        <br>
+        <mat-form-field appearance="standard" class="full-width"> 
+          <mat-label>{{'admin.german'| translate}}</mat-label>
+          <input matInput placeholder="{{'admin.german'| translate}}" [(ngModel)]="languageSetting.german">
+
+        </mat-form-field>
+        <br>
+        <button mat-flat-button color="primary" (click)="Update()">{{'account.save'| translate}}</button>
+
+      </mat-card-content>
+
+    </mat-card>
+  </div>
+
+</div>

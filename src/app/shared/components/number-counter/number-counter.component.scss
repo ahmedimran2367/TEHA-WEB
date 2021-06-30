@@ -1,0 +1,107 @@
+.counter-parent-wrapper{
+
+    
+    .counter-mid-wrapper{
+      
+        width: 35px;
+        height:28px;
+        background: #FFFFFF;
+        border: 0.5px solid #808080;
+        box-sizing: border-box;
+        border-radius: 5px;
+
+        
+        
+        letter-spacing: 0.05em;
+        
+        color: #565656;
+        
+        z-index: 3;
+
+        input{
+            text-align: center;
+            margin-bottom: 0px!important;
+            outline: none;
+            border-style: none;
+            margin-top: 13px!important;
+            font-style: normal;
+            font-weight: 300;
+            font-size: 12px;
+            line-height: 12px;
+            
+            
+            top: 50%;                         
+            transform: translate(0, -50%)  
+        }
+        input:focus{
+            border-style: none;
+            outline: none;
+        }
+       
+    }
+
+    .counter-left-wrapper{
+        margin-right:-6px;      
+        width: 35px;
+        height:28px;
+        background: #FFFFFF;
+        z-index: 2;
+        
+        border-left: 0.5px solid #808080;
+        border-top: 0.5px solid #808080;
+        border-bottom: 0.5px solid #808080;
+
+        box-sizing: border-box;
+        border-radius: 5px;
+
+
+        font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 21px;
+text-align: center;
+letter-spacing: 0.05em;
+
+color: #565656;
+
+
+        :hover,:focus, :active{
+        border-left: 0.5px solid #808080;
+        border-top: 0.5px solid #808080;
+        border-bottom: 0.5px solid #808080; 
+        }
+
+    }
+
+    .counter-right-wrapper{
+        z-index: 2;
+
+        margin-left:-6px;
+        width: 35px;
+        height:28px;
+        background: #FFFFFF;
+        border-right: 0.5px solid #808080;
+        border-top: 0.5px solid #808080;
+        border-bottom: 0.5px solid #808080;
+
+
+        font-style: normal;
+font-weight: normal;
+font-size: 18px;
+line-height: 21px;
+text-align: center;
+letter-spacing: 0.05em;
+
+color: #565656;
+
+
+        box-sizing: border-box;
+        border-radius: 5px;
+:hover,:focus, :active{
+    border-right: 0.5px solid #808080;
+        border-top: 0.5px solid #808080;
+        border-bottom: 0.5px solid #808080;
+
+}
+    }
+}

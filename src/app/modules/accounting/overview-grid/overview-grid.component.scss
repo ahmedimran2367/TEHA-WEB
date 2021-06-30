@@ -1,0 +1,53 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/deep";
+
+::ng-deep .menuFilter.mat-menu-panel {
+  max-height: 12.5vw;
+}
+.selected-filter-icon {
+  color: $primary;
+}
+
+.mat-column-actions {
+  white-space: unset !important;
+  width: 10px !important;
+}
+
+.mat-header-cell {
+  padding-right: 0px !important;
+}
+.customTooltipFlatGroup {
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+  width: 12vw;
+  display: block;
+}
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type,
+td.mat-footer-cell:last-of-type {
+  padding-right: 30px !important;
+}
+
+.mat-button:last-of-type {
+  min-width: auto !important;
+  padding: 0 0 !important;
+  border-radius: 4px;
+  overflow: visible;
+}
+.mat-header-cell,
+.mat-cell {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.on-hold-tooltip {
+  width: 200px;
+}
+.tableHeight {
+  max-height: calc(75vh - 190px);
+  overflow: auto; 
+}
+.filter-adj {
+  padding-right: 60px;
+}

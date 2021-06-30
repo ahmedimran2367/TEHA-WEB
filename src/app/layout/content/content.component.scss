@@ -1,0 +1,88 @@
+@import "./../../shared/styles/spacing";
+@import "./../../shared/styles/colors";
+@import "./../../shared/styles/typography";
+
+:host {
+  transition: width 0.5s;
+  animation: ease-in-out;
+  -moz-animation: ease-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.container {
+
+  height: 100%;
+}
+
+.main-contents {
+  background-color: $bgGray;
+  border-radius: 10px;
+}
+
+.mat-drawer-container {
+  background-color: #ffff;
+}
+
+.mat-drawer-side {
+  border: none;
+}
+
+.mat-drawer {
+  transform: translate3d(-70%, 0, 0);
+}
+
+.menu-open {
+  width: 250px;
+
+  overflow-x: hidden;
+}
+
+.menu-close {
+
+  width: 90px;
+  overflow-x: hidden;
+}
+
+.home-sidebar-toggle-wrapper {
+
+  position: fixed;
+  width: 24px;
+  height: 56px;
+
+  cursor: pointer;
+
+  background: #FFFFFF;
+  border-radius: 5px;
+
+}
+
+.home-sidebar-toggle-wrapper .mat-icon {
+  width: 18px;
+  font-size: 18px;
+}
+
+.home-sidebar-toggle-wrapper-open {
+  left: 225px;
+  top: (280px);
+}
+
+.home-sidebar-toggle-wrapper-closed {
+  left: 65px;
+  top: (280px);
+}
+
+.home-sidebar-toggle-wrapper:hover {
+  color: $primary;
+
+}
+
+.home-sidebar-toggle-wrapper .inner-div {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}

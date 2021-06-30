@@ -1,0 +1,116 @@
+<div >
+  <table mat-table class="full-width-table grid-table table-align " fxHide.lt-md="true" aria-label="Elements" [dataSource]="dataSource">
+    <!-- Id Column -->
+    <ng-container matColumnDef="tehaUserno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.tehaUserNo' | translate}}</th>
+      <td class="text-align-center" mat-cell *matCellDef="let row">{{row.tehaUserNo}}</td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="adminUserno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.adminUserNo' | translate}}</th>
+      <td class="text-align-center" mat-cell *matCellDef="let row">{{row.adminUserNo}}</td>
+    </ng-container>
+    
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>{{'account.username' | translate}}</th>
+      <td class="text-align-center" mat-cell *matCellDef="let row">{{row.tenantName | replaceNullWithDash}}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.floor' | translate}}</th>
+      <td class="text-align-center" mat-cell *matCellDef="let row">{{row.floor | replaceNullWithDash}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td class="text-align-center" mat-cell *matCellDef="let row">
+        <a (click)="showButtonclicked(row?.id)" *ngIf="placeOrderInd" mat-button color="link" fxLayoutAlign="end center">
+          {{'order.gotoAppointmentDetails' | translate}} <mat-icon>chevron_right</mat-icon>
+        </a>
+        <a (click)="showButtonclicked(row?.id)"  *ngIf="!placeOrderInd" mat-button color="link" fxLayoutAlign="end center">
+          {{'order.continuetoMeters' | translate}} <mat-icon>chevron_right</mat-icon>
+        </a>
+
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <div fxLayout="row" fxLayoutAlign="space-evenly center" fxHide.lt-md="true">
+    <mat-paginator hidePageSize = "true" #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="pageSize"
+    >
+      </mat-paginator>
+  </div>
+</div>
+<!-- responsive  -->
+
+<div fxLayout="column" fxLayoutAlign="start center" fxHide.gt-sm="true" fxLayoutGap="20px" *ngIf="dataSource"
+  class="font-resp">
+  <mat-card fxFlex fxHide.gt-sm="true" class="mat-dashboard-card w-100" fxLayout="column" fxLayoutGap="20px"
+    *ngFor="let item of dataSource.data">
+    <div fxFlex fxLayout="column" fxLayoutGap="10px">
+      <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <div fxFlex="47px" fxFlexAlign="center">
+          <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+        </div>
+        <span fxFlex="50" class="support-text-b">{{'stockOverview.tehaUserNo' | translate}}:
+          <span class="support-text">{{item.tehaUserNo}}</span></span>
+        <div fxFlex="47px" fxFlexAlign="center">
+          <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+        </div>
+        <span fxFlex="50" class="support-text-b">{{'account.username' | translate}}: <span
+            class="support-text-b">{{item.tenantName | replaceNullWithDash}}</span></span>
+      </div>
+      <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex="47px" fxFlexAlign="center">
+          <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+        </div>
+
+        <span fxFlex="50" class="support-text-b">{{'stockOverview.adminUserNo' | translate}}:
+          <span class="support-text">{{item.adminUserNo}}</span></span>
+        <div fxFlex="47px" fxFlexAlign="center">
+          <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+        </div>
+        <span fxFlex="50" class="support-text-b">{{'stockOverview.floor' | translate}}: <span
+            class="support-text">{{item.floor | replaceNullWithDash}}</span></span>
+      </div>
+      
+    </div>
+    <mat-divider fxFlex inset="true"></mat-divider>
+    <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+
+
+      <a (click)="showButtonclicked(item?.id)" *ngIf="placeOrderInd" mat-button color="link" fxLayoutAlign="end center">
+        {{'order.gotoAppointmentDetails' | translate}} <mat-icon>chevron_right</mat-icon>
+      </a>
+      <a (click)="showButtonclicked(item?.id)"  *ngIf="!placeOrderInd" mat-button color="link" fxLayoutAlign="end center">
+        {{'order.continuetoMeters' | translate}} <mat-icon>chevron_right</mat-icon>
+      </a>
+
+    </div>
+  </mat-card>
+</div>
+<mat-menu class="menuFilter" #filterMenu="matMenu">
+  <ng-template matMenuContent let-element="element">
+    <div *ngIf="type || status">
+      <button (click)="removeFilter(element)" mat-flat-button> {{'accounting.reset' | translate}}</button>
+      <mat-divider></mat-divider>
+    </div>
+    <button *ngFor="let item of getFilterList(element)" mat-menu-item (click)="onFilterClick(element, item)"><span
+        [ngClass]="{'text-darkgreen': setColor(element, item)}">
+        <!-- {{item.code}}  -->
+        <!-- {{'lookup.'+item.code | translate}} -->
+        <span *ngIf="element === 'orderType'"> {{'lookup.'+utilityService.toCamelCase('type'+item.code) |
+          translate}}</span>
+        <span *ngIf="element === 'orderStatus'"> {{'lookup.'+utilityService.toCamelCase(item.code) | translate}}</span>
+
+      </span>
+    </button>
+  </ng-template>
+</mat-menu>
+<ng-template #filledFilterIcon>
+  <mat-icon class="selected-filter-icon">filter_alt</mat-icon>
+</ng-template>

@@ -1,0 +1,46 @@
+<div fxLayout="column" class="p-l-5 p-3" fxLayoutGap="10px">
+  <div fxLayout="row wrap" fxLayoutGap="20px">
+    <div fxLayout="column" ngClass.lt-md="p-r-5" fxFlex.lt-md="100" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex="0 0 calc(66% - 20px)">
+      <app-persons-info [ContactPersonDetail]="serviceContacts?.general"></app-persons-info>
+    </div>
+
+    <div fxLayout="column" fxHide.lt-md="true" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex="0 0 calc(33% - 20px)">
+
+      <app-map-component [isFromUser]="true" fxFlex></app-map-component>
+    </div>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="20px">
+    <div fxLayout="column" class="p-t-5" fxFlex="0 0 calc(33% - 20px)" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex.lt-md="100">
+      <app-persons-tiles fxFlexAlign="stretch" Title="{{'home.mountingEquipment' | translate}}"  [ContactPersonDetail]="serviceContacts?.plumbingAndMeasuringEquipment">
+
+      </app-persons-tiles>
+    </div>
+    <div fxLayout="column" class="p-t-5" fxFlex="0 0 calc(33% - 20px)" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex.lt-md="100">
+      <app-persons-tiles fxFlexAlign="stretch" Title="{{'home.statements' | translate}}"  [ContactPersonDetail]="serviceContacts?.accounting">
+
+      </app-persons-tiles>
+    </div>
+    <div fxLayout="column" class="p-t-5" fxFlex="0 0 calc(33% - 20px)" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex.lt-md="100">
+      <app-persons-tiles fxFlexAlign="stretch" Title="{{'home.reading' | translate}}"  [ContactPersonDetail]="serviceContacts?.readings">
+
+      </app-persons-tiles>
+    </div>
+    <div fxLayout="column" class="p-t-5" fxFlex="0 0 calc(33% - 20px)" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex.lt-md="100">
+      <app-persons-tiles fxFlexAlign="stretch" Title="{{'home.offersContracts' | translate}}"  [ContactPersonDetail]="serviceContacts?.offersAndContracts">
+
+      </app-persons-tiles>
+    </div>
+    <div fxLayout="column" class="p-t-5" fxFlex="0 0 calc(33% - 20px)" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex.lt-md="100">
+      <app-persons-tiles fxFlexAlign="stretch" Title="{{'order.drinkingWater' | translate}}"  [ContactPersonDetail]="serviceContacts?.drinkingWater">
+
+      </app-persons-tiles>
+    </div>
+    <div fxLayout="column" ngClass.lt-md="p-r-5" class="p-t-5" fxFlex="0 0 calc(33% - 20px)" fxFlex.lt-lg="0 0 calc(50% - 20px)" fxFlex.lt-md="100">
+      <app-persons-tiles fxFlexAlign="stretch" Title="{{'home.energyPCertificate' | translate}}"  [ContactPersonDetail]="serviceContacts?.energyPerformanceCertificate">
+
+      </app-persons-tiles>
+    </div>
+
+  </div>
+</div>

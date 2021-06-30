@@ -1,0 +1,95 @@
+<div fxLayout="column" class="p-t-5" fxLayoutGap="18px">
+    <div fxLayout="row" fxLayout.lt-md="column">
+        <div fxFlex="50" fxLayoutAlign="center center">
+            <mat-form-field  class="comp-mat-select" fxFlex="50">
+                <mat-label>{{'account.languagePreference' | translate}}</mat-label>
+                <mat-select class="placeholder-text-1" placeholder="{{'account.languagePreference' | translate}}" selct [(ngModel)]="language" (valueChange)="changeLanguage($event)">
+                    <mat-option value="en">
+                        <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 20 20" xml:space="preserve" width="20"
+                            height="20">
+                            <g id="g102" transform="scale(0.0390625)">
+                                <circle style="fill:#f0f0f0" cx="256" cy="256" r="256" id="circle2" />
+                                <g id="g20">
+                                    <path style="fill:#0052b4"
+                                        d="M 52.92,100.142 C 32.811,126.305 17.648,156.46 8.819,189.219 h 133.178 z"
+                                        id="path4" />
+                                    <path style="fill:#0052b4"
+                                        d="m 503.181,189.219 c -8.829,-32.758 -23.993,-62.913 -44.101,-89.076 l -89.075,89.076 z"
+                                        id="path6" />
+                                    <path style="fill:#0052b4"
+                                        d="m 8.819,322.784 c 8.83,32.758 23.993,62.913 44.101,89.075 l 89.074,-89.075 z"
+                                        id="path8" />
+                                    <path style="fill:#0052b4"
+                                        d="M 411.858,52.921 C 385.695,32.812 355.541,17.649 322.782,8.819 v 133.177 z"
+                                        id="path10" />
+                                    <path style="fill:#0052b4"
+                                        d="m 100.142,459.079 c 26.163,20.109 56.318,35.272 89.076,44.102 V 370.005 Z"
+                                        id="path12" />
+                                    <path style="fill:#0052b4"
+                                        d="m 189.217,8.819 c -32.758,8.83 -62.913,23.993 -89.075,44.101 l 89.075,89.075 z"
+                                        id="path14" />
+                                    <path style="fill:#0052b4"
+                                        d="m 322.783,503.181 c 32.758,-8.83 62.913,-23.993 89.075,-44.101 l -89.075,-89.075 z"
+                                        id="path16" />
+                                    <path style="fill:#0052b4"
+                                        d="m 370.005,322.784 89.075,89.076 c 20.108,-26.162 35.272,-56.318 44.101,-89.076 z"
+                                        id="path18" />
+                                </g>
+                                <g id="g32">
+                                    <path style="fill:#d80027"
+                                        d="m 509.833,222.609 h -220.44 -10e-4 V 2.167 C 278.461,0.744 267.317,0 256,0 244.681,0 233.539,0.744 222.609,2.167 v 220.44 0.001 H 2.167 C 0.744,233.539 0,244.683 0,256 c 0,11.319 0.744,22.461 2.167,33.391 h 220.44 0.001 V 509.833 C 233.539,511.256 244.681,512 256,512 c 11.317,0 22.461,-0.743 33.391,-2.167 v -220.44 -10e-4 H 509.833 C 511.256,278.461 512,267.319 512,256 c 0,-11.317 -0.744,-22.461 -2.167,-33.391 z"
+                                        id="path22" />
+                                    <path style="fill:#d80027"
+                                        d="m 322.783,322.784 v 0 L 437.019,437.02 c 5.254,-5.252 10.266,-10.743 15.048,-16.435 l -97.802,-97.802 h -31.482 z"
+                                        id="path24" />
+                                    <path style="fill:#d80027"
+                                        d="m 189.217,322.784 h -0.002 L 74.98,437.019 c 5.252,5.254 10.743,10.266 16.435,15.048 l 97.802,-97.804 z"
+                                        id="path26" />
+                                    <path style="fill:#d80027"
+                                        d="m 189.217,189.219 v -0.002 L 74.981,74.98 C 69.727,80.232 64.715,85.723 59.933,91.415 l 97.803,97.803 h 31.481 z"
+                                        id="path28" />
+                                    <path style="fill:#d80027"
+                                        d="m 322.783,189.219 v 0 L 437.02,74.981 C 431.768,69.727 426.277,64.715 420.585,59.934 l -97.802,97.803 z"
+                                        id="path30" />
+                                </g>
+                            </g>
+                        </svg> {{'admin.english'| translate}}
+                    </mat-option>
+                    <mat-option value="de">
+                        <svg version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 20 20" xml:space="preserve"
+                            sodipodi:docname="germany.svg" width="20" height="20">
+                            <g id="g63" transform="scale(0.0390625)">
+                                <path style="fill:#ffda44"
+                                    d="M 15.923,345.043 C 52.094,442.527 145.929,512 256,512 366.071,512 459.906,442.527 496.077,345.043 L 256,322.783 Z"
+                                    id="path2" />
+                                <path
+                                    d="M 256,0 C 145.929,0 52.094,69.472 15.923,166.957 L 256,189.217 496.077,166.956 C 459.906,69.472 366.071,0 256,0 Z"
+                                    id="path4" />
+                                <path style="fill:#d80027"
+                                    d="M 15.923,166.957 C 5.633,194.69 0,224.686 0,256 c 0,31.314 5.633,61.31 15.923,89.043 H 496.078 C 506.368,317.31 512,287.314 512,256 c 0,-31.314 -5.632,-61.31 -15.923,-89.043 z"
+                                    id="path6" />
+                            </g>
+                        </svg> {{'admin.german'| translate}}
+                    </mat-option>
+                </mat-select>
+                <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+            </mat-form-field>
+        </div>
+        <div fxFlex="50" fxLayoutAlign="center center">
+            <mat-form-field class="comp-mat-select" fxFlex="50">
+                <mat-label>{{'account.numberOfRowsPage' | translate}}</mat-label>
+                <mat-select matNativeControl class="placeholder-text-1" placeholder="{{'account.numberOfRowsPage' | translate}}" [(ngModel)]="gridSize" (valueChange)="changeGridSize($event)">
+                    <mat-option value="10">10</mat-option>
+                    <mat-option value="25">25</mat-option>
+                    <mat-option value="50">50</mat-option>
+                    <mat-option value="75">75</mat-option>
+                    <mat-option value="100">100</mat-option>
+                </mat-select>
+                <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+            </mat-form-field>
+        </div>
+    </div>
+    <div fxLayoutAlign="end center">
+        <button (click)="save()" mat-button class="primary-green-button btn-lg">{{'account.save' | translate}}</button>
+    </div>
+</div>

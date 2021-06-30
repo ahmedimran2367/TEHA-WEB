@@ -1,0 +1,224 @@
+<form #generalForm="ngForm">
+  <div fxLayout="row wrap" class="p-l-8 p-r-8 m-t-5 font-resp form-group">
+
+    <div class="" fxFlex="33" fxFlex.lt-lg="50" fxFlex.lt-md="100" fxLayout="column" fxFill fxLayoutAlign="start"
+      fxLayoutGap="24px">
+      <div fxLayout="row" fxFill fxLayoutAlign="start center">
+        <h3>{{'account.primaryHeading' | translate}}</h3>
+      </div>
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center">
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-md="100" class="comp-mat-select"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'account.salutation' | translate}}:</mat-label>
+          <mat-select name="salutationCode" required class="placeholder-text-1"
+            [(ngModel)]="contactInformationNew.salutationCode" placeholder="">
+            <mat-option  *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+              {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+            </mat-option>
+          </mat-select>
+          <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxFill fxLayoutAlign="start start" fxLayoutGap="24px">
+
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-md="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'order.firstName' | translate}}:</mat-label>
+          <input class="input-field1" name="firstName" required matInput [(ngModel)]="contactInformationNew.firstName" />
+        </mat-form-field>
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-md="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'order.lastName' | translate}}:</mat-label>
+          <input class="input-field1" name="lastName" required matInput [(ngModel)]="contactInformationNew.lastName" />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-md="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'stockOverview.street' | translate}}:</mat-label>
+          <input name="street" required matInput maxlength="50" [(ngModel)]="contactInformationNew.street" />
+        </mat-form-field>
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-md="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'stockOverview.postcode' | translate}}:</mat-label>
+          <input name="postcode" required matInput numbersOnly="true" maxlength="10"
+            [(ngModel)]="contactInformationNew.postcode" />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center">
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-md="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'stockOverview.city' | translate}}:</mat-label>
+          <input name="city" required matInput maxlength="50" appAlphabetOnlyDirective
+            [(ngModel)]="contactInformationNew.place" />
+        </mat-form-field>
+      </div>
+
+
+    </div>
+
+    <div fxFlex="33" fxFlex.lt-lg="50" fxFlex.lt-md="100" fxLayout="column" fxLayoutAlign="start center"
+      fxLayoutGap="24px" ngClass.gt-sm="p-l-12 p-t-16">
+
+      <div class=" w-100">
+        <mat-form-field fxFlexFill fxFlex="70" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'account.phone' | translate}}:</mat-label>
+          <input name="phone" required matInput maxlength="20" [(ngModel)]="contactInformationNew.phone" />
+        </mat-form-field>
+      </div>
+
+      <div class="w-100">
+        <mat-form-field fxFlexFill fxFlex="70" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'account.mobile' | translate}}:</mat-label>
+          <input name="mobile" required matInput maxlength="20" [(ngModel)]="contactInformationNew.mobile" />
+        </mat-form-field>
+      </div>
+
+      <div class="w-100">
+        <mat-form-field fxFlexFill fxFlex="70" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'account.fax' | translate}}:</mat-label>
+          <input name="fax" required matInput maxlength="20" [(ngModel)]="contactInformationNew.fax" />
+        </mat-form-field>
+      </div>
+
+      <div class="w-100">
+        <mat-form-field fxFlexFill fxFlex="70" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'lookup.email' | translate}}: </mat-label>
+          <input name="email" type="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" required matInput
+            maxlength="100" [(ngModel)]="contactInformationNew.email" />
+        </mat-form-field>
+        <div fxFlex="10" fxLayoutAlign="center center">
+          <button class="m-b-2 "
+            (click)="contactInformationNew.additionalEmails?.push({email:'', enableNotificationInd:false})"
+            mat-icon-button>
+            <mat-icon class="circle-icon" matTooltip="{{'account.myProfileEmailTooltip' | translate }}" [matTooltipPosition]="'above'">add_circle_outline</mat-icon>
+          </button>
+        </div>
+        <!-- <div fxLayout="row " fxFill fxLayoutAlign="start center" *ngFor="let email of contactInformationNew.additionalEmails; let i = index; let c = count">
+
+        </div>
+        <ng-template #elseButtonTemplate>
+          <mat-icon>delete</mat-icon>
+        </ng-template> -->
+      </div>
+
+
+      <div fxLayout="row " class="w-100" fxLayoutAlign="start center"
+        *ngFor="let email of contactInformationNew.additionalEmails; let i=index;trackBy:trackByIdx">
+
+        <mat-form-field fxFlex="60" class="placeholder-text-1" [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'account.additionalEmail' | translate}} {{' # ' + (i+1)}}:</mat-label>
+          <input matInput type="email" pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" maxlength="100"
+            name="additionalEmail{{i}}" [(ngModel)]="contactInformationNew.additionalEmails[i].email" />
+        </mat-form-field>
+        <button (click)="deleteEmail(i)" class="m-b-2" mat-icon-button>
+          <img src="assets/images/trash.svg">
+        </button>
+        <div  fxLayout="row" fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1 font11" fxLayoutAlign="start center" fxFlex="50px">
+        <mat-checkbox class="m-b-2 font11" name="additionalNotificationCheckBox{{i}}"
+          [(ngModel)]="contactInformationNew.additionalEmails[i].enableNotificationInd">
+        </mat-checkbox>
+      </div>
+      </div>
+
+    </div>
+
+    <mat-divider vertical="true" fxHide.lt-md="true"></mat-divider>
+    <div fxFlex="33" fxFlex.lt-lg="50" fxFlex.lt-md="100" fxLayout="column" fxLayoutAlign="start center"
+      fxLayoutGap="24px" class="p-3">
+
+      <div class="w-100" fxFlex fxLayout="row" fxLayoutAlign="start center">
+        <h3 class="m-b-0">{{'account.secondaryHeading' | translate}}</h3>
+      </div>
+
+      <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1" class="m-l-6 comp-mat-select"
+        [floatLabel]="floatLabelControl.value">
+        <mat-label class="header-4">{{'account.salutation' | translate}}:</mat-label>
+        <mat-select name="secondarySalutationCode" [disabled]="contactInformationNew.sameAddressInd"
+          class="placeholder-text-1" [(ngModel)]="contactInformationNew.secondarySalutationCode" placeholder="">
+          <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+            {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+          </mat-option>
+        </mat-select>
+        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+      </mat-form-field>
+
+      <div fxLayout="row" class="w-100" fxLayout.lt-md="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'order.firstName' | translate}}:</mat-label>
+          <input name="secondaryFirstName" [disabled]="contactInformationNew.sameAddressInd" matInput
+            [(ngModel)]="contactInformationNew.secondaryFirstName" />
+        </mat-form-field>
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'order.lastName' | translate}}:</mat-label>
+          <input name="secondaryLastName" [disabled]="contactInformationNew.sameAddressInd" matInput
+            [(ngModel)]="contactInformationNew.secondaryLastName" />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" class="w-100" fxLayout.lt-md="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'stockOverview.street' | translate}}:</mat-label>
+          <input name="secondaryStreet" maxlength="50" [disabled]="contactInformationNew.sameAddressInd" matInput
+            [(ngModel)]="contactInformationNew.secondaryStreet" />
+        </mat-form-field>
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'stockOverview.postcode' | translate}}:</mat-label>
+          <input name="secondaryPostcode" maxlength="10" numbersOnly="true"
+            [disabled]="contactInformationNew.sameAddressInd" matInput
+            [(ngModel)]="contactInformationNew.secondaryPostcode" />
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" class="w-100" fxLayout.lt-md="column" fxLayoutAlign="start center" fxLayoutGap="24px">
+
+        <mat-form-field fxFlexFill fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1" class="placeholder-text-1"
+          [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'stockOverview.city' | translate}}:</mat-label>
+          <input name="secondaryCity" maxlength="50" appAlphabetOnlyDirective
+            [disabled]="contactInformationNew.sameAddressInd" matInput
+            [(ngModel)]="contactInformationNew.secondaryPlace" />
+        </mat-form-field>
+
+        <div fxLayout="row" fxFlex="50" fxFlex.lt-lg="100" class="placeholder-text-1" fxLayoutAlign="start center" fxFlex="50px">
+          <mat-checkbox  class="font11" (change)="onAddressCheckChange($event)" fxFill class="placeholder-text-1 font11"
+            [(ngModel)]= "contactInformationNew.sameAddressInd" name="dataControl">
+            {{'account.samePrimaryAddress' | translate}}
+          </mat-checkbox>
+        </div>
+      </div>
+
+      <div class="w-100">
+        <mat-form-field fxFill class="placeholder-text-1" [floatLabel]="floatLabelControl.value">
+          <mat-label class="header-4">{{'lookup.email' | translate}}:</mat-label>
+          <input type="email" pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{1,63}$" name="secondaryEmail" maxlength="100"
+            [disabled]="contactInformationNew.sameEmailInd" matInput
+            [(ngModel)]="contactInformationNew.secondaryEmail" />
+        </mat-form-field>
+      </div>
+      <div  fxLayout="row"  fxLayoutAlign="start center" >
+        <mat-checkbox fxFlex="70px" (change)="onEmailCheckChange($event)"  class="placeholder-text-1 "
+          [(ngModel)]="contactInformationNew.sameEmailInd" name="dataControl2">
+        </mat-checkbox >
+       <span fxFlex fxLayoutAlign=" start start"> {{'account.samePrimaryEmail' | translate}}</span>
+      </div>
+    </div>
+  </div>
+</form>

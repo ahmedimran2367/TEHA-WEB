@@ -1,0 +1,57 @@
+<div class="font-resp" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" class="font-resp">
+    <div fxFlexFill>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+                    <button (click)="arrowBack()" skipLocationChange mat-icon-button>
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <span fxFlex class="header-3">{{(selectedTabId==0?'accounting.accountingEnterCostData':(selectedTabId==1?'accounting.accountingEnterUserData':'accounting.accountingEnterSummaryRelease')) | translate}}</span>
+
+                </span>
+            </mat-card-title>
+            <div class="search-autocomplete-icon-wrapper " fxLayoutGap="7px" fxLayoutAlign="start center"
+                *ngIf="accountingService.property.billingStatus != 'WAIT_DATA' && selectedTabId === 0">
+                <div>
+                    <mat-icon>search</mat-icon>
+                </div>
+                <div fxFlex fxLayoutAlign="stretch center">
+                    <mat-form-field fxFlex class="search-autocomplete-input">
+                        <input type="text" placeholder="{{'accounting.searchCostConcept' | translate}}" matInput
+                            [ngModel]="autoCostConcept" [matAutocomplete]="auto" class="search-autocomplete-input"
+                            (keyup)="onTextChange($event)">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
+                            (optionSelected)="optionSelected($event.option.value)">
+                            <mat-option *ngFor="let option of filterOptions" [value]="option.code">
+                                {{option.value}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div *ngIf="selectedTabId===0" fxLayoutAlign="end start" class="m-r-6">
+                <span class="header-4">{{'accounting.totalBill' | translate}}: <span class="placeholder-text-1">{{(getTotalNetAmount()) | germanDecimal }} €</span></span>
+            </div>
+        </div>
+
+
+        <mat-card-content class="font-resp cost-data">
+
+            <mat-tab-group mat-align-tabs="center" class="comp-tabs-title" (selectedTabChange)="tabChanged($event)"
+                [(selectedIndex)]="selectedTabId">
+                <mat-tab label="1. {{'accounting.costData' | translate}}" (click)="tab='costData'">
+                    <app-cost-data #costDataComp [options]="options"></app-cost-data>
+                </mat-tab>
+                <mat-tab label="2. {{'accounting.userData' | translate}}" (click)="tab='userData'">
+                    <app-user-data #userDataComp></app-user-data>
+                </mat-tab>
+                <mat-tab [disabled]="costData?.cost.energy.length == 0"
+                    label="3. {{'accounting.accountingSummaryRelease' | translate}}" (click)="tab='summary'">
+                    <app-summary #summaryDataComp (openCostTab)="openCostTab()" [costDataComp]="costDataComp" [options]="options">
+                    </app-summary>
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+    </div>
+
+</div>

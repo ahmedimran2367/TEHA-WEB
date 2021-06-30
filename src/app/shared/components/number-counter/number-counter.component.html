@@ -1,0 +1,16 @@
+<div class="counter-parent-wrapper" fxFlexLayout="center center" fxLayout="row">
+
+    
+    <button *ngIf="(parentModule=='offReq')" (click)="addNumber()" matRipple class="counter-left-wrapper" [ngClass]="{'link': !disable}" fxFlexLayout="center center" [disabled]='disable'>
+    +
+        </button>
+    <div *ngIf="(parentModule=='offReq') || (parentModule=='offReqS')" class="counter-mid-wrapper" fxFlexLayout="center center" fxLayout="column">
+        <input [disabled]="disable" type="text" numbersOnly="true" [(ngModel)]="number"/>
+    </div>
+    <button  *ngIf="(parentModule=='offReq')" (click)="subtractNumber()" matRipple class="counter-right-wrapper" [ngClass]="{'link': !disable}" fxFlexLayout="center center" [disabled]='disable'>
+        -
+        
+    </button>
+    
+
+</div>

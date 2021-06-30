@@ -1,0 +1,139 @@
+<div class="font-resp" fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px">
+    <div fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
+
+        <h4 class="header-4">{{'order.userContactDetails' | translate}}</h4>
+        <div>
+            <p class="support-text">{{'account.salutation' | translate}}</p>
+            <mat-form-field class="support-text" class="example-full">
+                <mat-select placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.salutationCode" disabled>
+                    <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                        {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+                    </mat-option>
+                </mat-select>
+
+            </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px">
+            <div>
+                <p class="support-text">{{'order.firstName' | translate}}</p>
+                <mat-form-field class="support-text" class="example-full-width"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.firstName" disabled></mat-form-field>
+            </div>
+            <div>
+                <p class="support-text">{{'order.lastName' | translate}}</p>
+                <mat-form-field class="support-text" class="example-full-width"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.lastName" disabled></mat-form-field>
+            </div>
+        </div>
+        <div>
+            <p class="support-text">{{'stockOverview.street' | translate}}</p>
+            <mat-form-field class="support-text" class="example-full"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.street" disabled></mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px">
+            <div>
+                <p class="support-text">{{'stockOverview.postcode' | translate}}</p>
+                <mat-form-field class="support-text" class="example-full-width"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.postcode" disabled></mat-form-field>
+            </div>
+            <div>
+                <p class="support-text">{{'stockOverview.city' | translate}}</p>
+                <mat-form-field class="support-text" class="example-full-width"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.place" disabled></mat-form-field>
+            </div>
+        </div>
+
+        <h4 class="header-4">{{'order.newPropertyAddress' | translate}}</h4>
+        <div>
+            <p class="support-text">{{'stockOverview.street' | translate}}</p>
+            <mat-form-field class="example-full"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.propertyAddress.street" disabled></mat-form-field>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="30px">
+            <div>
+                <p class="support-text">{{'stockOverview.postcode' | translate}}</p>
+                <mat-form-field class="example-full-width"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.propertyAddress.postcode" disabled></mat-form-field>
+            </div>
+            <div>
+                <p class="support-text">{{'stockOverview.city' | translate}}</p>
+                <mat-form-field class="example-full-width"><input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.propertyAddress.place" disabled></mat-form-field>
+            </div>
+        </div>
+    </div>
+
+    <mat-divider [vertical]="true"></mat-divider>
+
+    <div fxFlex="25" fxLayout="column" fxLayoutGap="20px">
+        <div>
+            <h4 class="header-4">{{'order.typeOfBuilding' | translate}}</h4>
+            <p class="support-text">{{'order.psOne' | translate}}</p>
+            <mat-radio-group fxLayout="row wrap" [(ngModel)]="orderService.offerRequestObj.propertyAddress.type">
+                <mat-radio-button class="support-text" fxFlex="50" value="R" *ngIf="orderService.offerRequestObj.propertyAddress.type=='R'">{{'order.residential' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text" fxFlex="50" value="C" *ngIf="orderService.offerRequestObj.propertyAddress.type=='C'">{{'order.commercial' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text" class="m-t-5" fxFlex="50" value="RC" *ngIf="orderService.offerRequestObj.propertyAddress.type=='RC'">{{'order.residentialCommercial' | translate}}</mat-radio-button>
+            </mat-radio-group>
+            <div fxLayout="row" fxLayoutGap="20px" class="m-t-5">
+                <mat-form-field class="support-text" fxFlex *ngIf="orderService.offerRequestObj.propertyAddress.type=='R' || orderService.offerRequestObj.propertyAddress.type=='RC'">
+                    <mat-label>{{'order.noOfFlats' | translate}}</mat-label>
+                    <input disabled matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.propertyAddress.appartmentCount">
+                </mat-form-field>
+                <mat-form-field fxFlex *ngIf="orderService.offerRequestObj.propertyAddress.type=='C' || orderService.offerRequestObj.propertyAddress.type=='RC'">
+                    <mat-label>{{'order.noOfCommercialUnits' | translate}}</mat-label>
+                    <input disabled matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.propertyAddress.commercialUnitCount">
+                </mat-form-field>
+            </div>
+
+        </div>
+        <div>
+            <h4 class="header-4">{{'account.contractType' | translate}}</h4>
+            <p class="support-text">{{'order.psOne' | translate}}</p>
+            <mat-radio-group fxLayout="row wrap" [(ngModel)]="orderService.offerRequestObj.contractType[0]">
+                <mat-radio-button class="support-text" fxFlex="50" value="Rent" *ngIf="orderService.offerRequestObj.contractType && orderService.offerRequestObj.contractType.length>0 && orderService.offerRequestObj.contractType[0]=='Rent'">{{'order.rent' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text" fxFlex="50" value="WarrantyMaintenance" *ngIf="orderService.offerRequestObj.contractType && orderService.offerRequestObj.contractType.length>0 && orderService.offerRequestObj.contractType[0]=='WarrantyMaintenance'">{{'order.warrantyMaintenance' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text" class="m-t-5" fxFlex="50" value="Purchase" *ngIf="orderService.offerRequestObj.contractType && orderService.offerRequestObj.contractType.length>0 && orderService.offerRequestObj.contractType[0]=='Purchase'">{{'order.purchase' | translate}}</mat-radio-button>
+            </mat-radio-group>
+
+            <p  class="support-text m-t-6">{{'order.metersQuestion' | translate}}</p>
+            <mat-radio-group fxLayout="row wrap" [(ngModel)]="orderService.offerRequestObj.measuringDeviceRequirement">
+                <mat-radio-button class="support-text" fxFlex="50" value="DAA" *ngIf="orderService.offerRequestObj.measuringDeviceRequirement=='DAA'">{{'order.yes' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text" fxFlex="50" value="NMDA" *ngIf="orderService.offerRequestObj.measuringDeviceRequirement=='NMDA'">{{'order.no' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text m-t-5" fxFlex="50" value="NMOD" *ngIf="orderService.offerRequestObj.measuringDeviceRequirement=='NMOD'">{{'order.idwaMeter' | translate}}</mat-radio-button>
+            </mat-radio-group>
+            <p class="support-text m-t-6">{{'order.ownerOrManager' | translate}}</p>
+            <mat-radio-group fxLayout="row wrap" [(ngModel)]="orderService.offerRequestObj.contactDetails.type">
+                <mat-radio-button class="support-text" fxFlex="50" value="Owner" *ngIf="orderService.offerRequestObj.contactDetails.type=='Owner'">{{'order.owner' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text" fxFlex="50" value="Management" *ngIf="orderService.offerRequestObj.contactDetails.type=='Management'">{{'order.propertyManager' | translate}}</mat-radio-button>
+                <mat-radio-button class="support-text m-t-5" fxFlex="50" value="Other" *ngIf="orderService.offerRequestObj.contactDetails.type=='Other'">{{'lookup.other' | translate}}</mat-radio-button>
+            </mat-radio-group>
+            <mat-form-field class="support-text m-t-5" *ngIf="orderService.offerRequestObj.contactDetails.type=='Other'">
+                <mat-label>{{'order.otherTypeDescription' | translate}}</mat-label>
+                <input matInput placeholder="" [(ngModel)]="orderService.offerRequestObj.contactDetails.otherTypeDescription" disabled>
+            </mat-form-field>
+        </div>
+    </div>
+
+    <mat-divider [vertical]="true"></mat-divider>
+
+    <div fxFlex="50" fxLayout="column" fxLayoutGap="20px">
+        <div fxLayout="column">
+            <h4 class="header-4">{{'order.typesOfServices' | translate}}</h4>
+            <p>{{'order.selectApply' | translate}}</p>
+            <div fxLayout="column" fxLayoutGap="10px">
+                <div *ngFor="let serviceType of serviceTypes">
+                    <mat-checkbox disabled *ngIf="orderService.offerRequestObj.serviceTypes.indexOf(serviceType.code)>-1" [checked]='serviceType.checked'>{{serviceType.text}}</mat-checkbox>
+                </div>
+            </div>
+        </div>
+        <div fxLayout="column" fxLayoutGap="5px">
+            <h4 class="header-4 m-b-4">{{'order.requiredMeters' | translate}}</h4>
+            <p>{{'order.selectApply' | translate}}</p>
+
+            <div *ngFor="let measuringInstrumentType of orderService.offerRequestObj.meterTypes; let i = index">
+                <div fxLayout="row" fxLayoutGap="20px" fxFlex fxLayoutAlign="start center">
+                    <div fxFlex="50">
+                        <mat-checkbox checked="checked" disabled>{{'lookup.'+utilityService.toCamelCase(measuringInstrumentType.type) | translate}}</mat-checkbox> <!-- add Counter here  -->
+                    </div>
+                    <div fxLayoutAlign="start center" >
+                        <app-number-counter [code]='measuringInstrumentType.type' [disable]='measuringInstrumentType.disable' parentModule="offReqS" [number]="measuringInstrumentType.count"></app-number-counter>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

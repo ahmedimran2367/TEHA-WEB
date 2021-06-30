@@ -1,0 +1,43 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-stockoverview [propertyCountData]="propertyCountData" fxFlex="100"></app-stockoverview>
+    <div fxFlex.lt-md="100" fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-inprogress [inProgressCountData]="inProgressCountData" fxFlex="100"></app-inprogress>
+    </div>
+  </div>
+
+
+  <mat-card fxHide.lt-md="true" class="mat-dashboard-card overflow-hide " fxLayoutGap="10px" fxFlex="0 0 calc(75vh - 60px)">
+    <div class="card-header m-l-5">
+      <div fxLayout="row"  class="w-100" fxLayoutAlign="space-between center">
+        <mat-card-title fxFlex>
+          <span fxLayout="row" class="header-3" fxLayoutAlign="start center">
+            {{'stockOverview.propertyOverview' | translate}}
+          </span>
+        </mat-card-title>
+        <div fxFlex="30" fxLayoutAlign.lt-md="center start" fxLayoutAlign="end start">
+          <app-search-bar #appSearch class="w-100" placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}" [searchText]="searchText"
+            (enterPressed)="propertyTable.onSearchChange($event)" (backspace)="propertyTable.onSearchChange($event,true)"></app-search-bar>
+        </div>
+      </div>
+    </div>
+    <mat-card-content>
+      <app-property-table (propertySelectedOnDashboard)="appSearch.searchText = $event;" #propertyTable [(freeText)]="searchText" [searchPropertyId]="propertyId">
+      </app-property-table>
+    </mat-card-content>
+  </mat-card>
+  <mat-card fxHide.gt-sm="true" class="mat-dashboard-card">
+    <div fxLayout="column" fxLayoutAlign="center" class="w-100 overflow-hide">
+      <mat-card-title fxFlex>
+        <span fxLayout="row" class="header-4" fxLayoutAlign="center center">
+          {{'stockOverview.propertyOverview' | translate}}
+        </span>
+      </mat-card-title>
+      <div fxflex.lt-md="100" fxFlex fxLayout="column" fxLayoutGap="20px">
+        <app-search-bar #appSearchResp placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}" [searchText]="searchText"
+            (enterPressed)="propertyTableResp.onSearchChange($event)" (backspace)="propertyTableResp.onSearchChange($event,true)"></app-search-bar>
+      </div>
+    </div>    
+</mat-card>
+<app-property-table fxHide.gt-sm="true" (propertySelectedOnDashboard)="appSearchResp.searchText = $event" #propertyTableResp [(freeText)]="searchText" [searchPropertyId]="propertyId"></app-property-table>
+</div>

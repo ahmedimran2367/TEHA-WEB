@@ -1,0 +1,114 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+
+::ng-deep .vertical-tab-group {
+  .mat-tab-group {
+    flex-direction: row;
+  }
+  .mat-tab-header {
+    border-bottom: none;
+  }
+  .mat-tab-label-active {
+    border-bottom: none !important;
+  }
+
+  .mat-tab-body-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    width: 98%;
+    padding-left: 2vw;
+    transition: height 500ms cubic-bezier(0.35, 0, 0.25, 1);
+  }
+  
+  .mat-tab-labels {
+    flex-direction: column;
+  }
+  .mat-tab-label-active {
+    border-right: 2px solid $primary !important;
+  }
+
+  .mat-ink-bar {
+    display: none;
+  }
+}
+
+table {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    max-width: 200px;
+    text-align: left;
+    word-wrap: break-word;
+    span.right-flat {
+      display: block;
+      width: 140px;
+      text-align: right !important;
+    }
+    span.center-flat {
+      display: block;
+      width: 140px;
+      text-align: center !important;
+    }
+    span.right-prop {
+      display: block;
+      width: 170px;
+      text-align: right !important;
+    }
+    span.center-prop {
+      display: block;
+      width: 170px;
+      text-align: center !important;
+    }
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    min-height: 75px;
+    text-align: left;
+    span.right-flat {
+      display: block;
+      width: 140px;
+      text-align: right !important;
+    }
+    span.center-flat {
+      display: block;
+      width: 140px;
+      text-align: center !important;
+    }
+    span.right-prop {
+      display: block;
+      width: 170px;
+      text-align: right !important;
+    }
+    span.center-prop {
+      display: block;
+      width: 170px;
+      text-align: center !important;
+    }
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+
+  .dangerHighlight {
+    color: red;
+  }
+}
+
+
+.menuFilterForm {
+  padding: 1vw;
+}
+
+.selected-filter-icon {
+  color: $primary;
+}
+
+.cross-icon {
+  cursor: pointer
+}

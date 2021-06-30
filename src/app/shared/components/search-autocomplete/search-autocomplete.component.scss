@@ -1,0 +1,82 @@
+@import "./../../../shared/styles/spacing";
+@import "./../../../shared/styles/colors";
+@import "./../../../shared/styles/typography";
+@import "./../../../shared/styles/formfields";
+
+::ng-deep .cdk-overlay-pane {
+  .mat-autocomplete-panel.search-autocomplete {
+    border-radius: 15px;
+
+    .search-autocomplete-mat-option {
+      border-radius: 15px !important;
+      border: 1px solid whitesmoke;
+      padding-left: 24px;
+      padding-right: 24px;
+      line-height: 38px;
+      padding-top: 12px;
+      color: $primary;
+      min-height: 100px;
+      .mat-subheading-2 {
+        font-family: 'Roboto';
+        font-size: 22px;
+        font-weight: normal;
+        margin-bottom: 0;
+      }
+      .mat-small-grey {
+        font-family: 'Roboto';
+        font-size: 14px;
+        color: #565656;
+        font-weight: lighter;
+      }
+    }
+  }
+}
+
+.mat-option:hover:not(.mat-option-disabled) {
+  border-left: 6px solid;
+}
+.search-wrapper-notification {
+  border: 1px solid #CACAC8;
+}
+.search-wrapper {
+  max-height: 60px;
+  border-radius: 10px;
+
+  .search-autocomplete-input {
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+    /* identical to box height */
+    letter-spacing: 0.05em;
+
+    color: #565656;
+  }
+
+  .search-autocomplete-icon-wrapper {
+    width: auto;
+    height: 50px;
+
+    margin-left: 22px;
+
+    .mat-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 30px;
+
+      display: inline-flex;
+      vertical-align: middle;
+    }
+  }
+
+  .mat-input-underline .mat-form-field-underline {
+    display: none;
+  }
+}
+
+
+
+::ng-deep .search-wrapper .mat-form-field-wrapper {
+  margin: 0px !important;
+  padding: 0px !important;
+}

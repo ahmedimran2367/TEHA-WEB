@@ -1,0 +1,55 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/deep";
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  thead {
+    border-bottom: 1px solid $secondary;
+    th {
+      text-align: center;
+      font-family: Roboto-Regular;
+      font-size: 16px;
+      padding: 10px;
+      min-width: 8%;
+      width: 8%;
+    }
+  }
+  tr {
+    border-bottom: 1px solid $secondary;
+    td {
+      white-space: normal;
+      word-wrap: break-word;
+      text-align: center;
+      padding: 10px 0;
+      min-width: 8%;
+      width: 8%;
+      input {
+        height: 30px;
+        max-width: 160px;
+      }
+    }
+  }
+
+  .errorInput {
+    border: 1px solid $red;
+  }  
+}
+.date-input {
+  position: relative;
+  .svg-date {
+    position: absolute;
+    top: 50%;
+    left: 36px;
+    transform: translateY(-50%);
+  }
+  input {
+    text-align: center;
+    padding-left: 13px;
+  }
+}
+.link {
+  cursor: pointer;
+}

@@ -1,0 +1,51 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/deep";
+
+.sum-accord {
+  .mat-expansion-panel {
+    box-shadow: none !important;
+    margin-bottom: 0px;
+  }
+  mat-expansion-panel-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    height: 50px;
+    ::ng-deep {
+      .mat-expansion-indicator {
+        position: absolute;
+        left: 1rem;
+        top: 1rem;
+      }
+      .mat-expansion-indicator::after {
+        height: 0.5rem;
+        width: 0.5rem;
+      }
+    }
+  }
+}
+.child-table {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    width: 14%;
+    text-align: center;
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    width: 14%;
+    text-align: center;
+    min-height: 75px;
+  }
+}
+.txt-area {
+    width: 100%;
+    min-height: 150px;
+    border-color: $secondary;
+}
+.linkPoint {
+  cursor: pointer;
+}

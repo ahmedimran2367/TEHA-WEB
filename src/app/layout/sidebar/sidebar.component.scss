@@ -1,0 +1,74 @@
+@import "./../../shared/styles/spacing";
+@import "./../../shared/styles/colors";
+@import "./../../shared/styles/typography";
+
+aside {
+  height: 95%;
+  box-sizing: border-box;
+
+  .logo-container {
+    text-align: center;
+
+    .logo-lg {
+      width: 140px;
+    }
+
+    .logo-sm {
+      width: 50px;
+    }
+  }
+
+  mat-nav-list {
+    mat-list-item {
+      height: auto;
+      box-sizing: border-box;
+
+      align-self: center;
+
+      &:hover {
+        border-color: $primary;
+        background-color: $bgGray;
+      }
+
+      a {
+        color: $secondary;
+        text-decoration: none;
+        font-size: 14px;
+        font-family: Roboto-Regular;
+
+        &:hover {
+          color: $primary;
+        }
+
+        mat-icon {
+          vertical-align: middle;
+          padding-bottom: 12px;
+          padding-top: 12px;
+          padding-right: 15px;
+          padding-left: 15px;
+          align-self: baseline;
+          width: 30px;
+          height: 30px;
+          font-size: 30px;
+          display: inline-flex;
+          align-items: center;
+        }
+      }
+    }
+  }
+}
+
+.vertical-align-center {
+  vertical-align: middle;
+}
+.mat-small {
+  opacity: 0.6;
+}
+.activeSideMenu {
+  border-right: 4px solid $darkgreen;
+  border-color: $primary;
+  background-color: $bgGray;
+  a {
+    color: $darkgreen !important;
+  }
+}

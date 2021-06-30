@@ -1,0 +1,22 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+    <div fxFlex>
+        <mat-card-header>
+            <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+                    <button
+                        routerLink="/accounting/overview"
+                        skipLocationChange mat-icon-button>
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <span fxFlex>{{'accounting.accountingDataExchange' | translate}}
+                    </span>
+                </span>
+            </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="font-resp">
+            <iframe style="width: 100%; height: 500px;" [src]="urll"></iframe>
+        </mat-card-content>
+    </div>
+
+</div>

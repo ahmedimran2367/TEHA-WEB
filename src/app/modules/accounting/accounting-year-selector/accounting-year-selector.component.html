@@ -1,0 +1,15 @@
+<button mat-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <mat-icon>calendar_today</mat-icon> {{selectedAccountingPeriod}} <mat-icon>expand_more</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <div fxLayout="column" (click)="showAll()" class="yeardropdown" [ngClass]="{'selected': isAll}">
+        <div fxFlex="100" class="date-menu-year-all" fxLayoutAlign="center">{{'accounting.all' | translate}}</div>
+    </div>
+    <div fxLayout="column" fxLayoutAlign="center center" *ngFor="let y of yearList" (click)="choosedYear(y)" class="yeardropdown" >
+      <div fxFlex="50" fxLayoutAlign="center" [ngClass]="{'selected': selectedAccountingPeriod == y}">
+        <div fxLayout="row wrap">
+          <div fxFlex="100" class="date-menu-date" >{{y}}</div>
+        </div>
+      </div>
+    </div>
+  </mat-menu>

@@ -1,0 +1,72 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center" class="font-resp">
+    <div fxFlex>
+            <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+
+                    <button routerLink="/accounting/overview" skipLocationChange mat-icon-button>
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <span fxFlex class="header-3">{{'accounting.accountingStatusOverview' | translate}}
+                    </span>
+                </span>
+
+            </mat-card-title>
+
+        <mat-card-content>
+
+            <div fxLayout="column" class="m-t-20 font-resp order-table table-resp">
+                <div fxFlex="90" fxLayout="column" class="table-resp table-align">
+                    <h4 class="header-4 m-l-5">{{'accounting.propertyData' | translate}}</h4>
+                    <table class=" grid-table table-align" mat-table [dataSource]="dataSource">
+
+                        <ng-container matColumnDef="mngr">
+                            <th class="align-c" mat-header-cell *matHeaderCellDef> {{'order.propertyManager' | translate}} </th>
+                            <td class="align-c" mat-cell *matCellDef="let element"> {{element.mngr}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="addr">
+                            <th class="align-c" mat-header-cell *matHeaderCellDef> {{'stockOverview.address' | translate}} </th>
+                            <td class="align-c" mat-cell *matCellDef="let element"> {{element.addr}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="period">
+                            <th class="align-c" mat-header-cell *matHeaderCellDef>{{'accounting.accountingPeriodAccounting' | translate}}</th>
+                            <td class="align-c" mat-cell *matCellDef="let element"> {{element.period}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th class="align-c" mat-header-cell *matHeaderCellDef>{{'accounting.accountingStatusAccounting' | translate}}</th>
+                            <td class="align-c" mat-cell *matCellDef="let element"> {{'lookup.'+utilityService.toCamelCase(element.status) | translate}}</td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+
+                <div fxLayout="row" fxFlex="10" fxLayoutAlign="center start" fxLayoutGap="60px" class="m-t-10 font-resp">
+                    <div fxLayout="column" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                      <button [disabled]="accountingService.property.dta !='N'" routerLink="../enter" skipLocationChange mat-button class="header-4 primary-green-button">{{'accounting.enterCostData' | translate}}</button>
+                    </div>
+                    <div fxLayout="column" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                        <button [disabled]="accountingService.property.dta !='N'" routerLink="../enter/1" skipLocationChange mat-button class="header-4 primary-green-button">{{'accounting.enterUserData' | translate}}</button>
+                    </div>
+                    <div fxLayout="column" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                        <button [disabled]="accountingService.property.dta =='N'" (click)="onDataExchange()" skipLocationChange mat-button class="header-4 primary-green-button">{{'accounting.dataExchange' | translate}}</button>
+                    </div>       
+                </div>
+                <div fxLayout="row" fxFlex="60" fxLayoutAlign="center start" fxLayoutGap="60px" class="m-t-2 font-resp">
+                    <div  *ngIf="accountingService.property.dta =='N'" fxLayout="column" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                    <span *ngIf="lastUpdatedDates?.costLastUpdatedDate!=null" class="support-text text-align-center">{{'accounting.lastSavedOn' | translate}} {{lastUpdatedDates.costLastUpdatedDate | date: 'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div  *ngIf="accountingService.property.dta =='N'" fxLayout="column" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                        <span *ngIf="lastUpdatedDates?.userLastUpdatedDate!=null" class="support-text text-align-center" >{{'accounting.lastSavedOn' | translate}} {{lastUpdatedDates.userLastUpdatedDate | date: 'dd/MM/yyyy' }}</span>
+                    </div>
+                    <div *ngIf="accountingService.property.dta !='N'" fxLayout="column" fxFlex="45" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                        <span class="support-text text-align-center" >{{'accounting.dtaActive' | translate}}</span>
+                    </div>
+                    <div fxLayout="column" fxFlex="20" fxLayoutGap="20px" fxLayoutAlign="start center" >
+                        <span *ngIf="accountingService.property.dta =='N'" class="support-text text-align-center" >{{'accounting.dtaDeactive' | translate}}</span>
+                    </div>       
+                </div>
+            </div>
+        </mat-card-content>
+    </div>
+</div>

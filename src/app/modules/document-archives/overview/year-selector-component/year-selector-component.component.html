@@ -1,0 +1,21 @@
+<button mat-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+  <img class="m-r-2" src="./assets/images/calendar.svg"> {{selectedAccountingPeriod}} <mat-icon>expand_more</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <div class="year-menu font-resp">
+    <div fxLayout="column" (click)="showAll()">
+      <div fxFlex="100" class="paragraph link" fxLayoutAlign="center">{{'accounting.all' | translate}}</div>
+    </div>
+    <div fxLayout="row" class="m-t-5 link" *ngFor="let y of yearList" (click)="choosedDate(y)">
+      <div [ngClass]="{'text-brightgreen ': y.id == selectedPayrollId}" fxFlex="35" class="m-r-3 support-text" fxLayoutAlign="end">{{y.year}}</div>
+      <mat-divider [vertical]="true"></mat-divider>
+      <div class="m-l-3" fxFlex="65">
+        <div fxLayout="column">
+          <div [ngClass]="{'text-brightgreen ': y.id == selectedPayrollId}" fxFlex="100" class="support-text">{{y.from | date: 'dd/MM/yyyy'}}</div>
+          <div [ngClass]="{'text-brightgreen ': y.id == selectedPayrollId}" fxFlex="100" class="support-text">{{y.to | date: 'dd/MM/yyyy'}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</mat-menu>

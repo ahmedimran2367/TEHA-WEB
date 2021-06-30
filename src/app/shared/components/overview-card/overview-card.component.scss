@@ -1,0 +1,41 @@
+@import "../../styles/spacing";
+@import "../../styles/colors";
+@import "../../styles/typography";
+
+
+.hello-card-icon-wrapper {
+  height: 100px;
+  width: 100px;
+  border-radius: 8px;
+
+  background: url("https://www.nlgja.org/wp-content/uploads/2015/01/TJ-Thomson-Square.jpg") 50% 50% no-repeat;
+  background-size: 100% auto;
+}
+
+.hello-card-icon-wrapper .mat-icon {
+  vertical-align: middle;
+  align-self: baseline;
+  width: 90px;
+  height: 90px;
+  font-size: 90px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hello-title {
+  /* Hello Tomi, */
+
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: 0.05em;
+
+
+}
+
+.vertical-separator {
+  height: 100px;
+  width: 2px;
+  background: 1px $bgGray;
+}

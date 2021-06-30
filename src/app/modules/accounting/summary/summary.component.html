@@ -1,0 +1,605 @@
+<div fxLayout="row" class="font-resp" fxLayout.lt-md="column">
+    <div fxFlex>
+        <mat-card-header>
+
+            <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+
+                </span>
+                <!-- <span class="m-t-2" fxFlex>{{'accounting.accountingSummaryRelease' | translate}}
+                </span> -->
+
+            </mat-card-title>
+
+        </mat-card-header>
+        <mat-card-content *ngIf="steper == 1">
+            <div fxLayout="column" fxFlex="70" class="m-t-10 m-r-10">
+                <mat-accordion class="sum-accord" fxFlexFill fxFlex multi>
+                    <mat-expansion-panel expanded="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="m-l-10">
+                                {{'accounting.energyCost' | translate}}
+                            </mat-panel-title>
+                            <mat-panel-description fxLayoutAlign="end">{{getTotal('energy',null) | germanDecimal }} €
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-accordion class="sum-accord">
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.yourEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('energy',false) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill style="border-bottom: 1px;">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.units' | translate}}</th>
+                                            <th>{{'accounting.consumption' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('energy',false);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.parentUnits}}</td>
+                                            <td>{{cost.consumption | germanDecimal}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td>
+                                                <span *ngIf="!readonlyInd" class="linkPoint"
+                                                    (click)="editCost('energy',cost.costId,cost.conceptId)">
+                                                    <mat-icon>mode_edit</mat-icon>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel expanded="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="m-l-10">
+                                {{'accounting.heatingCost' | translate}}
+                            </mat-panel-title>
+                            <mat-panel-description fxLayoutAlign="end">{{getTotal('heating',null) | germanDecimal }} €
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-accordion class="sum-accord" multi>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.yourEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('heating',false) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill style="border-bottom: 1px;">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('heating',false);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td>
+                                                <span *ngIf="!readonlyInd" class="linkPoint"
+                                                    (click)="editCost('heating',cost.costId,cost.conceptId)">
+                                                    <mat-icon>mode_edit</mat-icon>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.tehaEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('heating',true) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill>
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th> {{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('heating',true);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel expanded="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="m-l-10">
+                                {{'accounting.additionalHeatingCost' | translate}}
+                            </mat-panel-title>
+                            <mat-panel-description fxLayoutAlign="end">{{getTotal('heatingAdditional',null) |
+                                germanDecimal }} €</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-accordion class="sum-accord" multi>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.yourEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('heatingAdditional',false) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill>
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('heatingAdditional',false);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td>
+                                                <span *ngIf="!readonlyInd" class="linkPoint"
+                                                    (click)="editCost('heatingAdditional',cost.costId,cost.conceptId)">
+                                                    <mat-icon>mode_edit</mat-icon>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.tehaEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('heatingAdditional',true) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill>
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('heatingAdditional',true);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel expanded="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="m-l-10">
+                                {{'accounting.additionalHotWaterCost' | translate}}
+                            </mat-panel-title>
+                            <mat-panel-description fxLayoutAlign="end">
+                                {{getTotal('hotWaterAdditional',null) | germanDecimal }} €
+                            </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-accordion class="sum-accord" multi>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.yourEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('hotWaterAdditional',false) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill>
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('hotWaterAdditional',false);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td>
+                                                <span *ngIf="!readonlyInd" class="linkPoint"
+                                                    (click)="editCost('hotWaterAdditional',cost.costId,cost.conceptId)">
+                                                    <mat-icon>mode_edit</mat-icon>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.tehaEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('hotWaterAdditional',true) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill>
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('hotWaterAdditional',true);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel expanded="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title class="m-l-10">
+                                {{'accounting.houseCost' | translate}}
+                            </mat-panel-title>
+                            <mat-panel-description fxLayoutAlign="end">{{getTotal('additionalCosts',null) |
+                                germanDecimal }} €</mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <mat-accordion class="sum-accord" multi>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.yourEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">
+                                        {{getTotal('additionalCosts',false) | germanDecimal }} €
+                                    </mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill style="border-bottom: 1px;">
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'accounting.calculationKey' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('additionalCosts',false);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.calculationKey}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td>
+                                                <span *ngIf="!readonlyInd" class="linkPoint"
+                                                    (click)="editCost('additionalCosts',cost.costId,cost.conceptId)">
+                                                    <mat-icon>mode_edit</mat-icon>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                            <mat-expansion-panel expanded="true">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title class="m-l-10">
+                                        {{'accounting.tehaEntries' | translate}}
+                                    </mat-panel-title>
+                                    <mat-panel-description fxLayoutAlign="end">{{getTotal('additionalCosts',true) |
+                                        germanDecimal }} €</mat-panel-description>
+                                </mat-expansion-panel-header>
+                                <table class="child-table" fxFlexFill>
+                                    <thead>
+                                        <tr>
+                                            <th>{{'accounting.costConcept' | translate}}</th>
+                                            <th>{{'accounting.amountGross' | translate}}</th>
+                                            <th>{{'accounting.vat' | translate}} % </th>
+                                            <th>{{'accounting.wageShare' | translate}}</th>
+                                            <th>{{'documentArchives.dateOfInvoice' | translate}}</th>
+                                            <th>{{'order.comments' | translate}}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let cost of getCosts('additionalCosts',true);let i = index">
+                                            <td>{{cost.costConcept}}</td>
+                                            <td>{{cost.amountBrutto | germanDecimal}}</td>
+                                            <td>{{cost.vat | germanDecimal}}</td>
+                                            <td>{{cost.wageShare | germanDecimal}}</td>
+                                            <td>{{cost.invoiceDate=="-"?(cost.invoiceDate):(cost.invoiceDate | date: 'dd/MM/yyyy')}}</td>
+                                            <td>{{cost.parentComments}}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </mat-expansion-panel>
+                        </mat-accordion>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                <div fxFlex fxLayout="row" fxLayoutAlign="space-between end" fxFlexFill class="m-t-8">
+                    <span fxLayoutAlign="start start" class="m-l-14 header-4">
+                        {{'accounting.totalAmount' | translate}}
+                    </span>
+                    <span fxLayoutAlign="end" class="m-r-10 header-4">{{getTotalAmount() | germanDecimal }} €</span>
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutAlign="space-between end" fxFlexFill class="m-t-20">
+                    <span fxLayoutAlign="start start" class="m-l-14 header-4">
+                        {{'accounting.userDataChanges' | translate}}
+                    </span>
+                    <span fxLayoutAlign="end" class="m-r-10 header-4">
+                        {{ accoutingService.noOfUserChanges }}
+                    </span>
+                </div>
+                
+            </div>
+
+            <mat-divider [vertical]="true"></mat-divider>
+
+            <div fxFlex="30" class="m-l-10 m-t-10 m-r-10" fxLayout="column" fxLayoutGap="40px">
+                <div fxLayout="column">
+                    <div class="header-4 m-b-8" *ngIf="!readonlyInd">
+                        {{'order.commentsObservations' | translate}}
+                    </div>
+                    <div class="upport-text m-b-5" *ngIf="!readonlyInd">
+                        {{'order.commentsQuestion' | translate}}
+                    </div>
+                    <div *ngIf="!readonlyInd">
+                        <textarea [ngModel]="comments" class="txt-area" [readonly]="readonlyInd">
+
+                        </textarea>
+                    </div>
+                </div>
+
+
+            </div>
+        </mat-card-content>
+        <mat-card-content *ngIf="steper == 2" class="m-l-5 m-t-5" fxLayoutGap="16px">
+            <div fxLayout="column" fxLayoutGap="16px">
+                <div fxLayout="column" fxFlex>
+                    <span style="font-weight:bold;"  class="m-b-4">{{'accounting.consumptionAnalysis' |
+                        translate}}</span>
+                        <span fxFlex>{{'accounting.consuptionDetailHeading' | translate}} *</span>
+                </div>
+                <div fxFlex>
+                    <mat-radio-group [(ngModel)]="summaryAndRelease.consumptionAnalysis" [disabled]="readonlyInd">
+                        <mat-radio-button class="m-r-3" [value]="true">{{'order.yes' | translate}}</mat-radio-button>
+                        <mat-radio-button class="m-r-3" [value]="false">{{'order.no' | translate}}</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div fxLayout="column" class="m-t-10">
+                    <div class="m-b-4">
+                        <span style="font-weight:bold;">{{'accounting.billingInformation' | translate}}</span>
+                    </div>
+                    <div fxLayout="row">
+                        <div *ngIf="isSmokeDetectorExists() || accoutingService.noOfUserChanges>0 || isRepairsExists()"
+                            fxFlex="50" class="m-r-10" fxLayout="column" fxLayoutGap="40px">
+                            <div fxFlex *ngIf="isSmokeDetectorExists()">
+                                <label class="support-text">{{'accounting.chargesShift' | translate}} </label>
+                                <mat-radio-group [disabled]="readonlyInd" fxFlex fxLayoutAlign="end start">
+                                    <mat-radio-button class="m-r-3" value="yes">{{'order.yes' | translate}}
+                                    </mat-radio-button>
+                                    <mat-radio-button value="no">{{'order.no' | translate}}</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div *ngIf="accoutingService.noOfUserChanges>0" fxFlex>
+                                <label class="support-text">{{'accounting.shiftUserCharges' | translate}} </label>
+                                <mat-radio-group [disabled]="readonlyInd"
+                                    [(ngModel)]="summaryAndRelease.siftChargesFor.userChange" fxFlex
+                                    fxLayoutAlign="end start">
+                                    <mat-radio-button class="m-r-3" [value]="true">{{'order.yes' | translate}}
+                                    </mat-radio-button>
+                                    <mat-radio-button [value]="false">{{'order.no' | translate}}</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div fxFlex *ngIf="isRepairsExists()">
+                                <label class="support-text">{{'accounting.shiftRepairCharges' | translate}}</label>
+                                <mat-radio-group [disabled]="readonlyInd" fxFlex fxLayoutAlign="end start">
+                                    <mat-radio-button class="m-r-3" value="yes">{{'order.yes' | translate}}
+                                    </mat-radio-button>
+                                    <mat-radio-button value="no">{{'order.no' | translate}}</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </div>
+                        <mat-divider
+                            *ngIf="isSmokeDetectorExists() || accoutingService.noOfUserChanges>0 || isRepairsExists()"
+                            [vertical]="true"></mat-divider>
+
+                        <div fxFlex="50" class="m-l-10 m-r-10" fxLayout="column" fxLayoutGap="40px">
+                            <div fxFlex>
+                                <label>{{'accounting.heater' | translate}} </label>
+                                <div fxFlex fxLayoutGap="30px" fxLayoutAlign="end start">
+                                    <mat-form-field fxFlex fxLayoutAlign="end start">
+                                        <mat-label>{{'accounting.basicCostPercent' | translate}}</mat-label>
+                                        <input [readonly]="readonlyInd"
+                                            [ngModel]="summaryAndRelease.billingInformation.heater?.basicCost"
+                                            (ngModelChange)="summaryAndRelease.billingInformation.heater.basicCost=$event"
+                                            matInput>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <mat-label>{{'accounting.consumptionPercent' | translate}}</mat-label>
+                                        <input [readonly]="readonlyInd"
+                                            [ngModel]="summaryAndRelease.billingInformation.heater?.consumption"
+                                            (ngModelChange)="summaryAndRelease.billingInformation.heater.consumption=$event"
+                                            matInput>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                            <div fxFlex>
+                                <label>{{'accounting.hotWatePercent' | translate}}</label>
+                                <div fxFlex fxLayoutGap="30px" fxLayoutAlign="end start">
+                                    <mat-form-field>
+                                        <mat-label>{{'accounting.basicCostPercent' | translate}}</mat-label>
+                                        <input [readonly]="readonlyInd"
+                                            [ngModel]="summaryAndRelease.billingInformation.hotWater?.basicCost"
+                                            (ngModelChange)="summaryAndRelease.billingInformation.hotWater.basicCost=$event"
+                                            matInput>
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <mat-label>{{'accounting.consumptionPercent' | translate}}</mat-label>
+                                        <input [readonly]="readonlyInd"
+                                            [ngModel]="summaryAndRelease.billingInformation.hotWater?.consumption"
+                                            (ngModelChange)="summaryAndRelease.billingInformation.hotWater.consumption=$event"
+                                            matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div fxFlex>
+                                <label>{{'accounting.boilerTemperature' | translate}} </label>
+                                <div fxFlex fxLayoutAlign="end start">
+                                    <mat-form-field style="width: 78%;">
+                                        <input [readonly]="readonlyInd"
+                                            [(ngModel)]="summaryAndRelease.billingInformation.averageBoilerTemprature"
+                                            matInput>
+                                    </mat-form-field>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div fxLayout="column" fxLayoutGap="10px">
+                <mat-checkbox [disabled]="readonlyInd" [(ngModel)]="terms.one" class="support-text" fxFlex>
+                    {{'order.termsMessagePart1' | translate}} <a class="link"
+                        (click)="downloadPDF()">{{'order.termsMessagePart2' |
+                        translate}}<span class="warning-color">*</span></a></mat-checkbox>
+                <!-- <mat-checkbox [disabled]="readonlyInd" [(ngModel)]="terms.two" class="support-text " fxFlex>{{'accounting.completenessCheck' | translate}} *</mat-checkbox> -->
+                <mat-checkbox [disabled]="readonlyInd" [(ngModel)]="terms.three" class="support-text " fxFlex>
+                    {{'accounting.accountingCostCheck' | translate}} *</mat-checkbox>
+            </div>
+        </mat-card-content>
+        <mat-card-content *ngIf="steper == 3">
+            <div class="confirm-message-wrapper p-t-16 p-b-8" fxLayout="column" fxLayoutGap="40px"
+                fxLayoutAlign="center center">
+
+                <div class="confirm-message-wrapper">
+                    <div class="message-with-icon-wrapper" fxLayoutAlign="center center" fxLayoutGap="24px">
+
+                        <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M43.7508 25.1461V27.0836C43.7455 36.3101 37.6722 44.4341 28.8244 47.0501C19.9766 49.6661 10.462 46.1509 5.44026 38.4108C0.418511 30.6708 1.0859 20.5495 7.08051 13.5359C13.0751 6.52218 22.9689 4.2868 31.3966 8.04196"
+                                stroke="#00A253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M45.8327 8.33301L22.916 31.2497L16.666 24.9997" stroke="#00A253" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span class="header-4 text-darkgreen">{{'accounting.accountingConfirmationMessage' |
+                            translate}}</span>
+
+                    </div>
+                    <div class="confirmation-message-text text-align-center p-t-8 header-4">
+                        <p>{{'accounting.accountingeirReciveMsg' | translate}}
+                            <br>
+                            <br>
+                            {{'accounting.accountingemailMessage' | translate}}
+                            <br>
+                            <br>
+                            -- {{'order.tehaServiceTeam' | translate}}
+                        </p>
+
+                    </div>
+                </div>
+
+
+
+                <div class="p-t-8 w-100" fxFlex fxLayoutAlign="end center">
+                    <button routerLink="/accounting/overview" mat-button
+                        class="primary-green-button">{{'accounting.backAccountingOverview' | translate}}</button>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions class="m-0 p-0">
+            <div *ngIf="steper != 3" fxLayoutAlign="end end" fxLayoutGap="12px" class="m-8">
+                <button *ngIf="steper != 1" mat-button (click)="steper = 1"
+                    class="primary-transparent-button btn-lg">{{'accounting.previous' | translate}}</button>
+                <button *ngIf="steper == 1" (click)="submit()" mat-button
+                    class="primary-green-button btn-lg">{{'order.next' | translate}}</button>
+                <button *ngIf="steper != 1" [disabled]="(!terms.one || !terms.three) || readonlyInd" (click)="submit()"
+                    mat-button class="primary-green-button btn-lg">{{'account.submit' | translate}}</button>
+            </div>
+        </mat-card-actions>
+    </div>
+</div>

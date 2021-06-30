@@ -1,0 +1,141 @@
+<div fxLayoutAlign="start" class="table-resp-1 font-resp" fxHide.lt-md="true">
+  <table class="grid-table table-align" mat-table aria-label="Elements" #PropertyTable
+    [dataSource]="propertyDataSource">
+    
+    <ng-container matColumnDef="tehalgno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.tehaLgNo' | translate}}</th>
+      <td mat-cell *matCellDef="let row">{{ row.tehaLgNo }}</td>
+    </ng-container>
+    <ng-container matColumnDef="adminlgno">
+        <th mat-header-cell *matHeaderCellDef>{{'stockOverview.adminLgNo' | translate}}</th>
+        <td mat-cell *matCellDef="let row">{{ row.adminLgNo }}</td>
+      </ng-container>
+
+    <ng-container matColumnDef="street">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.street' | translate}}</th>
+      <td mat-cell *matCellDef="let row">{{ row.street }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="postcode">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.postcode' | translate}}</th>
+      <td mat-cell *matCellDef="let row">{{ row.postcode | replaceNullWithDash}}</td>
+    </ng-container>
+    <ng-container matColumnDef="place">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.city' | translate}}</th>
+      <td mat-cell *matCellDef="let row">{{ row.place | replaceNullWithDash}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+
+          <a fxLayoutAlign="end center" (click)="createOrder(row.id)" mat-button
+            color="link">
+            {{'order.orderEnergyCertificate' | translate}} <mat-icon>chevron_right</mat-icon>
+          </a>
+
+
+        </td>
+      </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedPropertyColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedPropertyColumns"></tr>
+  </table>
+</div>
+  <div fxLayout="row" fxLayoutAlign="space-evenly center" fxHide.lt-md="true">
+    <mat-paginator hidePageSize = "true" #paginator [length]="propertyDataSource?.data?.length" [pageIndex]="0" [pageSize]="pageSize"
+    >
+      </mat-paginator>
+  </div>
+
+<!-- ------------------------mobile view-------- -->
+
+
+<div fxLayout="column" fxLayoutAlign="start center" fxHide.gt-sm="true" fxLayoutGap="20px" *ngIf="propertyDataSource"
+class="font-resp">
+<mat-card fxFlex fxHide.gt-sm="true" class="mat-dashboard-card w-100" fxLayout="column" fxLayoutGap="20px"
+  *ngFor="let item of propertyDataSource.data">
+  <div fxFlex fxLayout="column" fxLayoutGap="10px">
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+      </div>
+      <span fxFlex="50" class="support-text-b">{{'stockOverview.tehaLgNo' | translate}}:
+         <span class="support-text">{{item.tehaLgNo}}</span></span>
+      <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+      </div>
+      <span fxFlex="50" class="support-text-b">{{'stockOverview.postcode' | translate}}: <span class="support-text-b">{{item.postcode |
+          replaceNullWithDash}}</span></span>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+      <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+      </div>
+
+      <span fxFlex="50" class="support-text-b">{{'stockOverview.adminLgNo' | translate}}: 
+        <span
+          class="support-text">{{item.adminLgNo}}</span></span>
+      <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+      </div>
+      <span fxFlex="50" class="support-text-b">{{'stockOverview.street' | translate}}: <span class="support-text">{{item.street}}</span></span>
+    </div>
+    <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/Apartment.svg" width="40" height="40" viewBox="0 0 40 40">
+      </div>
+      <span fxFlex="50" class="support-text-b">{{'stockOverview.city' | translate}}:<br><span class="support-text">{{item.place |
+          replaceNullWithDash}}</span></span>
+      <!-- <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/status.svg" width="42" height="42" viewBox="0 0 42 42">
+      </div>
+      <span fxFlex="50" class="support-text-b">City:<br><span
+          class="support-text">{{item.place | replaceNullWithDash}}</span></span> -->
+    </div>
+    <!-- <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+      <div fxFlex="47px" fxFlexAlign="center">
+        <img src="./assets/images/difference.svg" width="42" height="42" viewBox="0 0 42 42">
+      </div>
+      <span class="support-text-b">City: <span class="support-text">{{item.place | replaceNullWithDash}}</span></span>
+    </div> -->
+
+  </div>
+  <mat-divider fxFlex inset="true"></mat-divider>
+  <div fxFlex fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+    <ng-container matColumnDef="actions">
+      <!-- <th mat-header-cell *matHeaderCellDef></th> -->
+      <td mat-cell *matCellDef="let row">
+        <a *ngIf="createOrder" fxLayoutAlign="end center" (click)="createOrderPropertyLevel(row.id)" mat-button
+          color="link">
+          {{'order.orderReading' | translate}} <mat-icon>chevron_right</mat-icon>
+        </a>
+        <a *ngIf="continueToFlats" fxLayoutAlign="end center" (click)="handleCase(row.id)" mat-button color="link">
+          {{'order.continueToFlats' | translate}} <mat-icon>chevron_right</mat-icon>
+        </a>
+      </td>
+    </ng-container>
+  </div>
+</mat-card>
+</div>
+<mat-menu class="menuFilter" #filterMenu="matMenu">
+<ng-template matMenuContent let-element="element">
+  <div *ngIf="type || status">
+    <button (click)="removeFilter(element)" mat-flat-button> {{'accounting.reset' | translate}}</button>
+    <mat-divider></mat-divider>
+  </div>
+  <button *ngFor="let item of getFilterList(element)" mat-menu-item (click)="onFilterClick(element, item)"><span
+      [ngClass]="{'text-darkgreen': setColor(element, item)}">
+      <!-- {{item.code}}  -->
+      <!-- {{'lookup.'+item.code | translate}} -->
+      <span *ngIf="element === 'orderType'"> {{'lookup.'+utilityService.toCamelCase('type'+item.code) |
+        translate}}</span>
+      <span *ngIf="element === 'orderStatus'"> {{'lookup.'+utilityService.toCamelCase(item.code) | translate}}</span>
+
+    </span>
+  </button>
+</ng-template>
+</mat-menu>
+<ng-template #filledFilterIcon>
+<mat-icon class="selected-filter-icon">filter_alt</mat-icon>
+</ng-template>

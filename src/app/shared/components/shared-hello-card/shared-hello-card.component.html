@@ -1,0 +1,33 @@
+<mat-card class="mat-dashboard-card font-resp hello-card" fxFlex="100" fxLayout="column" fxLayoutAlign="center">
+  <mat-card-content>
+    <div fxLayout.lt-md="column" fxFlex fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+      <div fxFlex="90" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center"
+        fxLayoutAlign.lt-md="center center" fxLayoutGap="20px">
+        <div fxFlex="134px" ngClass.gt-md="m-l-10" class="hello-card-icon-wrapper" fxLayoutAlign="center center">
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M25 50C11.1929 50 0 38.8071 0 25C0 11.1929 11.1929 0 25 0C38.8071 0 50 11.1929 50 25C50 38.8071 38.8071 50 25 50ZM41.817 36.6469C44.1105 33.3416 45.4545 29.3278 45.4545 25C45.4545 13.7033 36.2967 4.54545 25 4.54545C13.7033 4.54545 4.54545 13.7033 4.54545 25C4.54545 29.3278 5.88951 33.3416 8.18298 36.6469C10.7408 33.2683 16.7514 31.8182 25 31.8182C33.2486 31.8182 39.2592 33.2683 41.817 36.6469ZM38.5561 40.3176C37.8909 37.9258 33.1122 36.3636 25 36.3636C16.8878 36.3636 12.1091 37.9258 11.4439 40.3177C15.053 43.514 19.7999 45.4545 25 45.4545C30.2001 45.4545 34.9471 43.514 38.5561 40.3176ZM25 11.3636C19.498 11.3636 15.9091 15.354 15.9091 20.4545C15.9091 28.244 19.9111 31.8182 25 31.8182C30.0411 31.8182 34.0909 28.3628 34.0909 20.9091C34.0909 15.7309 30.4868 11.3636 25 11.3636ZM20.4545 20.4545C20.4545 25.6119 22.3141 27.2727 25 27.2727C27.6766 27.2727 29.5455 25.6782 29.5455 20.9091C29.5455 18.0691 27.7629 15.9091 25 15.9091C22.1221 15.9091 20.4545 17.7632 20.4545 20.4545Z"
+            fill="#808080" />
+        </svg>
+        </div>
+        <div fxLayout="column" fxLayoutAlign.lt-md="center center" fxLayoutAlign="center start" fxLayoutGap="10px">
+          <p class="o-wrap header-2 text-black" ngClass.lt-md="text-align-center">
+            {{'order.hello' | translate}}  {{firstName}}
+          </p>
+          <div *ngIf="currentRout == '/orders'">
+            <span class="header-4 text-gray">{{message}}</span>
+        </div>
+          <div *ngIf="currentRout == '/myprofile';else other_content">
+            <span class="header-4 text-gray">{{message}}</span>
+        </div>
+        
+        <ng-template #other_content>
+          <span *ngIf="currentRout != '/accounting/overview' && currentRout != '/orders'" class="header-4 text-gray">{{'miscellaneous.helloCardWelcome' | translate}}</span>
+          <span *ngIf="currentRout == '/accounting/overview'" class="header-4 text-gray">{{message}}</span>
+        </ng-template>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>

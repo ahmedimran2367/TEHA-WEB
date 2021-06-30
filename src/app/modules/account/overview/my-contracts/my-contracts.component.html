@@ -1,0 +1,235 @@
+<div fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="24px"
+  class="tableHeight font-resp">
+  <table mat-table class="full-width-table grid-table table-align" mat-table matSort aria-label="Elements"
+    [dataSource]="dataSource">
+    <ng-container matColumnDef="tehaLgNo">
+      <th class="sort th-c" mat-header-cell *matHeaderCellDef mat-sort-header>
+        <div fxLayout="row" fxLayoutAlign="center center">{{'stockOverview.tehaLgNo' | translate}}</div>
+      </th>
+      <td class="sort align-c" mat-cell *matCellDef="let element">
+        <a>{{ element.tehaLgNo | translate}}</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="adminLgNo">
+      <th class="sort th-c" mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{'stockOverview.adminLgNo' | translate}}
+      </th>
+      <td class="sort align-c" mat-cell *matCellDef="let element">{{ element.adminLgNo }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="street">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'stockOverview.street' | translate}}
+      </th>
+      <td class="align-s" mat-cell *matCellDef="let element">{{ element.street }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="postcode">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'stockOverview.postcode' | translate}}
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element">{{ element.postcode }}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="city">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'stockOverview.city' | translate}}
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element">{{ element.place }}</td>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="contractType">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        <span fxLayoutAlign="center center">
+          {{'account.contractType' | translate}}
+          <button mat-icon-button [matMenuTriggerFor]="filterMenu">
+            <svg *ngIf="!selectedFilter;else filledFilterIcon" width="15" height="15" viewBox="0 0 20 20" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M18.3334 2.5H1.66675L8.33342 10.3833V15.8333L11.6667 17.5V10.3833L18.3334 2.5V2.5Z" stroke="#565656"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </span>
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element"> {{ 'order.'+ utilityService.toCamelCase(element.contractType) | translate
+        }}</td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="startDate">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'account.startDate' | translate}}
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element">{{ element.startTime | date: 'dd/MM/yyyy' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="endDate">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'account.endDate' | translate}}
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element">{{ element.endTime | date: 'dd/MM/yyyy' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="download">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'documentArchives.download' | translate}}
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.id; else disabledDownloadButtonTemplate">
+          <button (click)="downlaodDocument(element.id, element.propertyId, element.tehaLgNo, element.contractType)"
+            mat-button>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M5 5V2C5 0.89543 5.89543 0 7 0H13C14.1046 0 15 0.89543 15 2V5V9H20L10 17.5847L0 9H5V5ZM13 2V5V9V11H14.2967L10 14.9505L5.70326 11H7V9V5V2H13ZM17 20C18.1046 20 19 19.1046 19 18H1C1 19.1046 1.89543 20 3 20H17Z"
+                fill="#565656" />
+            </svg>
+          </button>
+        </ng-container>
+        <ng-template #disabledDownloadButtonTemplate>
+          <span><img src="./assets/images/download-dis.svg"></span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+</div>
+<div fxHide.lt-md="true" fxLayoutAlign="center center">
+  <mat-paginator hidePageSize="true" #paginator [pageIndex]="0" [pageSize]="pageSize">
+  </mat-paginator>
+</div>
+<!-- <mat-menu #appMenu="matMenu">
+  <ng-template matMenuContent let-element="element">
+    <button mat-menu-item>Energy Performance {{element.tehaLgNo}}</button>
+    <button mat-menu-item>Drinking Water {{element.tehaLgNo}}</button>
+  </ng-template>
+</mat-menu> -->
+<mat-menu #filterMenu="matMenu">
+
+  <ng-template matMenuContent let-element="element">
+    <div *ngIf="selectedFilter">
+      <button (click)="removeFilter()" mat-flat-button>{{'accounting.reset' | translate}}</button>
+      <mat-divider></mat-divider>
+    </div>
+    <div *ngFor="let item of defaultDataService.DefaultData.lookUps.contractType;let i=index; let l= count">
+      <div class="menu-button">
+        <button mat-menu-item (click)="onFilterClick(item)"><span
+            [ngClass]="{'text-darkgreen': selectedFilter === item.code}">
+            {{ 'order.'+ utilityService.toCamelCase(item.code) | translate }}
+          </span>
+        </button>
+        <mat-divider *ngIf="i!==l-1"></mat-divider>
+      </div>
+    </div>
+  </ng-template>
+</mat-menu>
+
+<ng-template #filledFilterIcon>
+  <mat-icon class="selected-filter-icon">filter_alt</mat-icon>
+</ng-template>
+
+
+<div *ngIf="dataSource" class="font-resp m-t-4" fxHide.gt-sm="true">
+  <ng-container *ngFor="let element of dataSource.filteredData; let i=index">
+    <div class="simple-card">
+      <div fxLayout="column" fxLayoutGap="20px">
+        <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'stockOverview.tehaLgNo' | translate}}:<br>
+              {{ element.tehaLgNo }}
+            </div>
+          </div>
+
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'stockOverview.adminLgNo' | translate}}:<br>
+              {{ element.adminLgNo }}
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'stockOverview.street' | translate}}:<br>
+              {{ element.street }}
+            </div>
+          </div>
+
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'stockOverview.postcode' | translate}}:<br>
+              {{ element.postcode }}
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'stockOverview.city' | translate}}:<br>
+              {{ element.place }}
+            </div>
+          </div>
+
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'account.contractType' | translate}}:<br>
+              {{ 'order.'+ utilityService.toCamelCase(element.contractType) | translate}}
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'account.startDate' | translate}}:<br>
+              {{ element.startTime | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'account.endDate' | translate}}:<br>
+              {{ element.endTime | date: 'dd/MM/yyyy' }}
+            </div>
+          </div>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+          <div fxLayout="column" fxFlex="50">
+            <div class="paragraph">
+              {{'documentArchives.download' | translate}}
+              <ng-container *ngIf="element.id; else disabledDownloadButtonTemplate">
+                <button
+                  (click)="downlaodDocument(element.id, element.propertyId, element.tehaLgNo, element.contractType)"
+                  mat-button>
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M5 5V2C5 0.89543 5.89543 0 7 0H13C14.1046 0 15 0.89543 15 2V5V9H20L10 17.5847L0 9H5V5ZM13 2V5V9V11H14.2967L10 14.9505L5.70326 11H7V9V5V2H13ZM17 20C18.1046 20 19 19.1046 19 18H1C1 19.1046 1.89543 20 3 20H17Z"
+                      fill="#565656" />
+                  </svg>
+                </button>
+              </ng-container>
+              <ng-template #disabledDownloadButtonTemplate>
+                <span><img src="./assets/images/download-dis.svg"></span>
+              </ng-template>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,47 @@
+<div fxLayout="column" class="l-typography p-t-0" fxLayoutGap="15px">
+  <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="20px">
+    
+    <app-shared-hello-card fxFlex="50" fxFlex.lt-md="100"></app-shared-hello-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-map-component class="m-b-8" [isFromUser]="true" fxHide.lt-md="true"
+        fxFlex="90"></app-map-component>
+    </div>
+  </div>
+
+  <div fxFlex>
+    <mat-card class="mat-dashboard-card p-t-8 p-l-3 p-r-3 p-b-0">
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+        <div fxFlex >
+          <mat-card-header>
+
+            <mat-card-title class="m-t-2">
+              <span fxLayout="row" fxLayoutAlign="center center">
+                <button (click)="goBack()"
+                  mat-icon-button>
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+                {{'documentArchives.invoiceOverviewAllBuildings' | translate}}  
+              </span>
+              <span fxFlex></span>
+
+            </mat-card-title>
+
+          </mat-card-header>
+        </div>
+        <div class="font-resp" fxFlexAlign="end end">
+          <span>
+            <app-year-selector-component (yearChange)="onPayrollYearChange($event)"></app-year-selector-component>
+          </span>
+        </div>
+
+
+      </div>
+
+
+      <mat-card-content>
+        <app-invoice-table [allBuildingsInd]="true" [payrollYear]="selectedPayrollYear"></app-invoice-table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

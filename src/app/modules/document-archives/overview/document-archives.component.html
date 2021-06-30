@@ -1,0 +1,234 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-building-info-card fxFlex></app-building-info-card>
+    <div fxLayout="column" fxFlex fxLayoutGap="10px">
+
+      <app-search-autocomplete fxFlex="30" (onOptionSelected)="updateDocuments($event)"></app-search-autocomplete>
+      <app-map-component fxFlex="70"></app-map-component>
+    </div>
+  </div>
+
+  <div fxFlex="100">
+    <mat-card class="mat-dashboard-card p-t-5">
+
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+        <div fxFlex>
+          <mat-card-header>
+
+            <mat-card-title class="m-t-2">
+              <span fxLayout="row" fxLayoutAlign="center center">
+                <button (click)="goBackFromSpecificFlatTable()" [ngClass]="{'is-hidden': hiddenBackButton}"
+                  mat-icon-button>
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+                {{'documentArchives.'+selectedTabName | translate}}
+              </span>
+              <span fxFlex></span>
+
+            </mat-card-title>
+
+          </mat-card-header>
+        </div>
+        <div class="font-resp" fxFlexAlign="end end">
+          <span [ngClass]="{'is-hidden': hiddenDropdown}">
+
+            <app-year-selector-component (yearChange)="onPayrollYearChange($event); searchBar.searchText = ''">
+            </app-year-selector-component>
+          </span>
+          <span [ngClass]="{'is-hidden': hideSearchBar}">
+            <app-search-bar #searchBar placeHolder="Search (User No., Rent No., User Name)"
+              (changed)="onSearchChange($event)">
+            </app-search-bar>
+            <div *ngIf="selectedPayrollYear && tabid!=3" fxLayoutAlign="start center" class="p-l-6 header-5">
+              {{'stockOverview.accountingPeriod' | translate}}: {{accPeriod}}
+            </div>
+          </span>
+        </div>
+
+
+      </div>
+
+
+      <mat-card-content>
+        <mat-tab-group class="comp-tabs-title" mat-align-tabs="center" #tabGroup
+          (selectedTabChange)="tabChanged($event)">
+          <mat-tab label="Center">
+            <ng-template mat-tab-label>
+              <span class="tab-text">{{'documentArchives.invoices' | translate}}</span>
+            </ng-template>
+            <div fxHide.lt-md="true">
+              <app-invoice-table [payrollYear]="selectedPayrollYear"></app-invoice-table>
+            </div>
+          </mat-tab>
+          <mat-tab label="{{'accounting.accountingLabel' | translate}}">
+            <div fxHide.lt-md="true">
+              <app-accounting-table #accountingTabComponent
+                (onTabChanged)="hideSearchBar = $event; tabid!==3 ? hiddenDropdown = !$event : hiddenDropdown = true"
+                [payrollYear]="selectedPayrollYear"></app-accounting-table>
+            </div>
+          </mat-tab>
+          <mat-tab label="{{'home.reading' | translate}}">
+            <div fxHide.lt-md="true">
+              <app-reading-table #readingTabComponent
+                (onTabChanged)="hideSearchBar = $event; tabid!==3 ? hiddenDropdown = !$event : hiddenDropdown = true"
+                [payrollYear]="selectedPayrollYear"></app-reading-table>
+            </div>
+          </mat-tab>
+          <mat-tab label="{{'home.plumbing' | translate}}">
+            <div fxHide.lt-md="true">
+              <app-plumbing-table #plumbingComponent (onTabChanged)="hideSearchBar = $event; hiddenDropdown = true"
+                [payrollYear]="selectedPayrollYear"></app-plumbing-table>
+            </div>
+          </mat-tab>
+          <mat-tab label="Center">
+            <ng-template mat-tab-label>
+              <span class="tab-text">{{'documentArchives.energyCertificates' | translate}}</span>
+            </ng-template>
+            <div fxHide.lt-md="true">
+              <app-energy-certificate-table [payrollYear]="selectedPayrollYear"></app-energy-certificate-table>
+            </div>
+          </mat-tab>
+          <mat-tab label="Drinking Water Samples">
+            <ng-template mat-tab-label>
+              <span class="tab-text">{{'documentArchives.drinkingWaterSamples' | translate}}</span>
+            </ng-template>
+            <div fxHide.lt-md="true">
+              <app-drinking-water-table [payrollYear]="selectedPayrollYear"></app-drinking-water-table>
+            </div>
+          </mat-tab>
+          <mat-tab label="Center">
+            <ng-template mat-tab-label>
+              <span class="tab-text">{{'documentArchives.allDocuments' | translate}}</span>
+            </ng-template>
+            <div fxHide.lt-md="true">
+              <app-all-document-table #allDocumentComponent
+                (onTabChanged)="hideSearchBar = $event; tabid!==3 ? hiddenDropdown = !$event : hiddenDropdown = true"
+                [payrollYear]="selectedPayrollYear"></app-all-document-table>
+
+            </div>
+          </mat-tab>
+          <mat-tab label="SEPA Direct Debit Mandate">
+            <ng-template mat-tab-label>
+              <span class="tab-text">{{'documentArchives.sepaDebitMandate' | translate}}</span>
+            </ng-template>
+            <div fxHide.lt-md="true">
+              <div fxLayout="column" fxLayoutGap="32px">
+                <app-sepa-table></app-sepa-table>
+
+                <div fxFlex="100" class="download-text">
+                  {{'documentArchives.downloadSepaStatement' | translate}}
+                </div>
+                <div fxLayoutAlign="center center">
+                  <div fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="54px">
+
+                    <div fxFlex="100">
+                      <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="54px">
+                        <div>
+                          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                            <img src="./assets/images/dash/PDFIcon.svg" width="50px" />
+                            <span class="download-text"> {{'documentArchives.downloadPdf' | translate}}</span>
+                          </div>
+                        </div>
+                        <div>
+                          <svg width="12" height="22" viewBox="0 0 12 22" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11 11L1 1V21L11 11Z" fill="#808080" stroke="#808080" stroke-linejoin="round" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                            <img src="./assets/images/dash/Mail.svg" width="80px" />
+                            <div fxlayoutAlign="center center">
+                              <div class="download-text">
+                                <p>TEHA Technical House Service GambH<br>
+                                  <span class="light">Von-Humboldt StrBe 4</span><br>
+                                  <span class="light">64646 Heppenheim</span>
+                                </p>
+
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+    <div *ngIf="tabid == 0" fxHide.gt-sm="true">
+      <app-invoice-table [payrollYear]="selectedPayrollYear"></app-invoice-table>
+    </div>
+    <div *ngIf="tabid == 1" fxHide.gt-sm="true">
+      <app-accounting-table #accountingTabComponent
+        (onTabChanged)="hideSearchBar = $event; tabid!==3 ? hiddenDropdown = !$event : hiddenDropdown = true"
+        [payrollYear]="selectedPayrollYear"></app-accounting-table>
+    </div>
+    <div *ngIf="tabid == 2" fxHide.gt-sm="true">
+      <app-reading-table #readingTabComponent
+        (onTabChanged)="hideSearchBar = $event; tabid!==3 ? hiddenDropdown = !$event : hiddenDropdown = true"
+        [payrollYear]="selectedPayrollYear"></app-reading-table>
+    </div>
+    <div *ngIf="tabid == 3" fxHide.gt-sm="true">
+      <app-plumbing-table #plumbingComponent (onTabChanged)="hideSearchBar = $event; hiddenDropdown = true"
+        [payrollYear]="selectedPayrollYear"></app-plumbing-table>
+    </div>
+    <div *ngIf="tabid == 4" fxHide.gt-sm="true">
+      <app-energy-certificate-table [payrollYear]="selectedPayrollYear"></app-energy-certificate-table>
+    </div>
+    <div *ngIf="tabid == 5" fxHide.gt-sm="true">
+      <app-drinking-water-table [payrollYear]="selectedPayrollYear"></app-drinking-water-table>
+    </div>
+    <div *ngIf="tabid == 6" fxHide.gt-sm="true">
+      <app-all-document-table #allDocumentComponent
+        (onTabChanged)="hideSearchBar = $event; tabid!==3 ? hiddenDropdown = !$event : hiddenDropdown = true"
+        [payrollYear]="selectedPayrollYear"></app-all-document-table>
+    </div>
+    <div *ngIf="tabid == 7" fxHide.gt-sm="true">
+      <app-sepa-table></app-sepa-table>
+
+      <!-- <div fxHide.gt-sm="true" class="m-t-5">
+        <div fxLayout="column" fxLayoutGap="32px">
+
+          <div fxFlex="100" class="download-text text-align-center">
+            {{'documentArchives.downloadSepaStatement' | translate}}
+          </div>
+          <div fxLayoutAlign="center center">
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="54px">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                <img src="./assets/images/dash/PDFIcon.svg" width="50px" />
+                <span class="download-text"> {{'documentArchives.downloadPdf' | translate}}</span>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="54px">
+                <div>
+                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                    <img src="./assets/images/dash/Mail.svg" width="80px" />
+                    <div fxlayoutAlign="center center">
+                      <div class="download-text">
+                        <p>TEHA Technical House Service GambH<br>
+                          <span class="light">Von-Humboldt StrBe 4</span><br>
+                          <span class="light">64646 Heppenheim</span>
+                        </p>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+  </div>
+</div>

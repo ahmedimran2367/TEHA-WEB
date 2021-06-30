@@ -1,0 +1,59 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-person-overview-card *ngIf="!allMetersIndicator;else allMetersOverview" fxFlex="50"></app-person-overview-card>
+    <ng-template #allMetersOverview>
+      <app-building-info-card #allMetersOverview fxFlex="50"></app-building-info-card>
+    </ng-template>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="10px">
+
+      <app-inprogress fxFlex *ngIf="allMetersIndicator;else mapTemplate" [allMetersIndicator]="allMetersIndicator"
+        [inProgressCountData]="inProgressCountData"></app-inprogress>
+      <ng-template #mapTemplate>
+        <app-search-autocomplete fxFlex="100" (onOptionSelected)="updateMeters($event)"></app-search-autocomplete>
+        <app-map-component fxFlex="70"></app-map-component>
+      </ng-template>
+
+    </div>
+  </div>
+
+  <mat-card fxHide.lt-md="true" class="mat-dashboard-card overflow-hide " fxLayoutGap="10px"
+    fxFlex="0 0 calc(75vh - 60px)" fxFlex.lt-lg="0 0 calc(73vh - 124px)">
+    <div fxLayout="row" fxLayoutAlign="center center">
+      <div fxFlex>
+        <mat-card-title>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <button ngClass.lt-lg="back-button" (click)="goBack()" mat-icon-button>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <span class="header-3" fxFlex>{{'stockOverview.' + meterTableHeading | translate}}</span>
+          </div> 
+        </mat-card-title>
+      </div>
+      
+      <div fxFlexAlign="end end">
+        <app-search-bar placeHolder=" {{'stockOverview.appSearchBarMeter' | translate}}" (changed)="onChange($event)">
+        </app-search-bar>
+      </div>
+
+    </div>
+    <mat-card-content>
+      <app-meters-table class="overflow-hide" [allMetersIndicator]="allMetersIndicator" [flatId]="flatId"
+        [freeText]="searchText"></app-meters-table>
+    </mat-card-content>
+  </mat-card>
+  <mat-card fxHide.gt-sm="true" class="mat-dashboard-card">
+    <div fxLayout="column" fxLayoutAlign="center" class="w-100 overflow-hide">
+      <mat-card-title fxFlex>
+        <span fxLayout="row" class="header-4" fxLayoutAlign="center center">
+          {{'stockOverview.' + meterTableHeading | translate}}
+        </span>
+      </mat-card-title>
+      <div fxFlex fxLayout="column" fxLayoutGap="20px">
+        <app-search-bar #appSearch placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}"
+          [searchText]="searchText" (changed)="onChange($event)"></app-search-bar>
+      </div>
+    </div>
+  </mat-card>
+  <app-meters-table fxHide.gt-sm="true" class="overflow-hide" [allMetersIndicator]="allMetersIndicator" [flatId]="flatId"
+        [freeText]="searchText"></app-meters-table>
+</div>

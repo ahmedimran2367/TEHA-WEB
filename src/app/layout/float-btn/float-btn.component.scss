@@ -1,0 +1,29 @@
+@import "../../shared/styles/spacing";
+@import "../../shared/styles/colors";
+@import "../../shared/styles/typography";
+@import "../../shared/styles/deep";
+
+.float-btn {
+  position: fixed;
+  bottom: 1vw;
+  right: 0vw;
+  z-index: 10000;
+}
+::ng-deep {
+  .float-drop {
+    padding: 0 30px;
+    .heading {
+      font-family: Roboto-Light;
+      font-size: 18px;
+      padding: 30px 0;
+    }
+    button {
+      font-family: Roboto-Light;
+      font-size: 14px;
+      border-bottom: 1px solid #565656;
+    }
+    button:last-child {
+      border: none;
+    }
+  }
+}

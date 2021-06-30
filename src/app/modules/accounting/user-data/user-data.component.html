@@ -1,0 +1,179 @@
+<div fxLayout="column">
+    <form #userDataForm="ngForm" class="font-resp doc-table overflow-auto accountingUserForm">
+        <table class="m-b-10">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{{'accounting.accountingTehaUserNo' | translate}}</th>
+                    <th>{{'accounting.flatUserNo' | translate}}</th>
+                    <th>{{'accounting.accountingAdminUserNo' | translate}}</th>
+                    <th>{{'account.username' | translate}} <span class="text-red m-l-1">*</span>    </th>
+                    <th>{{'order.vacant' | translate}}</th>
+                    <th>{{'order.moveInDate' | translate}}</th>
+                    <th>{{'order.moveoutDate' | translate}}</th>
+                    <th>
+                        <svg matTooltip="{{'accounting.advancePayments' | translate }}" [matTooltipPosition]="'above'" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21.6016 27.0004C18.6676 27.0004 16.0936 25.5784 14.4376 23.4004H21.6016L23.4016 19.8004H12.7816C12.6736 19.2244 12.6016 18.6124 12.6016 18.0004C12.6016 17.3884 12.6736 16.7764 12.7816 16.2004H21.6016L23.4016 12.6004H14.4376C16.0936 10.4224 18.6676 9.00039 21.6016 9.00039C24.0856 9.00039 26.3356 10.0084 27.9736 11.6284L30.5116 9.09039C28.2256 6.80439 25.0756 5.40039 21.6016 5.40039C16.5796 5.40039 12.2596 8.35239 10.2256 12.6004H5.40156L3.60156 16.2004H9.14556C9.05556 16.7944 9.00156 17.3884 9.00156 18.0004C9.00156 18.6124 9.05556 19.2064 9.14556 19.8004H5.40156L3.60156 23.4004H10.2256C12.2416 27.6484 16.5796 30.6004 21.6016 30.6004C25.0756 30.6004 28.2256 29.1964 30.5116 26.9104L27.9736 24.3724C26.3356 25.9924 24.0856 27.0004 21.6016 27.0004Z" fill="#565656"/>
+                        </svg>                        
+                    </th>
+                    <th><mat-icon matTooltip="{{'accounting.noOfPeople' | translate }}" [matTooltipPosition]="'above'">people</mat-icon>
+                        <span class="text-red m-l-4">*</span></th>
+                    <th>
+                        <svg matTooltip="{{'accounting.calcKeyHotWater' | translate }}" [matTooltipPosition]="'above'" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M4.80469 20.0737C4.80469 11.6392 11.6422 4.80176 20.0766 4.80176C28.5111 4.80176 35.3486 11.6392 35.3486 20.0737C35.3486 28.5082 28.5111 35.3457 20.0766 35.3457C11.6422 35.3457 4.80469 28.5082 4.80469 20.0737ZM20.0766 0.801758C9.43304 0.801758 0.804688 9.43011 0.804688 20.0737C0.804688 30.7173 9.43304 39.3457 20.0766 39.3457C30.7203 39.3457 39.3486 30.7173 39.3486 20.0737C39.3486 9.43011 30.7203 0.801758 20.0766 0.801758ZM20.1052 10.2672V10.0803C20.1021 9.91604 20.0343 9.75968 19.9166 9.64514C19.7989 9.5306 19.6407 9.46712 19.4765 9.46849C19.3948 9.46645 19.3135 9.48076 19.2374 9.51057C19.1613 9.54038 19.0919 9.58509 19.0334 9.64208C18.9748 9.69907 18.9282 9.76719 18.8963 9.84244C18.8644 9.91768 18.8479 9.99854 18.8477 10.0803V10.2672H20.1052ZM14.4336 10.454H24.5278C24.6139 10.4522 24.6995 10.4676 24.7796 10.4992C24.8597 10.5308 24.9328 10.578 24.9945 10.6381C25.0561 10.6982 25.1052 10.77 25.1389 10.8493C25.1726 10.9285 25.1901 11.0137 25.1906 11.0998C25.187 11.2729 25.1155 11.4376 24.9915 11.5585C24.8675 11.6793 24.701 11.7465 24.5278 11.7456H20.1095V12.7482H18.8519V11.7456H14.4336C14.3475 11.7474 14.2619 11.732 14.1818 11.7004C14.1017 11.6688 14.0286 11.6216 13.967 11.5615C13.9053 11.5014 13.8562 11.4296 13.8225 11.3504C13.7888 11.2711 13.7713 11.1859 13.7708 11.0998C13.7744 10.9267 13.8459 10.762 13.9699 10.6411C14.0939 10.5203 14.2605 10.4531 14.4336 10.454ZM20.4664 13.8526H18.4951C18.4681 13.8536 18.4411 13.8489 18.4159 13.839C18.3908 13.8291 18.3679 13.8141 18.3488 13.795C18.3297 13.7759 18.3147 13.753 18.3048 13.7278C18.2948 13.7027 18.2902 13.6757 18.2912 13.6487V13.1559C18.2902 13.1288 18.2948 13.1019 18.3048 13.0767C18.3147 13.0515 18.3297 13.0287 18.3488 13.0096C18.3679 12.9904 18.3908 12.9754 18.4159 12.9655C18.4411 12.9556 18.4681 12.951 18.4951 12.9519H20.4664C20.4934 12.951 20.5203 12.9556 20.5455 12.9655C20.5707 12.9754 20.5935 12.9904 20.6127 13.0096C20.6318 13.0287 20.6468 13.0515 20.6567 13.0767C20.6666 13.1019 20.6712 13.1288 20.6703 13.1559V13.6487C20.6712 13.6757 20.6666 13.7027 20.6567 13.7278C20.6468 13.753 20.6318 13.7759 20.6127 13.795C20.5935 13.8141 20.5707 13.8291 20.5455 13.839C20.5203 13.8489 20.4934 13.8536 20.4664 13.8526ZM24.3581 21.9413V23.1818H28.3686V21.9583C28.3686 19.1543 26.5673 17.5229 23.8143 17.5229H23.1516C22.9912 17.2085 22.7975 16.9123 22.5738 16.6393V16.5713C22.6262 16.5702 22.6779 16.5588 22.726 16.5377C22.774 16.5166 22.8174 16.4862 22.8537 16.4483C22.89 16.4105 22.9185 16.3658 22.9375 16.3169C22.9565 16.268 22.9658 16.2159 22.9646 16.1634V14.702C22.9637 14.5175 22.89 14.3408 22.7596 14.2103C22.6291 14.0798 22.4524 14.0061 22.2679 14.0052H16.643C16.4585 14.0061 16.2818 14.0798 16.1513 14.2103C16.0208 14.3408 15.9471 14.5175 15.9462 14.702V16.1634C15.9451 16.2159 15.9543 16.268 15.9734 16.3169C15.9924 16.3658 16.0209 16.4105 16.0572 16.4483C16.0935 16.4862 16.1369 16.5166 16.1849 16.5377C16.2329 16.5588 16.2846 16.5702 16.3371 16.5713V16.6393C16.1097 16.9096 15.9157 17.2062 15.7593 17.5229H14.1619V21.5674H15.9632C17.5776 23.5217 21.3502 23.5217 22.9646 21.5674H23.7803C24.1032 21.5674 24.3411 21.5844 24.3581 21.9413ZM11.287 16.9277H13.1563C13.3584 16.9344 13.5499 17.0199 13.6896 17.166C13.8294 17.3122 13.9064 17.5072 13.904 17.7094V21.482C13.9067 21.5826 13.8895 21.6826 13.8533 21.7765C13.8171 21.8703 13.7627 21.9561 13.6932 22.0288C13.6236 22.1014 13.5404 22.1596 13.4482 22.2C13.3561 22.2403 13.2569 22.262 13.1563 22.2637H11.287V16.9277ZM28.5725 27.4555C28.7384 27.7402 28.904 28.0244 29.044 28.3137C29.1886 28.5605 29.2594 28.8436 29.2479 29.1294C29.257 29.4026 29.2017 29.6742 29.0866 29.9221C28.9715 30.1701 28.7997 30.3875 28.5852 30.5569C28.4212 30.673 28.2253 30.7354 28.0244 30.7354C27.8235 30.7354 27.6276 30.673 27.4636 30.5569C27.2473 30.3852 27.0746 30.1649 26.9594 29.914C26.8442 29.663 26.7899 29.3884 26.8008 29.1124C26.8102 28.8346 26.8797 28.562 27.0048 28.3137C27.1448 28.0244 27.3104 27.7402 27.4763 27.4556L27.4763 27.4555C27.6125 27.2218 27.7489 26.9878 27.8715 26.7503C28.0074 26.4954 28.0414 26.4954 28.1773 26.7503C28.2999 26.9878 28.4363 27.2218 28.5725 27.4555ZM23.9517 26.106H28.8629C28.9212 26.1051 28.9769 26.0816 29.0181 26.0403C29.0594 25.9991 29.0829 25.9434 29.0838 25.8851V23.6929C29.0829 23.6346 29.0594 23.5789 29.0181 23.5376C28.9769 23.4964 28.9212 23.4728 28.8629 23.472H23.9517C23.8934 23.4728 23.8377 23.4964 23.7965 23.5376C23.7552 23.5789 23.7317 23.6346 23.7308 23.6929V25.8851C23.7317 25.9434 23.7552 25.9991 23.7965 26.0403C23.8377 26.0816 23.8934 26.1051 23.9517 26.106Z" fill="red"/>
+                        </svg> 
+                        <span class="text-red m-l-1">*</span>                       
+                    </th>
+                    <th>
+                        <svg matTooltip="{{'accounting.calcKeyHeating' | translate }}" [matTooltipPosition]="'above'" width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0)">
+                            <path d="M28.4721 7.88137C29.3147 7.88137 30 7.19764 30 6.35693V5.33799C30 4.49729 29.3147 3.81356 28.4721 3.81356H27.4576V3.30162C27.4576 1.90182 26.317 0.762695 24.9152 0.762695C23.5134 0.762695 22.3729 1.90182 22.3729 3.30162V3.81356H20.8474V3.30162C20.8474 1.90182 19.7068 0.762695 18.305 0.762695C16.9032 0.762695 15.7627 1.90182 15.7627 3.30162V3.81356H14.2372V3.30162C14.2372 1.90182 13.0966 0.762695 11.6948 0.762695C10.293 0.762695 9.15246 1.90182 9.15246 3.30162V3.81356H7.62703V3.30162C7.62703 1.90182 6.48645 0.762695 5.08465 0.762695C3.68285 0.762695 2.54238 1.90188 2.54238 3.30168V3.81361H1.01695V2.28818H0V4.32209V7.37295V9.40686H1.01695V7.88143H2.54238V23.6441H0.508477C0.227402 23.6441 0 23.8715 0 24.1526V26.1865C0 26.4676 0.227402 26.695 0.508477 26.695C0.789551 26.695 1.01695 26.4676 1.01695 26.1865V24.6611H2.54238V26.699C2.54238 28.0988 3.68297 29.2374 5.08477 29.2374C6.48656 29.2374 7.62715 28.0988 7.62715 26.699V26.695H9.15258V26.699C9.15258 28.0988 10.2932 29.2374 11.695 29.2374C13.0968 29.2374 14.2373 28.0988 14.2373 26.699V26.695H15.7628V26.699C15.7628 28.0988 16.9034 29.2374 18.3052 29.2374C19.707 29.2374 20.8475 28.0988 20.8475 26.699V26.695H22.373V26.699C22.373 28.0988 23.5136 29.2374 24.9153 29.2374C26.3171 29.2374 27.4577 28.0988 27.4577 26.699V26.695H28.4722C29.3149 26.695 30.0001 26.0113 30.0001 25.1706V24.1516C30.0001 23.311 29.3149 22.6272 28.4722 22.6272H27.4576V7.88137H28.4721ZM27.4576 4.83057H28.4721C28.7537 4.83057 28.983 5.05797 28.983 5.33805V6.35699C28.983 6.63707 28.7537 6.86447 28.4721 6.86447H27.4576V4.83057ZM2.54238 6.86447H1.01695V4.83057H2.54238V6.86447ZM6.6102 4.32209V7.37295V23.1357V26.1865V26.699C6.6102 27.5376 5.92594 28.2204 5.08477 28.2204C4.24359 28.2204 3.55934 27.5376 3.55934 26.699V7.37295V4.32209V3.30168C3.55934 2.4625 4.24359 1.77971 5.08477 1.77971C5.92594 1.77971 6.6102 2.4625 6.6102 3.30168V4.32209ZM9.15252 25.678H7.62709V23.6441H9.15252V25.678ZM9.15252 22.6271H7.62709V7.88137H9.15252V22.6271ZM9.15252 6.86447H7.62709V4.83057H9.15252V6.86447ZM13.2203 4.32209V7.37295V23.1357V26.1865V26.699C13.2203 27.5376 12.5361 28.2204 11.6949 28.2204C10.8537 28.2204 10.1695 27.5376 10.1695 26.699V26.1865V23.1357V7.37295V4.32209V3.30168C10.1695 2.4625 10.8537 1.77971 11.6949 1.77971C12.5361 1.77971 13.2203 2.4625 13.2203 3.30168V4.32209ZM15.7627 25.678H14.2373V23.6441H15.7627V25.678ZM15.7627 22.6271H14.2373V7.88137H15.7627V22.6271ZM15.7627 6.86447H14.2373V4.83057H15.7627V6.86447ZM19.8305 4.32209V7.37295V23.1357V26.1865V26.699C19.8305 27.5376 19.1463 28.2204 18.3051 28.2204C17.4639 28.2204 16.7797 27.5376 16.7797 26.699V26.1865V23.1357V7.37295V4.32209V3.30168C16.7797 2.4625 17.4639 1.77971 18.3051 1.77971C19.1463 1.77971 19.8305 2.4625 19.8305 3.30168V4.32209ZM22.3729 25.678H20.8475V23.6441H22.3729V25.678ZM22.3729 22.6271H20.8475V7.88137H22.3729V22.6271ZM22.3729 6.86447H20.8475V4.83057H22.3729V6.86447ZM26.4407 4.32209V7.37295V23.1357V26.1865V26.699C26.4407 27.5376 25.7564 28.2204 24.9152 28.2204C24.0741 28.2204 23.3898 27.5376 23.3898 26.699V26.1865V23.1357V7.37295V4.32209V3.30168C23.3898 2.4625 24.0741 1.77971 24.9152 1.77971C25.7564 1.77971 26.4407 2.4625 26.4407 3.30168V4.32209ZM28.4721 23.6441C28.7537 23.6441 28.983 23.8715 28.983 24.1516V25.1705C28.983 25.4506 28.7537 25.678 28.4721 25.678H27.4576V23.6441H28.4721Z" fill="#565656"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0">
+                            <rect width="30" height="30" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>  
+                        <span class="text-red m-l-2">*</span>                      
+                    </th>
+                    <th>
+                        <img matTooltip="{{'accounting.additionalArea' | translate }}" class="additionArea" src="assets/images/additionalArea1.png">    
+                        <span class="text-red m-l-1">*</span>                       
+                    </th>
+                    <th>{{'admin.actions' | translate}}</th>
+                </tr>
+            </thead>
+            <ng-container *ngFor="let item of flatData?.flatUser; let i = index">
+                <tbody class="m-t-5" [attr.id]=i>
+                    <ng-container *ngFor="let innerItem of item.rentals; let x=index;trackBy:trackByIdx">
+                        <tr [ngClass]="{'childrow1': x== 0}" [fxHide]="!item.showRow && x != 0">
+                            <td *ngIf="x == 0">
+                                <button *ngIf="item.rentals.length > 1" [disabled]="item.rentals.length == 1" (click)="item.showRow = item.showRow ? false : true" mat-icon-button>
+                                    <mat-icon *ngIf="item?.showRow">expand_less</mat-icon>
+                                    <mat-icon *ngIf="!item?.showRow">expand_more</mat-icon>
+                                </button>
+                            </td>
+                            <td *ngIf="x != 0"></td>
+                            <td class="support-text">
+                                <span *ngIf="x == 0">{{item.tehaUserNo}}</span></td>
+                            <td class="support-text">{{GetRentalSeq(x+1)}}</td>
+                            <td>
+                                <input class="small-input text-align-center"maxlength="100" name="adminDesc{{i}}{{x}}" [(ngModel)]="innerItem.adminDesc"
+                                numbersOnly="true" [readonly]="readonlyInd" [disabled]="innerItem.rentId != -1 && !innerItem.deleteInd">
+                            </td>
+                            <td *ngIf="!innerItem.nameChange.userChangedInd" >
+                                <div class="nameChange support-text" fxLayout="row" fxLayoutAlign="space-between center">
+                                    <span *ngIf="!innerItem.flatEmptyInd" fxFlex>{{innerItem.nameChange.name}}</span>
+                                    <span *ngIf="innerItem.flatEmptyInd" fxFlex>Leerstand</span>
+                                    <button *ngIf="!innerItem.flatEmptyInd" fxFlex="30" (click)="editNameChange(i, x)" mat-icon-button [disabled]="readonlyInd">
+                                        <svg matTooltip="{{'accounting.userEdited' | translate }}" [matTooltipPosition]="'above'" width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M13.75 12.5V8.125H12.5V12.5H2.5V2.5H6.875V1.25H2.5C1.80964 1.25 1.25 1.80964 1.25 2.5V12.5C1.25 13.1904 1.80964 13.75 2.5 13.75H12.5C13.1904 13.75 13.75 13.1904 13.75 12.5ZM11.9863 1.70214C11.6998 1.41339 11.3076 1.25 10.8983 1.25C10.4896 1.25 10.0977 1.41302 9.80962 1.70289L4.57907 6.93339C4.11167 7.34521 3.80528 7.95802 3.75203 8.61706L3.75001 10.6265V11.2515H6.33413C7.04307 11.2028 7.6619 10.8934 8.09845 10.3898L13.2994 5.19115C13.5879 4.9026 13.75 4.51124 13.75 4.10317C13.75 3.69511 13.5879 3.30375 13.2994 3.0152L11.9863 1.70214ZM6.28999 10.003C6.62388 9.97937 6.93468 9.82398 7.18425 9.53851L10.973 5.74971L9.25162 4.02817L5.43506 7.84349C5.18184 8.06745 5.02519 8.38077 5 8.66739V10.0018L6.28999 10.003ZM10.1356 3.14443L11.8569 4.86583L12.4155 4.30726C12.4696 4.25313 12.5 4.17972 12.5 4.10317C12.5 4.02662 12.4696 3.95321 12.4155 3.89908L11.1007 2.58428C11.0472 2.53034 10.9743 2.49999 10.8983 2.49999C10.8224 2.49999 10.7495 2.53034 10.696 2.58428L10.1356 3.14443Z"
+                                                fill="#016D90" />
+                                        </svg>
+                                    </button>
+                                </div>
+    
+                            </td>
+                            <td *ngIf="innerItem.nameChange.userChangedInd">
+                                <div fxLayout="row" class="nameChange" fxLayoutAlign="space-between center">
+                                    <input [required]="!innerItem.flatEmptyInd" fxFlex name="FullName{{i}}{{x}}" [(ngModel)]="innerItem.nameChange.newName"
+                                        type="text" [ngClass]="getInputError('FullName',i, x) ? 'errorInput' : 'cross-btn'">
+                                    <button  mat-icon-button fxFlex="30" (click)="cancelNameChange(i,x)">
+                                        <mat-icon aria-hidden="false" aria-label="Example home icon">close</mat-icon>
+                                    </button>
+                                </div>
+                            </td>
+                            <td>
+                                <mat-checkbox name="flatEmptyInd{{i}}{{x}}" [disabled]="readonlyInd" [ngModel]="innerItem.flatEmptyInd" (ngModelChange)="onVacantClick($event, i, x)"></mat-checkbox>                            
+                            </td>
+                            <td class="date-input">
+                                <input name="moveInDate{{i}}{{x}}" [min]="x == 0? null: oneDayAdd(item.rentals[x-1].moveOutDate)"
+                                    [max]="accountingService.currentBillingPeroid.to"
+                                    [ngModel]="innerItem.moveInDate"
+                                    (ngModelChange)="innerItem.moveInDate= utility.setDateFormat($event)"
+                                    [matDatepicker]="picker" (click)="picker.open()" readonly required
+                                    [ngClass]="{'errorInput' : getInputError('moveInDate',i, x)}">
+                                <mat-datepicker [disabled]="readonlyInd || innerItem.nameChange.name != null" #picker></mat-datepicker>
+                                <svg (click)="picker.open()" class="svg-date" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                        fill="#565656" />
+                                </svg>
+                            </td>
+                            <td class="date-input">
+                                <input name="moveOutDate{{i}}{{x}}"
+                                    [max]="accountingService.currentBillingPeroid.to"
+                                    [min]="oneDayAdd(innerItem.moveInDate)" [ngModel]="innerItem.moveOutDate"
+                                    (ngModelChange)="innerItem.moveOutDate= utility.setDateFormat($event)"
+                                    [matDatepicker]="picker1" (click)="picker1.open()" readonly
+                                    [ngClass]="{'errorInput' : getInputError('moveOutDate',i, x)}" [required]="x!=item.rentals.length -1">
+                                <mat-datepicker [disabled]="readonlyInd" #picker1></mat-datepicker>
+                                <svg *ngIf="x != item.rentals.length -1 || innerItem.moveOutDate == null" (click)="picker1.open()" class="svg-date" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                        fill="#565656" />
+                                </svg>
+                                <mat-icon class="svg-date link" *ngIf="x == item.rentals.length -1 && innerItem.moveOutDate != null" (click)="innerItem.moveOutDate=null">clear</mat-icon>
+                            </td>
+
+                            <td><input class="small-input text-align-center" maxlength="15" name="advancePayment{{i}}{{x}}" [ngModel]="innerItem.advancePayment"
+                                currencyMask [options]="inputOptions" [readonly]="readonlyInd"></td>
+                                <td><input class="small-input text-align-center" maxlength="3" name="numberOfPeople{{i}}{{x}}" [ngModel]="innerItem.numberOfpeople"
+                                        [ngClass]="{'errorInput' : getInputError('numberOfPeople',i, x)}" required (ngModelChange)="setNumberOfPeople($event,i,x)"
+                                        numbersOnly="true" [readonly]="readonlyInd"></td>
+                            <td><input class="small-input text-align-center" name="hotWaterArea{{i}}{{x}}" [(ngModel)]="innerItem.hotWaterArea"
+                                    [ngClass]="{'errorInput' : getInputError('hotWaterArea',i, x)}" required
+                                    [readonly]="readonlyInd" currencyMask [options]="inputOptions"></td>
+                            <td><input class="small-input text-align-center" name="heatingArea{{i}}{{x}}" [(ngModel)]="innerItem.heatingArea"
+                                    [ngClass]="{'errorInput' : getInputError('heatingArea',i, x)}" required
+                                    [readonly]="readonlyInd" currencyMask [options]="inputOptions"></td>
+                                    <td>
+                                        <input class="small-input text-align-center" maxlength="15" name="additionalArea{{i}}{{x}}" [(ngModel)]="innerItem.additionalArea"
+                                        currencyMask [options]="inputOptions" [readonly]="readonlyInd" required 
+                                        [ngClass]="{'errorInput' : getInputError('additionalArea',i, x)}">
+                                    </td>
+                            <td>
+                                <div class="support-text" fxLayout="row">
+                                    <span class="m-2" *ngIf="x == 0" matTooltip="{{'accounting.historicEntries' | translate }}" [matTooltipPosition]="'above'">{{item.rentals.length}}</span>
+                                    <span class="m-r-6" *ngIf="x != 0"></span>
+                                    <button (click)="navigateEnterInterimReading(innerItem.flatId, i, x)" mat-icon-button
+                                    [disabled]="readonlyInd || innerItem.moveOutDate==null">
+                                    <img *ngIf="readonlyInd || innerItem.moveOutDate==null" matTooltip="{{'order.enterInterimReading' | translate}}" [matTooltipPosition]="'above'" class="cursorPoint" src="./assets/images/activity.svg">
+                                    <svg *ngIf="!(readonlyInd || innerItem.moveOutDate==null)" matTooltip="{{'order.enterInterimReading' | translate}}" [matTooltipPosition]="'above'" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M22 11H18L15 20L9 2L6 11H2" stroke="green" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>  
+                                    </button>
+                                    <button *ngIf="innerItem.nameChange.name == null || innerItem.deleteInd" (click)="deleteRow(i ,x)" mat-icon-button [disabled]="readonlyInd">
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'" src="./assets/images/trash.svg">
+                                    </button>
+                                    <button *ngIf="x == 0" (click)="addNewRow(i)" mat-icon-button [disabled]="readonlyInd">
+                                        <mat-icon [matTooltip]="addNewUserTooltip" [matTooltipPosition]="'above'">add_circle_outline</mat-icon>
+                                    </button>
+                                    <button *ngIf="x == 0" (click)="setOwnerData(item.flatId)" mat-icon-button
+                                        class="text-blue">
+                                        <img class="owner-icon" matTooltip="{{'accounting.ownerData' | translate}}" [matTooltipPosition]="'above'" src="./assets/images/Ownerdata.svg">
+                                    </button>
+                                </div>
+                            </td>
+                            <!-- <td *ngIf="x != 0"></td> -->
+                            <!-- <td *ngIf="x != 0"></td> -->
+    
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </ng-container>
+        </table>
+    </form>
+    
+    <div class="font-resp m-t-3 m-r-4" fxLayout="row" fxLayoutAlign="end">
+        <button routerLink="/accounting/overview" mat-button
+            class="primary-transparent-button wide placeholder-text-1 m-r-2">{{'account.cancel' | translate}}</button>
+        <button [disabled]="!userDataForm.form.valid || readonlyInd" (click)="saveAndContinue()" mat-button
+            class="primary-green-button wide placeholder-text-1">{{'account.save' | translate}}</button>
+    </div>
+</div>

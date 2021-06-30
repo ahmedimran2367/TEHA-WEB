@@ -1,0 +1,57 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-building-info-card fxFlex></app-building-info-card>
+    <div fxLayout="column" fxFlex fxLayoutGap="10px">
+
+      <app-search-autocomplete fxFlex="100" (onOptionSelected)="updateFlats($event)"></app-search-autocomplete>
+      <app-map-component fxFlex="70"></app-map-component>
+    </div>
+  </div>
+
+  <mat-card fxHide.lt-md="true" class="mat-dashboard-card overflow-hide " fxLayoutGap="10px"
+    fxFlex="0 0 calc(75vh - 60px)" fxFlex.lt-lg="0 0 calc(75vh - 124px)">
+    <div fxLayout="row" fxLayoutAlign="center start">
+      <div fxFlex>
+        <mat-card-title>
+          <div fxLayout="row" fxLayoutAlign="start center">
+            <button ngClass.lt-lg="back-button" (click)="goBack()" mat-icon-button>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            <span fxFlex="none" class="header-3">{{'stockOverview.flatOverviewLabel' | translate}}</span>
+            <span fxFlex class="p-l-6 support-text-b">
+            {{'stockOverview.accountingperiodUserLevel' | translate}}: {{accPeriod}}
+            </span>
+          </div>
+          
+        </mat-card-title>
+      </div>
+
+      <div class="font-resp" fxFlexAlign="end end">
+        <app-search-bar placeHolder=" {{'stockOverview.appSearchBarFlat' | translate}}" (changed)="onChange($event)">
+        </app-search-bar>
+      </div>
+
+    </div>
+
+    <mat-card-content>
+      <app-flat-overview-table class="overflow-hide" [propertyId]="propertyId" [freeText]="searchText">
+      </app-flat-overview-table>
+    </mat-card-content>
+
+  </mat-card>
+  <mat-card fxHide.gt-sm="true" class="mat-dashboard-card">
+    <div fxLayout="column" fxLayoutAlign="center" class="w-100 overflow-hide">
+      <mat-card-title fxFlex>
+        <span fxLayout="row" class="header-4" fxLayoutAlign="center center">
+          {{'stockOverview.flatOverviewLabel' | translate}}
+        </span>
+      </mat-card-title>
+      <div fxFlex fxLayout="column" fxLayoutGap="20px">
+        <app-search-bar #appSearch placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}"
+          [searchText]="searchText" (changed)="onChange($event)"></app-search-bar>
+      </div>
+    </div>
+  </mat-card>
+  <app-flat-overview-table fxHide.gt-sm="true" class="overflow-hide" [propertyId]="propertyId" [freeText]="searchText">
+  </app-flat-overview-table>
+</div>

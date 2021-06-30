@@ -1,0 +1,150 @@
+<div fxLayout="row wrap" fxLayoutGap="20px" class="p-3 font-resp">
+    <mat-card fxLayout="column" fxFlex="0 0 calc(50% - 10px)" fxFlex.lt-lg="0 0 100"
+        class="m-t-3 p-8 mat-dashboard-card">
+        <mat-card-title class="header-3">{{'home.accountingStatusHome' | translate}}</mat-card-title>
+        <mat-card-content>
+            <div class="m-t-7" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-sm="start center"  fxLayout="row wrap">
+                <div fxFlex="30" fxFlex.lt-sm="50" class="link" (click)="navigateToAccounting('FINISH')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/accounting_green.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.finalizedAccountingCount}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.finalized' | translate}}</div>
+                </div>
+                <div fxFlex="30" fxFlex.lt-sm="50" class="link" (click)="navigateToAccounting('IN_PREPARATION')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/accounting_yellow.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.inProgressAccountingCount}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'stockOverview.inProgress' |
+                        translate}}</div>
+                </div>
+                <div fxFlex="30" fxFlex.lt-sm="50" class="link" ngClass.lt-sm="m-t-4" (click)="navigateToAccounting('WAIT_DATA')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/accounting_red.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.dataMissingAccountingCount}}
+                    </div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.missingData' | translate}}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card fxLayout="column" fxFlex="0 0 calc(30% - 20px)" fxFlex.lt-lg="0 0 calc(70% - 20px)" fxFlex.lt-md="0 0 100"
+        class="m-t-3 p-8 mat-dashboard-card">
+        <mat-card-title class="header-3">{{'home.readingStatusHome' | translate}}</mat-card-title>
+        <mat-card-content>
+            <div fxLayout class="m-t-7" fxLayoutAlign="space-evenly start">
+                <div fxFlex="30" class="link" (click)="navigateToStockOverview('readingStatus', ['FINISHED'])" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/reading_green.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.readingCount.finalized}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.finalized' | translate}}</div>
+                </div>
+                <div fxFlex="30" class="link" (click)="navigateToStockOverview('readingStatus', ['PLAN', 'OPEN'])" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/reading_yellow.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.readingCount.preparation}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'stockOverview.inProgress' |
+                        translate}}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card fxLayout="column" fxFlex="0 0 calc(20% - 10px)" fxFlex.lt-lg="0 0 30" fxFlex.lt-md="0 0 100"
+        class="m-t-3 p-8 mat-dashboard-card">
+        <mat-card-title class="header-3">{{'home.invoicesPending' | translate}}</mat-card-title>
+        <mat-card-content>
+            <div fxLayout class="m-t-7" fxLayoutAlign="space-evenly start">
+                <div fxFlex="30" class="link" (click)="navigateToDocArchives('U')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img width="37px" src="assets/images/dash/letters_pending.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.pendingInvoiceCount}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.pending' | translate}}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+<div fxLayout="row wrap" fxLayoutGap="20px" class="p-l-3 p-r-3 font-resp">
+    <mat-card fxLayout="column" fxFlex="0 0 calc(50% - 10px)" fxFlex.lt-lg="0 0 100"
+        class="m-t-3 p-8 mat-dashboard-card">
+        <mat-card-title class="header-3">{{'home.ordersinProgress' | translate}}</mat-card-title>
+        <mat-card-content>
+            <div class="m-t-7" fxLayoutAlign="space-evenly start" fxLayoutAlign.lt-sm="start center"  fxLayout="row wrap">
+                <div fxFlex="30" fxFlex.lt-sm="50" class="link" (click)="navigateToOrders('reading')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/reading_yellow.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{this.dashboardData?.ordersCount.reading + this.dashboardData?.ordersCount.interimReading + this.dashboardData?.ordersCount.smokeDetectorTest}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.reading' | translate}}</div>
+                </div>
+                <div fxFlex="30" fxFlex.lt-sm="50" class="link" (click)="navigateToOrders('plumbing')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/spanner.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.ordersCount.plumbing}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.plumbing' | translate}}</div>
+                </div>
+                <div fxFlex="30" fxFlex.lt-sm="50" ngClass.lt-sm="m-t-4" class="link" (click)="navigateToOrders('drinkingWaterSampling')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/tap_yellow.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">
+                        {{dashboardData?.ordersCount.drinkingWaterSampling}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'order.drinkingWater' | translate}}
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card fxLayout="column" fxFlex="0 0 calc(30% - 20px)" fxFlex.lt-lg="0 0 calc(70% - 20px)" fxFlex.lt-md="0 0 100"
+        class="m-t-3 p-8 mat-dashboard-card">
+        <mat-card-title class="header-3">{{'home.smokeDetectorStatus' | translate}}</mat-card-title>
+        <mat-card-content>
+            <div fxLayout class="m-t-7" fxLayoutAlign="space-evenly start">
+                <div fxFlex="30" class="link" (click)="navigateToStockOverview('rwmStatus', 'OK')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <svg width="42" height="30" viewBox="0 0 42 30" version="1.1" id="svg9">
+                            <path id="path5"
+                                d="M 20.762712,3.6640747e-4 A 44.50339,44.435775 0 0 0 13.233217,0.67690641 45.010831,44.942445 0 0 0 0,5.2127744 L 1.542373,18.480721 7.711865,28.076289 A 45.538441,45.469253 0 0 0 22.423729,29.97171 45.450763,45.381708 0 0 0 34.288136,27.957825 L 40.576272,18.362257 42,5.2127744 C 35.229339,1.8080064 28.018628,-0.02984159 20.762712,3.6640747e-4 Z M 24.668929,16.880071 a 25.992305,25.952814 0 0 1 7.95819,1.245258 l -1.542373,5.330872 -8.186441,-0.710783 v -5.804727 a 25.992305,25.952814 0 0 1 1.770624,-0.06062 z m -7.729707,0.05252 a 23.902509,23.866193 0 0 1 2.518406,0.126562 v 5.686263 l -7.355932,0.355391 -2.254238,-5.093944 c 1.992627,-0.539247 4.057709,-0.94466 5.86454,-1.04026 0.221626,-0.01185 0.438901,-0.02023 0.660884,-0.02591 a 23.902509,23.866193 0 0 1 0.56634,-0.0081 z m 18.891286,1.903519 a 6.7234407,6.7132256 0 0 1 1.661018,1.066174 6.802339,6.792004 0 0 1 1.067796,1.184639 l -2.491525,4.146233 -1.898305,-0.710783 z M 6.40678,19.073038 8.542373,23.930054 6.050847,25.233156 3.20339,20.968459 A 4.9711865,4.9636336 0 0 1 4.921644,19.48234 4.1219323,4.1156697 0 0 1 5.694915,19.191502 3.9688814,3.9628513 0 0 1 6.40678,19.073038 Z"
+                                style="fill:#00a253;fill-opacity:1;stroke-width:0.118554" />
+                        </svg>
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.smokeDetectorCount.ok}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.ok' | translate}}</div>
+                </div>
+                <div fxFlex="30" class="link" (click)="navigateToStockOverview('rwmStatus','Error')" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <svg width="42" height="30" viewBox="0 0 42 30" version="1.1" id="svg10">
+                            <path id="path6"
+                                d="M 20.762712,3.6640747e-4 A 44.50339,44.435775 0 0 0 13.233217,0.67690641 45.010831,44.942445 0 0 0 0,5.2127744 L 1.542373,18.480721 7.711865,28.076289 A 45.538441,45.469253 0 0 0 22.423729,29.97171 45.450763,45.381708 0 0 0 34.288136,27.957825 L 40.576272,18.362257 42,5.2127744 C 35.229339,1.8080064 28.018628,-0.02984159 20.762712,3.6640747e-4 Z M 24.668929,16.880071 a 25.992305,25.952814 0 0 1 7.95819,1.245258 l -1.542373,5.330872 -8.186441,-0.710783 v -5.804727 a 25.992305,25.952814 0 0 1 1.770624,-0.06062 z m -7.729707,0.05252 a 23.902509,23.866193 0 0 1 2.518406,0.126562 v 5.686263 l -7.355932,0.355391 -2.254238,-5.093944 c 1.992627,-0.539247 4.057709,-0.94466 5.86454,-1.04026 0.221626,-0.01185 0.438901,-0.02023 0.660884,-0.02591 a 23.902509,23.866193 0 0 1 0.56634,-0.0081 z m 18.891286,1.903519 a 6.7234407,6.7132256 0 0 1 1.661018,1.066174 6.802339,6.792004 0 0 1 1.067796,1.184639 l -2.491525,4.146233 -1.898305,-0.710783 z M 6.40678,19.073038 8.542373,23.930054 6.050847,25.233156 3.20339,20.968459 A 4.9711865,4.9636336 0 0 1 4.921644,19.48234 4.1219323,4.1156697 0 0 1 5.694915,19.191502 3.9688814,3.9628513 0 0 1 6.40678,19.073038 Z"
+                                style="fill:#ff6161;fill-opacity:1;stroke-width:0.118554" />
+                        </svg>
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.smokeDetectorCount.error}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.outOfOrder' | translate}}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card fxLayout="column" fxFlex="0 0 calc(20% - 10px)" fxFlex.lt-lg="0 0 30" fxFlex.lt-md="0 0 100"
+        class="m-t-3 p-8 mat-dashboard-card">
+        <mat-card-title class="header-3">{{'stockOverview.offersPending' | translate}}</mat-card-title>
+        <mat-card-content>
+            <div fxLayout class="m-t-7" fxLayoutAlign="space-evenly start">
+                <div fxFlex="30" class="link" (click)="navigateToMyOffers()" fxLayout="column" fxLayoutGap="8px">
+                    <div fxFlex="52px" fxFlexAlign="center">
+                        <img src="assets/images/dash/offer_tag.svg">
+                    </div>
+                    <div class="header-4" fxFlex fxFlexAlign="center">{{dashboardData?.offerRequestCount}}</div>
+                    <div class="support-text text-align-center" fxFlex fxFlexAlign="center">{{'home.pending' | translate}}</div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

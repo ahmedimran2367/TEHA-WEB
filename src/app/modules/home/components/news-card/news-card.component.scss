@@ -1,0 +1,12 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+
+.news-content-card {
+    height: 9vw;
+}
+
+.toggle-btn {
+    cursor: pointer;
+    border-radius: 50%;
+}

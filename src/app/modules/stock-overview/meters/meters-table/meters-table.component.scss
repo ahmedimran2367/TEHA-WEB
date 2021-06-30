@@ -1,0 +1,34 @@
+@import "./../../../../shared/styles/spacing";
+@import "./../../../../shared/styles/colors";
+@import "./../../../../shared/styles/typography";
+@import "./../../../../shared/styles/deep";
+
+
+.selected-filter-icon {
+  color: $primary;
+}
+.mat-header-cell,
+.mat-cell {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.menu-button {
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
+}
+.text-brightgreen.paragraph {
+  text-decoration: none;
+}
+
+::ng-deep .comp-mat-menu.mat-menu-panel {
+  min-height: 48px;
+}
+
+.disabled-link { 
+  pointer-events: none;
+  color: gray !important;
+}
+.tableHeight {
+  max-height: calc(75vh - 188px);
+  overflow: auto; 
+}

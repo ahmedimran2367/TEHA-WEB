@@ -1,0 +1,22 @@
+@import "./../../../shared/styles/spacing";
+@import "./../../../shared/styles/colors";
+@import "./../../../shared/styles/typography";
+
+.hello-card {
+
+  .hello-card-icon-wrapper {
+    width: 134px;
+    height: 134px;
+    background: #dadada;
+    border-radius: 10px;
+    background: #dadada;
+    background-size: 100% auto;
+
+    svg {
+      display: block;
+      margin: auto;
+      height: 100%;
+
+    }
+  }
+}

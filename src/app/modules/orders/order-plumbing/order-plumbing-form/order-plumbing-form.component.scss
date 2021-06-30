@@ -1,0 +1,30 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/confirmationmessage";
+@import "../../../../shared/styles/orderscommon";
+@import "../../../../shared/styles/formfields";
+@import "../../../../shared/styles/deep";
+
+
+.panel {
+    padding-left: 30px;
+    padding-top: 30px;
+  
+    .inner-panel {
+      // padding-left: 10px;
+  
+    }
+  }
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .formFieldWidth480 .mat-form-field-infix {
+    width: 80px;
+  }
+  .requiredColor{
+    color: $red;
+  }

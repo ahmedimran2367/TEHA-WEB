@@ -1,0 +1,36 @@
+<mat-card fxFlex="100" fxLayout="column" class="p-5 mat-dashboard-card font-resp">
+    <mat-card-title class="header-2">{{'home.news' | translate}}</mat-card-title>
+    <mat-card-content class="news-content-card">
+        <div fxFlexFill fxLayout="row" fxLayoutAlign="space-between center">
+            <div fxFlex>
+                <button [disabled]="checkDisabled('p')" (click)="toggle('p')" mat-icon-button>
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+            </div>
+
+            <div fxFlex="80" class="paragraph" fxLayout="column" fxLayoutGap="20px" fxFlexAlign="start" fxFlexFill>
+                <div fxFlex="90" style="overflow: auto;">
+                    <b>{{getHeading()}} </b>{{getDescription()}}
+                </div>
+                <div fxLayout="row" fxLayoutAlign="space-between center" fxFlex="10">
+                    <div class="support-text" *ngIf="selected?.news.date">
+                        {{'home.dated' | translate}}: <span class="paragraph">{{selected?.news.date | date: 'dd-MM-yyyy'}}</span>
+                    </div>
+                    <div *ngIf="selected?.news.referenceLink">
+                        {{'home.referenceLink' | translate}}:
+                        <span class="paragraph"><a style="text-decoration: none;"
+                                href="{{selected?.news.referenceLink}}" target="blank">
+                                {{selected?.news.referenceLink}}
+                            </a></span>
+                    </div>
+                </div>
+            </div>
+            <div fxFlex class="m-l-3">
+                <button [disabled]="checkDisabled('n')" (click)="toggle('n')" mat-icon-button>
+                    <mat-icon>chevron_right</mat-icon>
+                </button>
+            </div>
+
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,22 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-building-info-card *ngIf="currentRout != '/accounting/overview'" fxFlex="50" fxFlex.lt-md="100">
+    </app-building-info-card>
+    <app-shared-hello-card *ngIf="currentRout == '/accounting/overview'"
+      message="{{'accounting.welcomeAccounting' | translate}}" fxFlex="50" fxFlex.lt-md="100"></app-shared-hello-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+
+      <app-map-component *ngIf="currentRout == '/accounting/overview'" [isFromUser]="true" fxHide.lt-md="true"
+        fxFlex="100"></app-map-component>
+      <app-status-card  class="status-card" *ngIf="currentRout != '/accounting/overview'" fxHide.lt-md="true"
+        fxFlex="100"></app-status-card>
+    </div>
+  </div>
+
+  <div fxFlex>
+    <mat-card class="mat-dashboard-card p-b-0">
+
+      <router-outlet></router-outlet>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<button class="float-btn" [matMenuTriggerFor]="menu" mat-fab color="primary" aria-label="">
+  <svg xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 13 13" fill="#000000"
+    width="26" height="26" version="1.1" id="svg6">
+    <path style="fill:#ffff00;fill-opacity:1;stroke-width:0.0286055"
+      d="M 3.4593616,10.293355 5.0061373,7.611061 3.5143742,6.7412469 2.0226121,5.8714329 6.5550083,2.9478977 11.087403,0.02436205 9.5565533,2.6904733 l -1.530851,2.6661104 1.442335,0.8412772 1.4423357,0.841278 -4.4988887,2.9682491 -4.4988876,2.96825 1.5467754,-2.682293 z" />
+  </svg>
+</button>
+<mat-menu #menu="matMenu" yPosition="above" xPosition="before" class="float-drop">
+  <div fxLayout="row" fxLayoutAlign="space-between center">
+    <span fxLayout="row" fxFlex="100" fxLayoutAlign="center" class="heading">{{'order.quickActions' | translate}}</span>
+    <button mat-icon-button aria-label="close">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  
+  <!-- <button (click)="navigateToOrder('plumbingFlat')" class="support-text" mat-menu-item>{{'order.orderPlumbingFlat' | translate}}</button>
+  <button (click)="navigateToOrder('plumbingMeter')" class="support-text" mat-menu-item>{{'order.orderPlumbingMeter' | translate}}</button> -->
+  <button (click)="navigateToOrder('plumbingMeter')" class="support-text" mat-menu-item>{{'order.orderPlumbing' | translate}}</button>
+  <button (click)="navigateToOrder('orderReadingProperty')" class="support-text" mat-menu-item>{{'order.floatRequestReadingProperty' | translate}}</button>
+  <button (click)="navigateToOrder('orderReadingFlat')" class="support-text" mat-menu-item>{{'order.floatRequestReadingFlat' | translate}}</button>
+  <button (click)="navigateToOrder('orderReadingMeter')" class="support-text" mat-menu-item>{{'order.floatRequestReadingMeter' | translate}}</button>
+  <button (click)="navigateToOrder('interimReading')" class="support-text" mat-menu-item>{{'order.irFormTitle' | translate}}</button>
+  <button (click)="navigateToOrder('postInterimReading')" class="support-text" mat-menu-item>{{'order.enterInterimReading' | translate}}</button>
+  <button (click)="navigateToOrder('energyCertificate')" class="support-text" mat-menu-item>{{'order.requestEnergyCertificate' | translate}}</button>
+  <button (click)="navigateToOrder('smokeDetectorTestFlat')" class="support-text" mat-menu-item>{{'order.orderSmokeDetectorTestFlat' | translate}}</button>
+  <button (click)="navigateToOrder('smokeDetectorTestMeter')" class="support-text" mat-menu-item>{{'order.orderSmokeDetectorTestMeter' | translate}}</button>
+  <button class="support-text" mat-menu-item (click)="navigateToOrder('drinkingWaterSampling')">{{'order.requestDWA' | translate}}</button>
+  <button (click)="navigateToOrder('offer')" class="support-text" mat-menu-item>{{'order.offerRequest' | translate}}</button>
+</mat-menu>

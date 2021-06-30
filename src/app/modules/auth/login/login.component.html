@@ -1,0 +1,127 @@
+<div class="sect-container" fxLayout="column">
+  <div fxLayout="row" fxLayout.lt-lg="column" fxFlex>
+
+    <section fxLayoutAlign="center center" fxFlex="50" fxFlex.lt-lg="50" fxFlex.lt-md="30" class="sect-a pad-top">
+      <div fxLayout="column">
+        <img fxFlexAlign="center" src="./assets/images/teha_logo.png" class="logo" />
+        <div fxFlexAlign="center" class="logo-txt welcome-txt">{{'account.welcome'| translate}}</div>
+        <img fxFlexAlign="center" src="./assets/images/signin-page.png" fxHide.lt-md="true" class="image-lg" />
+      </div>
+    </section>
+
+    <section *ngIf="showForgotScreen" fxFlex="100" fxLayoutAlign="center center" fxLayoutAlign.lt-lg="center start" fxFlex class="sect-b">
+      <div fxFlex="80" fxLayoutAlign="center" fxLayout="row" class="right-card">
+        <mat-card style="width: min(100%, 450px);" class="p-10">
+          <mat-card-title fxLayoutAlign="center">{{'account.signIn'| translate}} </mat-card-title>
+
+          <form #loginForm="ngForm" class="m-t-4">
+            <mat-card-content fxLayout="column">
+              <mat-form-field class="font-login-input" fxFlex>
+                <mat-label>{{'account.username'| translate}}</mat-label>
+                <input matInput placeholder="{{ 'account.username' | translate }}" [(ngModel)]='userCredential.Username'
+                  name="Username" />
+                <span matPrefix>
+                  <mat-icon inline="true" class="p-r-2" aria-hidden="false" aria-label="home icon">
+                    person
+                  </mat-icon>
+                </span>
+              </mat-form-field>
+
+              <mat-form-field class="font-login-input" fxFlex>
+                <mat-label>{{'account.password'| translate}}</mat-label>
+                <input matInput type="password" placeholder="{{ 'account.password' | translate }}"
+                  [(ngModel)]='userCredential.Password' name="Password" />
+                <span matPrefix>
+                  <mat-icon inline="true" class="p-r-2" aria-hidden="false" aria-label="home icon">
+                    lock
+                  </mat-icon>
+                </span>
+              </mat-form-field>
+              <div [ngClass]="invalidInd ? 'm-b-3': 'm-b-17'">
+                <div fxFlex></div>
+                <a mat-flat-button class="font-login-input  m-b-0 p-0 italic" style="color: blue;" (click)="redirectToForgotPassword()">
+                  {{'account.forgotPassword'| translate}}
+                </a>
+              </div>
+
+              <div *ngIf="invalidInd" class="m-b-6" fxLayoutAlign="center center">
+                <div fxLayoutAlign="center center" class="invalid-error">
+                  <mat-icon class="warning-icon m-r-2" aria-hidden="true" aria-label="Example home icon">
+                    warning
+                  </mat-icon>
+                  Incorrect Username/Password
+                </div>
+              </div>
+
+            </mat-card-content>
+
+            <mat-card-footer class="m-0">
+              <div fxLayout="row" fxLayout.lt-lg="column-reverse">
+                <!-- <div fxFlex fxLayoutAlign.lt-lg="center" fxLayoutAlign="start end" class="font-login-input italic">
+                  {{'account.notAuser'| translate}} <a class="text-brightgreen">
+                    <b>&nbsp;{{'account.getInTouch'| translate}}</b>
+                  </a>
+                </div> -->
+                <div fxFlex fxLayoutAlign.lt-lg="center" fxLayoutAlign="end end">
+                  <button fxFlex="0 0 150px" class="login-btn" mat-flat-button (click)='Authenticate()'>
+                    {{'account.login'| translate}}
+                  </button>
+                </div>
+              </div>
+            </mat-card-footer>
+          </form>
+
+        </mat-card>
+      </div>
+    </section>
+    <!--Bellow is the forggot password section-->
+    <section *ngIf="!showForgotScreen" fxFlex="100" fxLayoutAlign="center center" fxLayoutAlign.lt-lg="center start" fxFlex class="sect-b">
+      <div fxFlex="80" fxLayoutAlign="center" fxLayout="row" class="right-card">
+        <mat-card style="width: min(100%, 450px);" class="p-10">
+          <mat-card-title fxLayoutAlign="center">{{'account.forgotPassword'| translate}} </mat-card-title>
+
+          <form #forgotPasswordForm="ngForm" class="m-t-4">
+            <mat-card-content fxLayout="column">
+              <mat-form-field class="font-login-input" fxFlex>
+                <mat-label>{{'account.username'| translate}}</mat-label>
+                <input required matInput placeholder="{{ 'account.usernamePlaceholder' | translate }}" [(ngModel)]='forgotPasswordRequest.username'
+                  name="Username" />
+                <span matPrefix>
+                  <mat-icon inline="true" class="p-r-2" aria-hidden="false" aria-label="home icon">
+                    person
+                  </mat-icon>
+                </span>
+              </mat-form-field>
+              <div [ngClass]="invalidInd ? 'm-b-3': 'm-b-17'">
+                <div fxFlex></div>
+              </div>
+
+              <!-- <div *ngIf="invalidInd" class="m-b-6" fxLayoutAlign="center center">
+                <div fxLayoutAlign="center center" class="invalid-error">
+                  <mat-icon class="warning-icon m-r-2" aria-hidden="true" aria-label="Example home icon">
+                    warning
+                  </mat-icon>
+                  Incorrect Username
+                </div>
+              </div> -->
+
+            </mat-card-content>
+
+            <mat-card-footer class="m-0">
+              <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+                <button mat-button mat-button class="primary-transparent-button" (click)='goBack()'>
+                  {{'account.cancel'| translate}}
+                </button>
+                <button [disabled]="!forgotPasswordForm.form.valid" mat-button class="primary-green-button" (click)='submit()'>
+                  {{'account.submit'| translate}}
+                </button>
+                <br />
+              </div>
+            </mat-card-footer>
+          </form>
+
+        </mat-card>
+      </div>
+    </section>
+  </div>
+</div>

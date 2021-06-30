@@ -1,0 +1,161 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-shared-hello-card></app-shared-hello-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-map-component [isFromUser]="true" fxFlex></app-map-component>
+    </div>
+  </div>
+
+  <div fxFlex="100" fxFlexGap="1">
+    <mat-card class="mat-dashboard-card p-b-8 p-t-8 p-12">
+      <div fxLayout="row" fxLayoutAlign="start center" class="m-b-8">
+        <!-- <div fxFlex> -->
+        <mat-card-header>
+          <mat-card-title>
+            <!-- <span fxLayout="row" fxLayoutAlign="start center"> -->
+            <button mat-icon-button
+              [ngClass]="{ 'is-hidden': ((currentStep != 'STEP_2') && (currentStep != 'STEP_3')) }">
+              <mat-icon (click)="arrowBack()">arrow_back</mat-icon>
+            </button>
+            <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }">
+              {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.requestaQuote' | translate}}
+            </span>
+
+            <span [ngClass]="{ 'is-hidden': ((currentStep != 'STEP_2') && (currentStep != 'STEP_3'))}">
+              {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.requestaQuoteSummary' | translate}}
+            </span>
+
+            <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_4' }">
+              {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderConfirmation' | translate}}
+            </span>
+            <!-- </span> -->
+
+          </mat-card-title>
+        </mat-card-header>
+        <!-- </div> -->
+      </div>
+
+      <mat-card-content>
+
+        <!-- ********************** -->
+
+        <!-- STEP 1 -->
+        <div [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }" fxLayout="column" fxLayoutGap="24px">
+          <app-offer-request-form #offerMainForm></app-offer-request-form>
+          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+            <button mat-button class="primary-transparent-button" (click)="cancelOrder()">
+              {{'account.cancel' | translate}}
+            </button>
+            <button [disabled]="!offerMainForm?.entryForm?.form?.valid" (click)="stepper('STEP_2')" mat-button
+              class="primary-green-button">
+              {{'order.next' | translate}}
+            </button>
+            <br />
+          </div>
+        </div>
+        <!-- STEP 2 -->
+        <div [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }" fxLayout="column" fxLayoutGap="24px">
+          <app-offer-request-form-summary></app-offer-request-form-summary>
+          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+            <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+              {{'account.cancel' | translate}}
+            </button>
+            <button (click)="stepper('STEP_3')" mat-button class="primary-green-button">
+              {{'order.next' | translate}}
+            </button>
+            <br />
+          </div>
+        </div>
+        <!-- STEP 3 -->
+        <div class="p-b-4 p-t-4" [ngClass]="{ 'is-hidden': currentStep != 'STEP_3'}" fxLayout="column"
+          fxLayoutGap="40px">
+
+          <!-- Table for STEP_3 -->
+          <div class="you-have-ordered-text p-t-4">
+            <p>{{'order.thankYouMsg' | translate}}</p>
+
+            <p>{{'order.checkMsg' | translate}}</p>
+          </div>
+          <div fxLayout="row" fxLayoutAlign="space-between end">
+
+            <div fxLayout="column" fxFlex="70" fxFlex.lt-md="100">
+              <h4>{{'order.commentsObservations' | translate}}</h4>
+              <mat-form-field class="custom-mat-form-field">
+                <mat-label class="custom-mat-label">{{'order.commentsQuestion' | translate}}</mat-label>
+                <textarea matInput placeholder="Ex. It makes me feel..."
+                  [(ngModel)]="ordersService.offerRequestObj.comments"></textarea>
+              </mat-form-field>
+              <form #finalForm="ngForm">
+                <section class="m-t-20" fxFlex fxLayout="column" fxLayoutGap="10px">
+                  <div fxLayout="row">
+                    <mat-checkbox required name="termsInd" [(ngModel)]="ordersService.offerRequestObj.termsInd" fxFlex="50px"
+                      class="example-margin">
+                    </mat-checkbox><span fxFlex>{{'order.termsMessagePart1' | translate}}
+                      <a (click)="downloadPDF()">{{'order.termsMessagePart2' | translate}}</a>
+                      <span class="red">*</span></span>
+                  </div>
+                  <div fxLayout="row">
+                    <mat-checkbox required name="confirmInd" [(ngModel)]="ordersService.offerRequestObj.confirmInd"
+                      fxFlex="50px" class="example-margin">
+                    </mat-checkbox><span fxFlex>{{'order.confirmEntriesMsg' | translate}} <span
+                        class="red">*</span></span>
+                  </div>
+
+                </section>
+              </form>
+            </div>
+
+
+          </div>
+          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+            <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+              {{'account.cancel' | translate}}
+            </button>
+            <button [disabled]="!finalForm.form.valid" (click)="save()" mat-button class="primary-green-button">
+              {{'order.confirm' | translate}}
+            </button>
+            <br />
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+
+        <div class="confirm-action p-b-16 p-t-8" [ngClass]="{ 'is-hidden': currentStep != 'STEP_4' }" fxLayout="column"
+          fxLayoutGap="5px">
+          <div class="confirm-message-wrapper">
+            <div class="message-with-icon-wrapper" fxLayoutAlign="center center" fxLayoutGap="24px">
+
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M43.7508 25.1461V27.0836C43.7455 36.3101 37.6722 44.4341 28.8244 47.0501C19.9766 49.6661 10.462 46.1509 5.44026 38.4108C0.418511 30.6708 1.0859 20.5495 7.08051 13.5359C13.0751 6.52218 22.9689 4.2868 31.3966 8.04196"
+                  stroke="#00A253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M45.8327 8.33301L22.916 31.2497L16.666 24.9997" stroke="#00A253" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="message">{{'order.orderConfirmationMessage' | translate}}</span>
+
+            </div>
+            <div class="confirmation-message-text p-t-8">
+              <p>{{'order.receivedOrder' | translate}}
+
+                <br>
+                <br>
+                {{'order.emailMessage' | translate}}
+                <br>
+                <br>
+                -- {{'order.tehaServiceTeam' | translate}}
+              </p>
+
+            </div>
+          </div>
+          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+            <button (click)="backToOrders()" mat-button class="primary-green-button">
+              {{'order.backToOrders' | translate}}
+            </button>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

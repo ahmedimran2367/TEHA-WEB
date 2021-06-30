@@ -1,0 +1,21 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/formfields";
+
+
+.hideOverflow {
+    overflow: hidden;
+  }
+  // .inputControl{
+  //   width: 400 !important;
+  // }
+  
+  mat-form-field {
+    width: 100%;
+  }
+
+  .link {
+    cursor: pointer;
+    color: whitesmoke;
+  }

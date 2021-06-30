@@ -1,0 +1,25 @@
+<div class="mat-dashboard-card search-wrapper" [ngClass]="{'search-wrapper-notification': isFromNotification}">
+
+  <div class="search-autocomplete-icon-wrapper " fxLayoutGap="7px" fxLayoutAlign="start center">
+    <div>
+      <mat-icon>search</mat-icon>
+    </div>
+    <div fxFlex fxLayoutAlign="stretch center">
+      <mat-form-field fxFlex appearance="none">
+        <input [(ngModel)]="searchText" placeholder="{{'miscellaneous.searchyourproperties' | translate}}" matInput class="search-autocomplete-input"
+          type="text" [formControl]="myControl" [matAutocomplete]="auto" (keyup)="onTextChange()">
+        <mat-autocomplete class="search-autocomplete" (optionSelected)="optionSelected($event.option.value)" #auto="matAutocomplete">
+          <mat-option class="search-autocomplete-mat-option" *ngFor="let option of options" [value]="option.id">
+            <div class="search-autocomplete-item-wrapper" fxFlex>
+              <div class="mat-subheading-2">{{option.street}}</div>
+              <div class="mat-small-grey" fxLayout="row" >
+                <div>{{option.postcode}}, {{option.place}}, TEHA LG No. {{option.tehaLgNo}}, Admin LG No. {{option.adminLgNo}}</div>
+              </div>
+            </div>
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+
+</div>

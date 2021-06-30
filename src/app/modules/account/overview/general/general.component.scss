@@ -1,0 +1,52 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/deep";
+
+
+// .spaced-rows div:first-child{
+//   margin-top:20px;
+//   margin-bottom:20px
+// }
+
+table {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+    text-align: center;
+    min-height: 75px;
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+
+  .dangerHighlight {
+    color: red;
+  }
+
+}
+.placeholder-text-new{
+  font-size: smaller;
+}
+.circle-icon{
+  vertical-align: baseline;
+}
+.input-field1{
+  padding-left: 0px;
+    border: 0px !important;
+    font-style: normal;
+    letter-spacing: 0.05em;
+    color: #565656;
+}
+
+@import "../../../../shared/styles/formfields";

@@ -1,0 +1,174 @@
+<mat-card *ngIf="!scrValue" class="mat-dashboard-card p-b-8 p-t-8">
+    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+        <div fxFlex>
+            <mat-card-header>
+                <mat-card-title>
+                    <span fxLayout="row" fxLayoutAlign="start center">
+                        <button mat-icon-button (click)="goGridOrCancelOrder()">
+                            <mat-icon>arrow_back</mat-icon>
+                          </button>
+                        <span>
+                            {{'order.orderDrinkingWaterAnalysis' | translate}}
+                        </span>
+                    </span>
+                </mat-card-title>
+            </mat-card-header>
+        </div>
+    </div>
+    <mat-card-content class="p-t-20 p-l-8 p-r-8 font-resp">
+        <div fxLayout="row">
+            <div fxLayout="column" fxLayoutGap="60px" fxFlex fxLayoutAlign="center center">
+
+                <div fxLayout="row" fxLayoutGap="40px" class="no-rec-icon">
+                    <img src="./assets/images/document_not_found.png" class="logo" />
+
+                    <span fxLayoutAlign="center center" class="header-4">{{'order.noPreviousData' | translate}}</span>
+                </div>
+                <button fxFlex (click)="scrValue = true" mat-button class="primary-green-button">
+                    {{'order.createAnOrder' | translate}}
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<form #questionform="ngForm">
+<mat-card *ngIf="scrValue" class="mat-dashboard-card p-b-8 p-t-8">
+    <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex>
+            <mat-card-header>
+                <mat-card-title>
+                    <span fxLayout="row" fxLayoutAlign="start center">
+                        <button mat-icon-button (click)="goBack()">
+                            <mat-icon>arrow_back</mat-icon>
+                          </button>
+                        <span>
+                            {{'order.orderNewBuilding' | translate}}
+                        </span>
+                    </span>
+                </mat-card-title>
+            </mat-card-header>
+        </div>
+    </div>
+    <mat-card-content class="p-t-20 p-l-8 p-r-8  font-resp">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="60px">
+            <div fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+                <div fxLayout="row">
+                    <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+                        <span class="placeholder-text-1" fxFlex="auto">1. {{'order.whyInspectionQuestion' | translate}} <span class="red">*</span></span>
+                        <mat-form-field class="comp-mat-select" fxFlex="40">
+                            <mat-select required name="Inspection" class="placeholder-text-1" placeholder="" multiple (selectionChange)="onChangeInspection($event)">
+                              <mat-option value="S">{{'order.storageValumeLiters' | translate}}</mat-option>
+                              <mat-option value="L">{{'order.lineLitters' | translate}}</mat-option>
+                            </mat-select>
+                            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxLayout="row">
+                    <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+                        <span class="placeholder-text-1" fxFlex="auto">2. {{'order.sampleAvaliable' | translate}}</span>
+                        <mat-form-field class="mat-place comp-mat-select" fxFlex="40">
+                            <mat-label>{{'stockOverview.select' | translate}}</mat-label>
+                            <mat-select required name="valvesAvailable" [(ngModel)]="orderService.waterSamplingRequest.questions.valvesAvailable">
+                                <mat-option value="YES_FLOW">{{'order.yesFlow' | translate}}</mat-option>
+                                <mat-option value="YES_RETURN">{{'order.yesReturn' | translate}}</mat-option>
+                                <mat-option value="NO_VALVES">{{'order.noValves' | translate}}</mat-option>
+                            </mat-select>
+                            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div fxLayout="row">
+                    <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+                        <span class="placeholder-text-1" fxFlex="auto">3. {{'order.selectTap' | translate}}</span>
+                        <mat-form-field class="mat-place comp-mat-select" fxFlex="40">
+                            <input required name="tap" matInput placeholder="{{'order.pleaseEnterText' | translate}}" [(ngModel)]="orderService.waterSamplingRequest.questions.tap">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+                    <span class="placeholder-text-1" fxFlex="auto">4. {{'order.advanceInspection' | translate}}</span>
+                    <mat-form-field class="mat-place comp-mat-select" fxFlex="40">
+                        <mat-label>{{'stockOverview.select' | translate}}</mat-label>
+                        <mat-select required name="InspectionInAdvance" (selectionChange)="changeInspectionInAdvance($event)">
+                            <mat-option value="1">{{'order.yes' | translate}}</mat-option>
+                            <mat-option value="0">{{'order.no' | translate}}</mat-option>
+                        </mat-select>
+                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+
+                <div fxFlex fxLayout="row" fxLayout.lt-md="column">
+                    <div fxLayout="column" fxFlex="40">
+                        <span class="placeholder-text-1 m-r-5" fxFlex="40">{{'order.whichApartment' | translate}} <span class="red">*</span></span>
+                    </div>
+                    <div fxLayout="column" fxFlex="60" fxLayoutAlign="start">
+                        <div fxLayout="row">
+                            <mat-form-field class="mat-place comp-mat-select m-r-5" fxFlex="35">
+                                <mat-label>{{'stockOverview.tehaUserNo' | translate}}</mat-label>
+                                <mat-select required name="flatId" [(ngModel)]="orderService.waterSamplingRequest.questions.drinkingWaterExtractionPoint[0].flatId">
+                                    <mat-option *ngFor="let item of stockOverviewService.flatData" [value]="item.id">{{item.tehaUserNo}}</mat-option>
+                                </mat-select>
+                                <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field class="mat-place comp-mat-select m-r-5" fxFlex="35">
+                                <mat-label>{{'order.extractionPoints' | translate}}</mat-label>
+                                <mat-select required name="location" multiple [(ngModel)]="orderService.waterSamplingRequest.questions.drinkingWaterExtractionPoint[0].location">
+                                    <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps.extractionpoints" [value]="item.code">{{item.value}}</mat-option>
+                                </mat-select>
+                                <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                            </mat-form-field>
+                            <div fxFlex="30">
+                                <button (click)="addExtractionpointsObj()" mat-icon-button>
+                                    <mat-icon>add_circle_outline</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngFor="let row of arr(rowIndex); let i = index" fxLayout="row" fxLayout.lt-md="column">
+                            <mat-form-field class="mat-place comp-mat-select m-r-5" fxFlex="35">
+                                <mat-label>{{'StockOverview.tehaUserNo' | translate}}</mat-label>
+                                <mat-select required name="flatId1" [(ngModel)]="orderService.waterSamplingRequest.questions.drinkingWaterExtractionPoint[i+1].flatId">
+                                    <mat-option *ngFor="let item of stockOverviewService.flatData" [value]="item.id">{{item.tehaUserNo}}</mat-option>
+                                </mat-select>
+                                <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                            </mat-form-field>
+                            <mat-form-field class="mat-place comp-mat-select m-r-5" fxFlex="35">
+                                <mat-label>{{'order.extractionPoints' | translate}}</mat-label>
+                                <mat-select required name="location1"  multiple [(ngModel)]="orderService.waterSamplingRequest.questions.drinkingWaterExtractionPoint[i+1].location">
+                                    <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps.extractionpoints" [value]="item.code">{{item.value}}</mat-option>
+                                </mat-select>
+                                <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                            </mat-form-field>
+                            <div fxFlex="30">
+                                <button (click)="addExtractionpointsObj()" mat-icon-button>
+                                    <mat-icon>add_circle_outline</mat-icon>
+                                </button>
+                                <button (click)="remove(i+1)" mat-icon-button>
+                                    <mat-icon>delete_outline</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+    </mat-card-content>
+    <mat-card-actions class="p-t-8 p-l-8 p-r-8">
+        <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+            <button (click)="cancelOrder()" mat-button mat-button class="primary-transparent-button">
+                {{'account.cancel' | translate}}
+            </button>
+            <button [disabled]="!questionform.form.valid" mat-button class="primary-green-button" (click)="confirm()">
+                {{'order.next' | translate}}
+            </button>
+            <br />
+        </div>
+    </mat-card-actions>
+</mat-card>
+</form>

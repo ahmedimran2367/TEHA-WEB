@@ -1,0 +1,31 @@
+<mat-card class="mat-dashboard-card font-resp hello-card" fxFlex="100" fxLayout="column" fxLayoutAlign="center">
+  <mat-card-content>
+    <div fxLayout.lt-md="column" fxFlex fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center">
+      <div fxFlex="65" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center"
+        fxLayoutAlign.lt-md="center center" fxLayoutGap="20px">
+        <div fxFlex="134px" ngClass.gt-md="m-l-10" class="hello-card-icon-wrapper" fxLayoutAlign="center center">
+          <img width="100px" src="./assets/images/bulding.svg">
+        </div>
+        <div fxLayout="column" fxLayoutAlign.lt-md="center center" fxLayoutAlign="center start" fxLayoutGap="10px">
+          <p class="o-wrap header-2 text-black" ngClass.lt-md="text-align-center">
+            {{street}}
+          </p>
+          <span class="header-4 text-gray">{{city}}</span>
+          <span class="header-4 text-gray">{{zipcode}}</span>
+        </div>
+      </div>
+      <mat-divider fxHide.lt-md="true" class="h-100" [vertical]="true"></mat-divider>
+      <div fxLayout="column" fxLayoutGap.lt-lg="10px" fxLayoutGap="20px" fxFlexAlign="center">
+        <div fxLayout="row" fxLayout.gt-sm="column" fxFlexAlign.lt-lg="center">
+          <span class="header-4">{{'stockOverview.adminLgNo' | translate}}</span>
+          <span class="paragraph">{{adminLgNo}}</span>
+        </div>
+        <div fxLayout="row" fxLayout.gt-sm="column" fxFlexAlign.lt-lg="center">
+          <span class="header-4">{{'stockOverview.tehaLgNo' | translate}}</span>
+          <span class="paragraph">{{tehaLgNo}}</span>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>

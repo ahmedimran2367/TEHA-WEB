@@ -1,0 +1,49 @@
+@import "./../../../shared/styles/spacing";
+@import "./../../../shared/styles/colors";
+@import "./../../../shared/styles/typography";
+@import "./../../../shared/styles/deep";
+
+.search-bar-wrapper {
+  min-width: 320px;
+  //height: 30px;
+
+  background: #ffffff;
+  box-shadow: none;
+  border-radius: 0px 5px;
+  .search-form {
+    border-bottom: 1px solid $grey;
+    ::ng-deep {
+      .mat-form-field-wrapper {
+        padding-bottom: 0 !important;
+        .mat-form-field-underline,
+        .mat-form-field-ripple {
+          height: 0px !important;
+        }
+      }
+    }
+    .mat-icon {
+      font-size: 22px;
+      width: 18px;
+      height: 18px;
+      color: $grey;
+    }
+  }
+}
+
+.search-autocomplete-input {
+  line-height: normal;
+  font-family: Roboto-Light;
+  font-size: 12px;
+}
+
+.mat-option {
+  padding: 12px;
+  color: $primary;
+  min-height: 100px;
+}
+
+.search-autocomplete-icon-wrapper {
+  width: auto;
+  height: 30px;
+  margin: 8px;
+}

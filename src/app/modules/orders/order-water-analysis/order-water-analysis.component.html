@@ -1,0 +1,62 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-shared-hello-card *ngIf="showHelloCard" fxFlex="50"></app-shared-hello-card>
+    <app-building-info-card fxFlex="50" *ngIf="showPropertyCard">
+    </app-building-info-card>
+    <app-person-overview-card fxFlex="50" *ngIf="showFlatCard">
+    </app-person-overview-card>
+    <app-meter-details-overview-card *ngIf="showMeterCard" #meterCard [meterId]="meterId" fxFlex="50">
+    </app-meter-details-overview-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-search-autocomplete *ngIf="showPropertySearch" (onOptionSelected)="propertyChange($event)"></app-search-autocomplete>
+      <app-map-component *ngIf="!showUserMap" fxFlex="70"></app-map-component>
+      <app-map-component [isFromUser]="true" *ngIf="showUserMap" fxFlex></app-map-component>
+    </div>
+  </div>
+  <div *ngIf="showPropertyGrid" fxFlex="100" fxFlexGap="1" class=" ">
+
+    <mat-card class="mat-dashboard-card p-t-8">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+        <div fxFlex>
+          <mat-card-header>
+            <mat-card-title>
+              <span fxLayout="row" fxLayoutAlign="center center">
+                <!-- <button mat-icon-button (click)="goBack()"
+                  [ngClass]="{ 'is-hidden': currentStep === 'STEP_0' || currentStep === 'STEP_6' }">
+                  <mat-icon>arrow_back</mat-icon>
+                </button> -->
+                <span>
+                  {{'order.orderDrinkingWaterAnalysis' | translate}}
+                </span>
+              </span>
+
+
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+
+        <div fxFlexAlign="end end">
+          <div fxFlexAlign="end end">
+            <app-search-bar (changed)="waterTable.applyFilter($event)">
+            </app-search-bar>
+          </div>
+        </div>
+      </div>
+
+      <mat-card-content>
+        <app-order-water-analysis-property-table #waterTable (waterAnalysisPropertyEvent)=createNewOrder($event)>
+        </app-order-water-analysis-property-table>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div *ngIf="!showPropertyGrid" fxFlex="100" fxFlexGap="1" class=" ">
+    <span [ngClass]="{'is-hidden': showSummary}">
+      <app-oder-water-analysis-new-building #abcc (hideSummary)="hideSummary($event)"
+        (goBackEvent)="goBackList($event)"></app-oder-water-analysis-new-building>
+    </span>
+    <span [ngClass]="{'is-hidden': !showSummary}">
+      <app-oder-water-analysis-summary (hideSummary)="hideSummary($event)" [drinkingWaterInd]="drinkingWaterInd">
+      </app-oder-water-analysis-summary>
+    </span>
+  </div>
+</div>

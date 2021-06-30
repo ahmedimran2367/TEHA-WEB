@@ -1,0 +1,186 @@
+<div class="fixed-height-container-overflow" fxLayout="column" fxFlexOffset="30px" fxLayoutAlign="space-between space-between">
+  <form #notificationForm="ngForm">
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">1.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.receiveBillStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlex="30" fxFlexOffset="30px" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select (selectionChange)="addEmailSecondQuestion()" name="receiveBillStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.invoice.communicationMedium" placeholder="" multiple>
+              <mat-option value="Email">{{'lookup.'+ utility.toCamelCase('Email') | translate }}</mat-option>
+              <div class="radio-button-div" *ngIf="checkIfEmail()" fxLayout="column" fxLayoutGap="18px" >
+                <mat-divider></mat-divider>
+                <mat-radio-group name="buildingTypeControl" fxFlex="70" fxLayout="column" required class="m-l-2 form-control"
+                  [(ngModel)]="generalSettingsNew.invoice.emailPreference">
+                  <mat-radio-button *ngIf="!selectedProperty" class="building-radio-button" customToolTip [contentTemplate]="OneAAPTooltipTemplate" value="OneAAP">{{'account.oneAap' | translate}}</mat-radio-button>
+                  <mat-radio-button class="building-radio-button" customToolTip [contentTemplate]="OneAEPTooltipTemplate" value="OneAEP">{{'account.oneAep' | translate}}</mat-radio-button>
+                  <mat-radio-button class="building-radio-button" customToolTip [contentTemplate]="OnePITooltipTemplate" value="OnePI">{{'account.onePi' | translate}}</mat-radio-button>
+                </mat-radio-group>
+              </div>
+              <div *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel">
+                <mat-option *ngIf="item.code!=='Email'"  [disabled]="item.code === 'SMS' || item.code === 'Web'" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+              </div>
+              <ng-template #OneAAPTooltipTemplate>
+                <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+                  <span> {{'account.oneAapTooltip' | translate}}</span>
+                </div>
+              </ng-template>
+              <ng-template #OneAEPTooltipTemplate>
+                <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+                  <span> {{'account.oneAepTooltip' | translate}}</span>
+                </div>
+              </ng-template>
+              <ng-template #OnePITooltipTemplate>
+                <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+                  <span> {{'account.onePiTooltip' | translate}}</span>
+                </div>
+              </ng-template>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">2.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.newInvoiceStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlex="30" fxFlexOffset="30px" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select name="newInvoiceStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.newInvoice.communicationMedium" placeholder="" multiple>
+              <mat-option [disabled]="item.code === 'Web' || (item.code === 'Email' && checkIfEmail())" *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">3.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.readingDatesStatement' | translate}}
+          </div>
+          <mat-form-field  class="comp-mat-select" fxFlexOffset="30px" fxFlex="30" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select name="readingDatesStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.readingdates.communicationMedium" placeholder="" multiple>
+              <mat-option [disabled]="item.code === 'Web'" *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">4.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.receiveReadingReportStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlexOffset="30px" fxFlex="30" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select name="receiveReadingReportStatement" class="placeholder-text-1" [(ngModel)]="generalSettingsNew.readingAttempt.communicationMedium" placeholder="{{(generalSettingsNew.readingAttempt.communicationMedium?.length===0 || generalSettingsNew.readingAttempt.communicationMedium===null)? ('account.noOptionSelected' | translate): ''}}" multiple>
+              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [disabled]="item.code === 'SMS'" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">5.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.defectedSmokeStatement' | translate}}
+          </div>
+          <mat-form-field fxFlexOffset="30px" class="comp-mat-select" fxFlex="30" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select name="defectedSmokeStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.defectSmokeDetectors" placeholder="" >
+              <mat-option *ngFor="let item of informReadingAttemptList" [value]="item.code">{{'account.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">6.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.usersNotAvailableStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlexOffset="30px" fxFlex="30" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select name="usersNotAvailableStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.userNotAvailable" placeholder="">
+              <mat-option *ngFor="let item of informReadingAttemptList" [value]="item.code">{{'account.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="30px">7.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="calc(90% - 30px)">
+            {{'account.receiveAccountingStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlexOffset="30px" fxFlex="30" fxFlex.lt-md="90" ngClass.lt-md="m-t-5">
+            <mat-select name="receiveAccountingStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.accountingDocument.communicationMedium" placeholder="" multiple>
+              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [disabled]="item.code === 'SMS' || item.code === 'Web'" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="8">8.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="90">
+            {{'account.plumbingDatesStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlex="30" fxFlex.lt-md="50" ngClass.lt-md="m-t-5">
+            <mat-select name="plumbingDatesStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.plumbingDates.communicationMedium" placeholder="" multiple>
+              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div> -->
+    </div>
+    
+    <!-- <div fxLayout="row wrap" fxLayoutAlign="start center">
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="8">9.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="90">
+            {{'account.plumbingReportsStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlex="30" fxFlex.lt-md="50" ngClass.lt-md="m-t-5">
+            <mat-select name="plumbingReportsStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.plumbingReports.communicationMedium" placeholder="" multiple>
+              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [disabled]="item.code === 'SMS'" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxFlex="50" fxFlex.lt-md="90" class="m-t-5">
+        <div fxLayout="row wrap" fxLayoutAlign="start center" fxLayoutGap="10px">
+          <div class="question-text" fxFlex="8">10.</div>
+          <div class="question-text" fxFlex="50" fxFlex.lt-md="90">
+            {{'account.remainingLettersStatement' | translate}}
+          </div>
+          <mat-form-field class="comp-mat-select" fxFlex="30" fxFlex.lt-md="50" ngClass.lt-md="m-t-5">
+            <mat-select name="remainingLettersStatement" required class="placeholder-text-1" [(ngModel)]="generalSettingsNew.remainingLetters.communicationMedium" placeholder="" multiple>
+              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.communicationChannel" [disabled]="item.code === 'SMS'" [value]="item.code">{{'lookup.'+ utility.toCamelCase(item.code) | translate }}</mat-option>
+            </mat-select>
+            <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+    </div> -->
+  </form>
+</div>

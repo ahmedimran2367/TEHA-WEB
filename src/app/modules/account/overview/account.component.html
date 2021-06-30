@@ -1,0 +1,132 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-shared-hello-card message="{{helloCardTabWiseText}}" fxFlex="50" fxFlex.lt-md="100"></app-shared-hello-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-map-component [isFromUser]="true" fxFlex="100"></app-map-component>
+    </div>
+  </div>
+
+  <div fxFlex="100">
+    <mat-card class="mat-dashboard-card p-b-0">
+      <div fxLayout="row" fxLayoutAlign="space-between center" class="card-title-row" fxLayout.lt-md="column">
+
+        <mat-card-title fxFlex>
+          <span fxLayout="row" fxLayoutAlign="start center">
+            <button (click)="backPressed()" [ngClass]="{'is-hidden': hiddenBackButton}" mat-icon-button>
+              <mat-icon>arrow_back</mat-icon>
+            </button>
+            {{'account.settings' | translate}} {{settingsSuffixMessage}}
+          </span>
+          <span fxFlex></span>
+
+        </mat-card-title>
+
+
+
+        <div fxFlex="40" fxFlexAlign.lt-md="center" class="font-resp" fxFlexFill>
+          <div *ngIf="selectedTabId != 4">
+            <span [ngClass]="{'is-hidden': hiddenSearchbar}">
+              <div *ngIf="selectedTabId === 3;else teamSearch">
+                <app-search-bar placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}"
+                  (changed)="onChange($event)">
+                </app-search-bar>
+              </div>
+
+            </span>
+            <ng-template #teamSearch>
+              <app-search-bar placeHolder="{{'account.appSearchBarMyTeams' | translate}}"
+                (changed)="onChange($event); teamsTab.searchChanged($event)">
+              </app-search-bar>
+
+            </ng-template>
+          </div>
+          <div *ngIf="selectedTabId === 4">
+            <app-search-bar placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}"
+              (changed)="onChange($event)">
+            </app-search-bar>
+          </div>
+          <span [ngClass]="{'is-hidden': hiddenPropertySelectComponent}" class="w-100">
+            <div fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px">
+              <app-search-autocomplete isFromNotification="true" class="searchAutoComplete w-100"
+                (onOptionSelected)="onPropertySelected($event);notificationTab.getGeneralSettings($event)">
+              </app-search-autocomplete>
+              <div [ngClass]="{'is-hidden': hiddenPropertySelectStatement}" fxLayout="row">
+                <div fxFlex="10" fxLayoutAlign="center center">
+                  <mat-icon class="primary-icon">apartment</mat-icon>
+                </div>
+                <div fxFlex="80" fxLayoutAlign="start center" class="header-4"> {{selectedProperty?.street}},
+                  {{selectedProperty?.tehaLgNo}}</div>
+                <div fxFlex="10" fxLayoutAlign="center center">
+                  <button mat-icon-button (click)="deselectProperty(); notificationTab.getGeneralSettings(null)">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </span>
+        </div>
+      </div>
+
+      <mat-card-content class="font-resp m-b-0">
+        <mat-tab-group class="comp-tabs-title" mat-align-tabs="center" #tabGroup
+          (selectedTabChange)="tabChanged($event); contractsComponent.getContracts($event.index); offersComponent.getOffers($event.index)"
+          [(selectedIndex)]="selectedTabId">
+          <mat-tab label="{{ 'account.personalData' | translate }}">
+            <app-general #generalTab (stateChanged)="onChildStateChanged($event)"
+              [contactInformationNew]="contactInformationNew" [contactInformationCurrent]="contactInformationCurrent"
+              [selectedTabId]="selectedTabId" [discardedEvent]="discardChangesEventSubject.asObservable()"
+              [buttonClickedEvent]="saveEventsSubject.asObservable()"></app-general>
+          </mat-tab>
+          <mat-tab label="{{'account.notifications' | translate}}">
+            <app-notification #notificationTab (stateChanged)="onChildStateChanged($event)"
+              [generalSettingsCurrent]="generalSettingsCurrent" [generalSettingsNew]="generalSettingsNew"
+              [selectedTabId]="selectedTabId" [discardedEvent]="discardChangesEventSubject.asObservable()"
+              [buttonClickedEvent]="saveEventsSubject.asObservable()"></app-notification>
+          </mat-tab>
+          <mat-tab label="{{'account.password' | translate}}">
+            <app-password></app-password>
+          </mat-tab>
+          <mat-tab label="{{'account.myContracts' | translate}}">
+            <app-my-contracts-table #contractsComponent [searchText]="searchText"></app-my-contracts-table>
+          </mat-tab>
+          <mat-tab label="{{'order.myOffers' | translate}}">
+            <app-my-offers #offersComponent [searchText]="searchText"></app-my-offers>
+          </mat-tab>
+          <mat-tab *ngIf="accountService.user.type === 'HA'" label="{{'account.myTeam' | translate}}">
+            <app-my-teams-table #teamsTab (stateChanged)="onChildStateChanged($event)" [searchText]="searchText"
+              [myTeamSearch]="myTeamNew" [myTeamNew]="myTeamNew" (updateFormAppeard)="onUpdateFormAppeared($event)"
+              [discardedEvent]="discardChangesEventSubject.asObservable()" [backEvent]="backEventSubject.asObservable()"
+              [ngClass]="{'is-hidden': addTeamMemberShown}"></app-my-teams-table>
+
+          </mat-tab>
+          <mat-tab label="{{'account.preferences' | translate}}">
+            <app-preferences (onGridSizeChanged)="contractsComponent.reloadTable()" (languageChangeEvent)="languageChange()"></app-preferences>
+
+          </mat-tab>
+        </mat-tab-group>
+
+
+      </mat-card-content>
+
+      <mat-card-actions>
+        <span fxLayoutAlign="end end" fxLayoutGap="12px" class="m-b-8 m-r-8 save-b" [ngClass]="{'is-hidden': hiddenButtons}">
+          <button mat-button (click)="emitCancelClickEventToChild()"
+            class="primary-transparent-button btn-lg save-b">{{'account.cancel' | translate}}</button>
+          <button mat-button
+            [disabled]="selectedTabId === 0 ? !generalTab.generalForm?.form.valid : !notificationTab.notificationForm?.form.valid"
+            *ngIf="hiddenPropertySelectStatement " (click)="emitSaveClickEventToChild(0)"
+            class="primary-green-button btn-lg save-b">{{ 'account.save' | translate }}</button>
+          <button mat-button [disabled]="!notificationTab.notificationForm?.form.valid"
+            *ngIf="!hiddenPropertySelectStatement" (click)="emitSaveClickEventToChild(1)"
+            class="primary-green-button btn-lg">{{ 'account.saveForThisProperty' | translate }}</button>
+        </span>
+        <div fxLayoutAlign="end end" fxLayoutGap="12px" class="m-b-8 m-r-8"
+          [ngClass]="{'is-hidden': !addTeamMemberShown}">
+          <button (click)="addMemberCanceled()" mat-button class="primary-transparent-button btn-lg">{{'account.cancel'
+            | translate}}</button>
+          <button (click)="confirmTeamMemberClicked()" mat-button class="primary-green-button btn-lg">{{'order.confirm'
+            | translate}}</button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>

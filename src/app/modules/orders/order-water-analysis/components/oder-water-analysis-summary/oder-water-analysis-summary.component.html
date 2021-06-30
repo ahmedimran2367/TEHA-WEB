@@ -1,0 +1,186 @@
+<mat-card class="mat-dashboard-card p-b-8 p-t-8">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxFlex>
+      <mat-card-header>
+        <mat-card-title>
+          <span fxLayout="row" fxLayoutAlign="start center">
+            <button mat-icon-button [ngClass]="{ 'is-hidden': ((currentStep != 'STEP_1') || (drinkingWaterInd))}">
+              <mat-icon (click)="arrowBack()">arrow_back</mat-icon>
+            </button>
+            <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }">
+              {{'order.orderDrinkingWaterAnalysis' | translate}}
+            </span>
+            <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }">
+              {{'order.orderDrinkingWaterAnalysisConfirmation' | translate}}
+            </span>
+          </span>
+        </mat-card-title>
+      </mat-card-header>
+    </div>
+  </div>
+
+  <mat-card-content class="p-l-8 p-r-8">
+    <!-- class="mat-card-content-overflow" -->
+
+    <!-- ********************** -->
+    <div class="you-have-ordered-text p-t-4 p-b-4" fxLayoutAlign="start center">
+      <p [ngClass]=" { 'is-hidden' : currentStep !='STEP_1' }">
+        {{'order.drinkingWaterPropertyMsg' | translate}}
+      </p>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="p-b-4 p-t-4" [ngClass]="{ 'is-hidden': currentStep != 'STEP_1'}" >
+      <div fxHide.lt-md="true">
+        <table mat-table [dataSource]="tableTwoDataSource" class="full-width-table"
+          [ngClass]=" { 'is-hidden': currentStep != 'STEP_1' } ">
+
+          <ng-container matColumnDef="tehaLgNo">
+            <th mat-header-cell *matHeaderCellDef>{{'stockOverview.tehaLgNo' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.tehaLgNo}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="adminLgNo">
+            <th mat-header-cell *matHeaderCellDef>{{'stockOverview.adminLgNo' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.adminLgNo}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="street">
+            <th mat-header-cell *matHeaderCellDef>{{'stockOverview.street' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.street}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="postcode">
+            <th mat-header-cell *matHeaderCellDef>{{'stockOverview.postal' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.postcode}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="place">
+            <th mat-header-cell *matHeaderCellDef>{{'stockOverview.city' | translate}}</th>
+            <td mat-cell *matCellDef="let row">{{row.place}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: DisplayedColumns"></tr>
+        </table>
+      </div>
+
+      <div *ngIf="tableTwoDataSource" class="font-resp m-t-4" fxHide.gt-sm="true">
+        <ng-container *ngFor="let element of tableTwoDataSource.data; let i=index">
+          <div class="simple-card">
+            <div fxLayout="column" fxLayoutGap="20px">
+              <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                <div fxLayout="column" fxFlex="50">
+                  <div class="paragraph">
+                    {{'stockOverview.tehaLgNo' | translate}}:<br>
+                    {{ element.tehaLgNo }}
+                  </div>
+                </div>
+
+                <div fxLayout="column" fxFlex="50">
+                  <div class="paragraph">
+                    {{'stockOverview.adminLgNo' | translate}}:<br>
+                    {{ element.adminLgNo }}
+                  </div>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                <div fxLayout="column" fxFlex="50">
+                  <div class="paragraph">
+                    {{'stockOverview.street' | translate}}:<br>
+                    {{ element.street }}
+                  </div>
+                </div>
+
+                <div fxLayout="column" fxFlex="50">
+                  <div class="paragraph">
+                    {{'stockOverview.postcode' | translate}}:<br>
+                    {{ element.postcode }}
+                  </div>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                <div fxLayout="column" fxFlex="50">
+                  <div class="paragraph">
+                    {{'stockOverview.city' | translate}}:<br>
+                    {{ element.place }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+
+      <div>
+        <form #summaryForm="ngForm">
+          <div fxLayout="column" fxLayoutGap="20px" class="font-resp m-t-10">
+            <div fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="end start">
+
+              <div fxLayout="row">
+                <mat-checkbox fxFlex="50px" class="support-text" name="termsInd" required
+                  [(ngModel)]="orderService.waterSamplingRequest.termsInd">
+                </mat-checkbox>
+                <span fxFlex>{{'order.termsMessagePart1' | translate}} <a
+                    (click)="downloadPDF()">{{'order.termsMessagePart2' | translate}}</a></span>
+              </div>
+              <div fxLayout="row">
+                <mat-checkbox fxFlex="50px" class="support-text" name="costsInd" required
+                  [(ngModel)]="orderService.waterSamplingRequest.costsInd">
+                </mat-checkbox>
+                <span>{{'order.drinkingWaterCostIndMsg' | translate}}{{'order.fee' | translate}}.</span>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+              <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                {{'account.cancel' | translate}}
+              </button>
+              <button [disabled]="!summaryForm.form.valid" (click)="save()" mat-button class="primary-green-button">
+                {{'order.confirm' | translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- step 2 -->
+    <div class="confirm-action p-b-16 p-t-8" [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }" fxLayout="column"
+      fxLayoutGap="5px">
+      <div class="confirm-message-wrapper">
+        <div class="message-with-icon-wrapper" fxLayoutAlign="center center" fxLayoutGap="24px">
+
+          <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M43.7508 25.1461V27.0836C43.7455 36.3101 37.6722 44.4341 28.8244 47.0501C19.9766 49.6661 10.462 46.1509 5.44026 38.4108C0.418511 30.6708 1.0859 20.5495 7.08051 13.5359C13.0751 6.52218 22.9689 4.2868 31.3966 8.04196"
+              stroke="#00A253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M45.8327 8.33301L22.916 31.2497L16.666 24.9997" stroke="#00A253" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span class="message">{{'order.orderConfirmationMessage' | translate}}</span>
+
+        </div>
+        <div class="confirmation-message-text p-t-8">
+          <p>{{'order.receivedOrder' | translate}}
+
+            <br>
+            <br>
+            {{'order.emailMessage' | translate}}
+            <br>
+            <br>
+            -- {{'order.tehaServiceTeam' | translate}}
+          </p>
+
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+        <button (click)="backToOrders()" mat-button class="primary-green-button">
+          {{'order.backToOrders' | translate}}
+        </button>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

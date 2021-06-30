@@ -1,0 +1,254 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/confirmationmessage";
+@import "../../../shared/styles/orderscommon";
+@import "../../../shared/styles/formfields";
+@import "../../../shared/styles/deep";
+
+.ml4 {
+  margin-left: 20px;
+}
+
+.search-bar input {
+  width: 400px;
+  height: 40px;
+  border: transparent;
+  outline: none;
+}
+
+.building-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+}
+
+.building-radio-button {
+  margin: 5px;
+}
+
+.search-bar svg {
+  width: 15px;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.is-hidden-overview-card {
+  display: none;
+  visibility: collapse;
+}
+
+.is-hidden {
+  display: none;
+  visibility: collapse;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+.panel {
+  padding-left: 30px;
+  padding-top: 30px;
+
+  .inner-panel {
+    // padding-left: 10px;
+  }
+}
+
+.search {
+  margin-top: -70px;
+}
+
+.confirmed-order p {
+  color: $primary;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+  padding-top: 50px;
+}
+
+// .mat-card-content {
+//   overflow: scroll;
+//   min-height: 290px;
+//   overflow-x: auto;
+// }
+
+.confirmed-order svg {
+  margin-right: 25px;
+  margin-top: 32px;
+}
+
+.confirmed-order {
+  margin-bottom: 30px;
+}
+
+.confirm-order2 {
+  color: $secondary;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  padding-bottom: 30px;
+}
+
+.check-box {
+  margin-top: 15px;
+}
+
+.check-box .example-margin {
+  margin-bottom: 18px;
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+}
+
+.check-box .example-margin a {
+  text-decoration: none;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+.mat-custom-period-field {
+  width: 12vw;
+}
+.mat-custom-field-margin {
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+.mat-custom-table-form-field {
+  position: relative;
+  display: inline-flex;
+  margin: 0 auto;
+  margin-top: 12px;
+
+  height: 35px;
+
+  // .mat-label {
+  //   font-style: normal;
+  //   font-weight: normal;
+  //   font-size: 16px;
+  //   line-height: 19px;
+  //   letter-spacing: 0.05em;
+  //   color: #565656;
+  // }
+  .mat-card-content-bottom-border {
+    padding-bottom: 5px;
+    border-bottom: #565656;
+    border-width: 2;
+  }
+
+  input {
+    line-height: 21px;
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+
+    display: flex;
+    padding-left: 12px;
+    height: 35px;
+
+    position: absolute;
+    //width: 114px;
+    height: 30px;
+    background: #ffffff;
+    border: 1px solid #808080;
+    box-sizing: border-box;
+  }
+  input.mat-custom-period-field {
+    width: 12vw;
+  }
+  input.mat-custom-summary-field {
+    width: 5vw;
+    margin-left: 14px;
+  }
+  input:disabled {
+    background: #dadada;
+    border: 1px solid #808080;
+    box-sizing: border-box;
+  }
+
+  input:hover {
+    box-shadow: 1px solid #00c95d;
+    box-sizing: border-box;
+  }
+}
+.vertical-separator {
+  height: 377px;
+  left: 931px;
+  top: 481px;
+
+  border: 0.75px solid #808080;
+}
+
+.formFieldWidth480 .mat-form-field-infix {
+  width: 80px;
+}
+
+:host ::ng-deep .mat-header-cell {
+  justify-content: center;
+  text-align: center;
+}
+
+.fifty-gap {
+  margin-left: 50px;
+}
+
+th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type,
+td.mat-footer-cell:last-of-type {
+  padding-right: 0px !important;
+}
+
+// .mat-button:last-of-type {
+//   min-width: auto !important;
+//   padding: 0 0 !important;
+//   border-radius: 4px;
+//   overflow: visible;
+// }
+
+.mat-header-cell {
+  padding-right: 0px !important;
+}
+.errorInput {
+  border: 1px solid $red !important;
+}
+.mat-custom-table-form-field {
+  width: 90%;
+}
+
+.dateRange {
+  ::ng-deep {
+    .mat-form-field-wrapper {
+      padding-bottom: 0;
+    }
+    .mat-form-field-appearance-outline {
+      .mat-form-field-outline {
+        display: none !important;
+      }
+      .mat-form-field-infix {
+        max-height: 28px;
+        border: 1px solid $secondary;
+        padding: 7px;
+        margin-top: 6px;
+      }
+      .mat-form-field-flex {
+        text-align: center;
+      }
+    }
+  }
+}

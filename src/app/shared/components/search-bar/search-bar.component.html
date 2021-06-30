@@ -1,0 +1,28 @@
+<mat-card class="search-bar-wrapper p-0 p-b-3">
+
+  <mat-card-content class="search-autocomplete-icon-wrapper ">
+    <div fxFlexAlign="center">
+        <form class="search-form">
+          <div fxLayout="column" fxFlexAlign="center">
+            <mat-icon class="m-r-5">search</mat-icon>
+          </div>
+          <mat-form-field fxFlex class="search-autocomplete-input">
+            <input #searchInputElement class="search-autocomplete-input" appearance="none"
+              [placeholder]="placeHolder" type="text" [(ngModel)]="searchText"
+              [ngModelOptions]="{standalone: true}" (keyup.enter)="this.enterPressed.emit(searchInputElement.value)" (keyup.backspace)="this.backspace.emit(searchInputElement.value)"
+              (input)="this.changed.emit(searchText)" matInput>
+            <!-- <input #searchInputElement class="search-autocomplete-input" [placeholder]="placeHolder" type="text" [(ngModel)]="searchText" [ngModelOptions]="{standalone: true}" (keyup.enter)="this.enterPressed.emit(searchInputElement.value)" (input)="this.changed.emit(searchText)" matInput [matAutocomplete]="auto"> -->
+            <!-- <mat-autocomplete #auto="matAutocomplete">
+              <mat-option value="test">
+                <div class="search-autocomplete-item-wrapper" fxFlex>
+                  <div class="mat-subheading-2">Woldowstr. 90</div>
+                  <div class="mat-small">Ich Leiba Deutsche</div>
+                </div>
+              </mat-option>
+            </mat-autocomplete> -->
+          </mat-form-field>
+        </form>
+      </div>
+  </mat-card-content>
+
+</mat-card>

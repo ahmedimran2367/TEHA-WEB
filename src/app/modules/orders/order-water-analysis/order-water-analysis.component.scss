@@ -1,0 +1,88 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/confirmationmessage";
+@import "../../../shared/styles/orderscommon";
+@import "../../../shared/styles/confirmationmessage";
+@import "../../../shared/styles/orderscommon";
+
+
+
+
+.ml4 {
+  margin-left: 20px;
+}
+
+.search-bar input {
+  width: 400px;
+  height: 40px;
+  border: transparent;
+  outline: none;
+}
+
+.search-bar svg {
+  width: 15px;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.is-hidden-overview-card {
+  display: none;
+  visibility: collapse;
+}
+
+.is-hidden {
+  display: none;
+  visibility: collapse;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+
+// .smaller-input .input-box {
+//   width: 115px;
+//   height: 35px;
+//   left: 1101px;
+//   top: 520px;
+
+//   background: #FFFFFF;
+//   box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+// }
+
+
+.check-box .example-margin a {
+  text-decoration: none;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+.formFieldWidth480 .mat-form-field-infix {
+  width: 80px;
+}
+
+:host ::ng-deep .mat-header-cell {
+  justify-content: center;
+  text-align: center;
+}
+
+
+.search-bar input {
+  width: 400px;
+  height: 40px;
+  border: transparent;
+  outline: none;
+}
+
+.search-bar svg {
+  width: 15px;
+  margin-top: 10px;
+  margin-left: 15px;
+}

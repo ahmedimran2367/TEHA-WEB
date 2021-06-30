@@ -1,0 +1,31 @@
+<app-float-btn></app-float-btn>
+<app-header fxHide.gt-md="true" flexLayout="column"></app-header>
+<main flexLayout="row" class="outer-container" fxFlex>
+  <mat-drawer-container class="container" autosize>
+    <mat-drawer fxHide.lt-lg="true" #drawer class="sidenav" mode="side" opened="true">
+      <app-sidebar [class.menu-open]="isSidebarOpen" [class.menu-close]="!isSidebarOpen" [sidebarOpen]="isSidebarOpen"
+        fxFlex="auto" fxFlex.gt-xs="none"></app-sidebar>
+    </mat-drawer>
+
+    <div ngClass.gt-sm="p-5" class="main-contents">
+      <router-outlet></router-outlet>
+
+      <div fxHide.lt-lg="true" type="button" class="m-t-6 m-l-6 home-sidebar-toggle-wrapper" mat-button (click)="sidebarToggle()"
+        [class.home-sidebar-toggle-wrapper-open]="isSidebarOpen"
+        [class.home-sidebar-toggle-wrapper-closed]="!isSidebarOpen">
+        <div *ngIf="isSidebarOpen; else chevronClosed">
+          <div class="inner-div">
+            <mat-icon>chevron_left</mat-icon>
+          </div>
+
+        </div>
+        <ng-template class="inner-div" #chevronClosed>
+          <div class="inner-div">
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+        </ng-template>
+      </div>
+      <!-- <app-footer flexLayout="column"></app-footer> -->
+    </div>
+  </mat-drawer-container>
+</main>

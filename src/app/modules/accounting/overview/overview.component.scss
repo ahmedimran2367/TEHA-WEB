@@ -1,0 +1,43 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/deep";
+
+
+.hideOverflow {
+  overflow: hidden;
+}
+
+.mat-menu-panel {
+  overflow: hidden;
+}
+
+.is-hidden {
+  display: none;
+
+}
+
+.download-text {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+
+  color: #565656;
+
+  .light {
+    font-weight: 300 !important;
+  }
+}
+
+.download-icon {
+  font-size: 30px;
+  height: 30px;
+  width: 30px;
+  margin: 15px;
+}
+
+ 

@@ -1,0 +1,122 @@
+.comp-tabs-title {
+  ::ng-deep {
+    .mat-tab-label-content {
+      font-size: large;
+    }
+  }
+}
+.comp-mat-select {
+  font-size: large;
+  ::ng-deep {
+    .mat-select-arrow {
+      visibility: hidden;
+    }
+    .select-icon {
+      position: absolute;
+      right: 5px;
+      bottom: 7px;
+      font-size: 30px !important;
+    }
+  }
+}
+
+::ng-deep {
+  .mat-column-adminUserNo, .mat-column-adminUserno {
+    white-space: pre !important;
+  }
+}
+
+::ng-deep {
+  .comp-mat-menu {
+    .mat-menu-content {
+      padding: 0 16px;
+    }
+  }
+  .th-s .mat-sort-header-container {
+    justify-content: start;
+  }
+  .th-c .mat-sort-header-container {
+    justify-content: center;
+  }
+
+  .mat-tab-header {
+    border-bottom: none;
+  }
+}
+.table-align {
+  width: 100%;
+  table-layout:auto;
+  th {
+    text-align: center;
+    word-wrap: break-word;
+
+  }
+  th.w-1 {
+    max-width: 70px;
+  }
+  th.w-2 {
+    max-width: 100px;
+  }
+  th.w-3 {
+    max-width: 100%;
+  }
+  th.sort {
+    padding-right: 11px;
+  }
+  th.sort-x {
+    padding-right: 11px;
+    padding-left: 11px;
+  }
+  td.sort {
+    padding-right: 33px;
+  }
+  th.align-c {
+    text-align: center;
+  }
+  th.align-s {
+    text-align: start;
+  }
+  th.align-e {
+    text-align: end;
+  }
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    min-height: 75px;
+  }
+  td.sort {
+    padding-right: 22px;
+  }
+  td.align-c {
+    text-align: center;
+  }
+  td.align-s {
+    text-align: start;
+  }
+  td.align-e {
+    text-align: end;
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+  .link {
+    cursor: pointer;
+  }
+}
+.simple-card {
+  border: 1px solid;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-color: lightgray;
+}
+::ng-deep .vertical-tab-group {
+  .mat-tab-group {
+    flex-direction: row;
+  }
+  .mat-tab-label-active{
+    background-color:  $bgGray;
+    color: $primary;
+  }
+}

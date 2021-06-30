@@ -1,0 +1,130 @@
+
+
+
+  <!-- <app-language-translation></app-language-translation> -->
+
+
+<div *ngIf="viewGrid" fxLayout="column" fxLayoutGap="40px">
+    <div fxFlex="100" fxFlexGap="1" class=" ">
+      <mat-card class="mat-dashboard-card p-8">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex>
+            <mat-card-header>
+  
+              <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+                  <button mat-icon-button>
+                    <!-- <mat-icon>arrow_back</mat-icon> -->
+                  </button>
+                  {{'admin.systemSettings'| translate}} 
+                </span>
+              </mat-card-title>
+            </mat-card-header>
+          </div>
+          <div fxFlexAlign="end end">
+            <!-- <app-search-bar></app-search-bar> -->
+          </div>
+          <!-- <div fxFlexAlign="end end">
+            <mat-form-field appearance="fill">
+              <mat-label>Filter by category</mat-label>
+              <select matNativeControl id="mySelectId" >
+                <option value="all" selected>All</option>
+                <option value="home">Home</option>
+                <option value="admin">Admin</option>
+                <option value="account">Account</option>
+                <option value="accounting">Accounting</option>
+                <option value="stockoverview">Stockoverview</option>
+                <option value="order">Order</option>
+                <option value="info">Info</option>
+              </select>
+            </mat-form-field>
+          </div> -->
+  
+        </div>
+  
+        <mat-card-content>
+          <app-system-settings-table #settingstableComponent  (editEvent)="reciveItem($event)">
+          </app-system-settings-table>
+          
+          <button mat-button class="primary-green-button link" (click)="downloadDocument()" *ngIf="isAdmin">Documents.JSON</button>
+        </mat-card-content>
+  
+      </mat-card>
+    </div>
+  
+  </div>
+  
+
+
+
+  <div *ngIf="!viewGrid" fxLayout="column" fxLayoutGap="40px">
+    <div fxFlex="100" fxFlexGap="1" class=" ">
+      <mat-card class="mat-dashboard-card p-8">
+        <div fxLayout="row" fxLayoutAlign="center center">
+          <div fxFlex>
+            <mat-card-header>
+  
+              <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+                  <button mat-icon-button (click)="goBack()">
+                    <mat-icon>arrow_back</mat-icon>
+                  </button>
+                  {{'admin.edit'| translate}}
+                </span>
+              </mat-card-title>
+            </mat-card-header>
+          </div>
+  
+          <div fxFlexAlign="end end">
+  
+          </div>
+  
+        </div>
+  
+        <mat-card-content>
+  
+          <mat-form-field appearance="standard">
+            <mat-label>{{'admin.code'| translate}}</mat-label>
+            <input matInput placeholder="{{'admin.code'| translate}}" [(ngModel)]="systemSetting.code" disabled>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="standard">
+            <mat-label>{{'admin.category'| translate}}</mat-label>
+            <input matInput placeholder="{{'admin.category'| translate}}" [(ngModel)]="systemSetting.settingCategory" disabled>
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="standard">
+            <mat-label>{{'miscellaneous.type'| translate}}</mat-label>
+            <input matInput placeholder="{{'miscellaneous.type'| translate}}" [(ngModel)]="systemSetting.type" disabled>
+  
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="standard">
+            <mat-label>{{'admin.displayName'| translate}}</mat-label>
+            <input matInput placeholder="Display Name" [(ngModel)]="systemSetting.displayName">
+  
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="standard">
+            <mat-label>{{'admin.value'| translate}}</mat-label>
+            <input matInput placeholder="Value" [(ngModel)]="systemSetting.value">
+  
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="standard">
+            <mat-label>{{'admin.description'| translate}}</mat-label>
+            <input matInput placeholder="{{'admin.description'| translate}}" [(ngModel)]="systemSetting.description">
+  
+          </mat-form-field>
+          <br>
+          <button mat-flat-button color="primary" (click)="Update()">{{'account.save'| translate}}</button>
+  
+        </mat-card-content>
+  
+      </mat-card>
+    </div>
+  
+  </div>
+  
+  
+  

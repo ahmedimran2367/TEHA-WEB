@@ -1,0 +1,8 @@
+<h2 matDialogTitle>{{config.title}}</h2>
+<mat-dialog-content>
+    <p>{{config.message}}</p>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose="cancel" color="primary">{{config.cancelButtonLabel}}</button>
+    <button mat-button matDialogClose="confirm" color="warn">{{config.confirmButtonLabel}}</button>
+</mat-dialog-actions>

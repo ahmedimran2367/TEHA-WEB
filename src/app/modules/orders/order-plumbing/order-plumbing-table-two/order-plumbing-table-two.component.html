@@ -1,0 +1,156 @@
+<div fxLayout="column" fxLayoutGap="40px">
+  <table mat-table class="full-width-table grid-table table-align" aria-label="Elements" fxHide.lt-md="true">
+    <!-- Id Column -->
+    <ng-container matColumnDef="tehalgno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.tehaLgNo' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{building?.tehaLgNo}}</td>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="adminlgno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.adminLgNo' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{building?.adminLgNo}}</td>
+    </ng-container>
+
+    <!-- Id Column -->
+    <ng-container matColumnDef="tehauserno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.tehaUserNo' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{meter?.tehaUserNo}}</td>
+    </ng-container>
+    <!-- Name Column -->
+    <ng-container matColumnDef="adminuserno">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.adminUserNo' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{meter?.adminUserNo}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="meterserial">
+      <th mat-header-cell *matHeaderCellDef>{{'order.serialNumber' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{meter?.serialNumber}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="meterty">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.meterType' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{showFullMeter(meter?.meterTypeDesc)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="reason">
+      <th mat-header-cell *matHeaderCellDef>{{'order.plumbingReason' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{orderPlumbingRequestNew?.reason}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="location">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.location' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{meter?.location}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="address">
+      <th mat-header-cell *matHeaderCellDef>{{'stockOverview.address' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{building?.street}}, {{building?.postcode}},
+        {{building?.place}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>{{'documentArchives.creationDate' | translate}}</th>
+      <td class="align-c" mat-cell *matCellDef="let row">{{currentDate | date: 'dd/MM/yyyy'}}</td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let row">
+        <a mat-button color="link" fxLayoutAlign="end center">Edit</a>
+      </td>
+    </ng-container> -->
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+
+  <div class="m-b-4" *ngIf="dataSource" class="font-resp m-t-4" fxHide.gt-sm="true">
+    <ng-container *ngFor="let element of dataSource.data; let i=index">
+      <div class="simple-card">
+        <div fxLayout="column" fxLayoutGap="20px">
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.tehaLgNo' | translate}}
+                {{building?.tehaLgNo}}
+              </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.adminLgNo' | translate}}
+                {{building?.adminLgNo}}
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'order.serialNumber' | translate}}
+                {{meter?.serialNumber}}
+              </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.meterType' | translate}}
+                {{showFullMeter(meter?.meterTypeDesc)}}
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'order.plumbingReason' | translate}}
+                {{orderPlumbingRequestNew?.reason}}
+              </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.location' | translate}}
+                {{meter?.location}}
+              </div>
+            </div>
+          </div>
+
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'documentArchives.creationDate' | translate}}
+                {{currentDate | date: 'dd/MM/yyyy'}}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <form #summaryForm="ngForm">
+  
+    <div fxLayout="column" fxLayoutGap="20px">
+
+      <div fxLayout="row">
+        <mat-checkbox fxFlex="50px" class="support-text" required name="termsInd" [(ngModel)]="orderPlumbingRequestNew.termsInd">
+        </mat-checkbox>
+        <span fxFlex>
+          {{'order.termsMessagePart1' | translate}} <a (click)="downloadPDF()">{{'order.termsMessagePart2' |
+            translate}}</a> <span class="red">*</span>
+        </span>
+      </div>
+      <div fxLayout="row">
+        <mat-checkbox fxFlex="50px" class="support-text" required name="costsInd" [(ngModel)]="orderPlumbingRequestNew.costsInd">
+        </mat-checkbox>
+        <span fxFlex>
+          {{'order.plumbingCostIndMsg' | translate}} <span class="red">*</span>
+        </span>
+      </div>
+    </div>
+
+  </form>
+</div>

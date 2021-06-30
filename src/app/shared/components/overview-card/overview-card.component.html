@@ -1,0 +1,26 @@
+<mat-card class="mat-dashboard-card p-b-17 p-t-18 p-l-15 p-r-15">
+
+  <mat-card-content>
+    <div fxLayoutGap="24px" fxFlexAlign="center" fxLayoutAlign="center center" fxFlexFill>
+      <div class="hello-card-icon-wrapper">
+      </div>
+      <div fxFlex>
+        <p class="hello-title">
+          {{firstName}}
+        </p>
+        <p class="">{{street}}</p>
+        <p>{{zipcode}},<br>{{city}}</p>
+      </div>
+      <div class="vertical-separator">
+
+
+      </div>
+      <div>
+        <p class="mat-body-2">{{'stockOverview.adminUserNo' | translate}}<br>{{adminUserNo}}</p>
+        <p class="mat-body-2">{{'stockOverview.tehaUserNo' | translate}}<br>{{tehaUserNo}}</p>
+
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>

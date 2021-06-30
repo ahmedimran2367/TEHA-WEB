@@ -1,0 +1,68 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/deep";
+
+
+::ng-deep .menuFilter.mat-menu-panel {
+  max-height: 12.5vw;
+  overflow-y: scroll;
+
+}
+table {
+  th {
+    div {
+      cursor: pointer;
+    }
+  }
+}
+.selected-filter-icon {
+  color: $primary;
+}
+.menu-button {
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
+}
+
+.customTooltipFlatGroup {
+  padding-top: 0.5vw;
+  padding-bottom: 0.5vw;
+}
+
+.hint-head {
+  font-family: Roboto-Regular;
+  font-size: 14px;
+  line-height: normal;
+}
+.hint-txt {
+  font-family: Roboto-Light;
+  font-size: 14px;
+  line-height: normal;
+}
+.acc-period{
+  flex: 1 1 50%;
+    box-sizing: border-box;
+    max-width: 49%;
+    flex-direction: row;
+    display: flex;
+}
+.on-hold-tooltip {
+  width: 200px;
+}
+.drop-btn-pad {
+  padding-left: 10px;
+}
+.tableHeight {
+  max-height: calc(75vh - 188px);
+  overflow: auto; 
+}
+.forward1{
+  align-items: stretch;
+  flex-direction: row;
+  box-sizing: border-box;
+  display: flex;
+  // flex: 1 1 0%;
+}
+.shadow-none {
+  box-shadow: none !important;
+}

@@ -1,0 +1,56 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/deep";
+
+
+table {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+    text-align: center;
+    min-height: 75px;
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+
+  .dangerHighlight {
+    color: red;
+  }
+}
+
+.radio-button-div {
+  border: 1px dashed $primary;
+  border-radius: 8px;
+  padding-bottom: 1vw;
+  margin: 1%;
+  background-color: rgb(252, 250, 250);
+}
+.building-radio-button {
+  margin: 5px;
+}
+.select {
+  font-weight: bold;
+  color: $primary;
+}
+.question-text {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+
+  color: #565656;
+
+}

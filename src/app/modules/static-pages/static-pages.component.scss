@@ -1,0 +1,18 @@
+@import "../../shared/styles/spacing";
+@import "../../shared/styles/colors";
+@import "../../shared/styles/typography";
+@import "../../shared/styles/deep";
+
+.comp-tabs-title {
+    ::ng-deep {
+      .mat-tab-body {
+        margin-top: 50px;
+      }
+      .mat-ink-bar {
+        display: none !important;
+      }
+      .mat-tab-label-active {
+        border-bottom: 3px solid $brightgreen;
+      }
+    }
+  }

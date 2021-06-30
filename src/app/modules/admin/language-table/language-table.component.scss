@@ -1,0 +1,31 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+
+
+
+table {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+    text-align: center;
+    min-height: 75px;
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+
+  .dangerHighlight {
+    color: red;
+  }
+}

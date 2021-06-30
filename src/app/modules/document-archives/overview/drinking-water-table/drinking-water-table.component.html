@@ -1,0 +1,207 @@
+<div fxLayout="column" fxHide.lt-md="true" fxLayoutAlign="start center" fxLayoutGap="24px" class="m-t-10 doc-table">
+  <table mat-table class="full-width-table" matSort aria-label="Elements" [dataSource]="dataSource">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef>
+        <span fxLayoutAlign="start center">
+          {{'documentArchives.descriptionDocument' | translate}}
+          <button mat-icon-button [matMenuTriggerFor]="filterMenu" [matMenuTriggerData]="{element: 'title'}">
+            <svg *ngIf="!titleFilterText;else filledFilterIcon" width="15" height="15" viewBox="0 0 20 20" fill="none"
+              xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M18.3334 2.5H1.66675L8.33342 10.3833V15.8333L11.6667 17.5V10.3833L18.3334 2.5V2.5Z" stroke="#565656"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.title }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="creationDate">
+      <th mat-header-cell *matHeaderCellDef>
+        <span class="center">{{'documentArchives.creationDate' | translate}}</span>
+      </th>
+      <td mat-cell *matCellDef="let element"><span class="center">{{ element.creationDate | date: 'dd/MM/yyyy' |
+          replaceNullWithDash }}</span></td>
+    </ng-container>
+
+    <ng-container matColumnDef="accountingPeriod">
+      <th mat-header-cell *matHeaderCellDef>
+        <span class="center">{{'stockOverview.accountingPeriod' | translate}}</span>
+      </th>
+      <td mat-cell *matCellDef="let element"><span class="center">{{ element.accountingPeriod | replaceNullWithDash
+          }}</span></td>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="download">
+      <th mat-header-cell *matHeaderCellDef>
+        <span class="center">{{'documentArchives.download' | translate}}</span>
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <span class="center">
+
+          <ng-container *ngIf="element.creationDate; else disabledDownloadButtonTemplate">
+            <button (click)="downloadDocument(element.id, element.title)" mat-flat-button>
+              <img src="./assets/images/download-bold.svg">
+            </button>
+          </ng-container>
+          <ng-template #disabledDownloadButtonTemplate>
+            <span><img src="./assets/images/download-dis.svg"></span>
+          </ng-template>
+        </span>
+      </td>
+    </ng-container>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator hidePageSize="true" #paginator [length]="dataSource?.data.length" [pageIndex]="0"
+    [pageSize]="pageSize">
+  </mat-paginator>
+</div>
+<!-- ---------------------- matcard --------------->
+<div fxLayout="column" fxLayoutAlign="start center" fxHide.gt-sm="true" fxLayoutGap="20px" *ngIf="dataSource"
+  class="font-resp">
+  <mat-card fxFlex fxHide.gt-sm="true" class="mat-dashboard-card w-100" fxLayout="column" fxLayoutGap="20px"
+    *ngFor="let item of dataSource.data">
+    <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="row" fxLayoutAlign="space-between start">
+        <div fxFlex fxLayout="column">
+          <span fxFlex="70 " class="support-text-b"> {{'documentArchives.descriptionDocument' | translate}}: <span
+              class="support-text">{{item.title}}</span></span>
+        </div>
+        <div fxFlex fxLayout="column">
+          <span fxFlex="30" class="support-text-b"></span>
+        </div>
+        <div fxFlex fxLayout="column">
+          <span fxFlex="30" class="support-text-b">{{'documentArchives.download' | translate}}: <span class="support-text">
+              <button *ngIf="item.creationDate" (click)="downloadDocument(item.id, item.title)" mat-flat-button>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5 5V2C5 0.89543 5.89543 0 7 0H13C14.1046 0 15 0.89543 15 2V5V9H20L10 17.5847L0 9H5V5ZM13 2V5V9V11H14.2967L10 14.9505L5.70326 11H7V9V5V2H13ZM17 20C18.1046 20 19 19.1046 19 18H1C1 19.1046 1.89543 20 3 20H17Z"
+                    fill="#565656" />
+                </svg>
+              </button>
+            </span>
+          </span>
+        </div>
+        <!-- <span fxFlex="50" class="support-text-b">TEHA LG No: <span
+              class="support-text">{{item.tehaLgNo}}</span></span> -->
+        <!-- <span fxFlex="50" class="support-text-b">Admin LG No: <span
+              class="support-text-b">{{item.adminLgNo}}</span></span> -->
+
+      </div>
+      <mat-divider [inset]="true">
+      </mat-divider>
+      <div class="block" fxLayout="row wrap" fxLayoutAlign="space-between start">
+        <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div fxFlex="47px" fxFlexAlign="center">
+            <div fxFlex="47px" fxFlexAlign="center">
+              <img src="./assets/images/calendar.svg" width="47" height="47" viewBox="0 0 47 47">
+            </div>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <span class="support-text-b">{{'documentArchives.creationDate' | translate}}: <span class="support-text">{{item.creationDate | date:
+                'dd/MM/yyyy' |
+                replaceNullWithDash}}</span></span>
+          </div>
+        </div>
+        <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div fxFlex="47px" fxFlexAlign="center">
+            <div fxFlex="47px" fxFlexAlign="center">
+              <img src="./assets/images/calendar.svg" width="47" height="47" viewBox="0 0 47 47">
+            </div>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <span class="support-text-b">{{'stockOverview.accountingPeriod' | translate}}: <span class="support-text">{{item.accountingPeriod |
+                replaceNullWithDash
+                }}</span></span>
+          </div>
+        </div>
+        <!-- <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+         <div fxFlex="52px" fxFlexAlign="center">
+            <div fxFlex="47px" fxFlexAlign="center">
+              <img src="./assets/images/status.svg" width="47" height="47" viewBox="0 0 47 47">
+            </div>
+         </div>
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <span class="support-text-b">Status: <span class="support-text">{{item.status}}</span></span>
+          </div>
+        </div> -->
+        <!-- <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div fxFlex="52px" fxFlexAlign="center">
+            <div fxFlex="47px" fxFlexAlign="center">
+           </div>
+          </div>
+          <div fxLayout="column" fxLayoutAlign="center center">
+            <span class="support-text-b">Difference: <span class="support-text">{{item.balance | number }}</span></span>
+          </div>
+        </div> -->
+      </div>
+
+
+      <mat-divider [inset]="true">
+      </mat-divider>
+      <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+        <!-- <div fxFlex fxLayout="column">
+          <span fxFlex="50" class="support-text-b">Create an Order: <span class="support-text">
+             <button mat-icon-button [matMenuTriggerFor]="appMenu" [matMenuTriggerData]="{element: element}"
+                class="btn text-blue">
+                {{'stockOverview.select' | translate}}
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+            </span>
+          </span>
+        </div> -->
+        <!-- <div fxFlex fxLayout="column">
+          <span fxFlex="50" class="support-text-b">Open Letter: <span class="support-text">
+             <button (click)="downloadOpenLetter(element.id, element.tehaLgNo)" mat-flat-button>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5 5V2C5 0.89543 5.89543 0 7 0H13C14.1046 0 15 0.89543 15 2V5V9H20L10 17.5847L0 9H5V5ZM13 2V5V9V11H14.2967L10 14.9505L5.70326 11H7V9V5V2H13ZM17 20C18.1046 20 19 19.1046 19 18H1C1 19.1046 1.89543 20 3 20H17Z"
+                    fill="#565656" />
+                </svg>
+             </button>
+            </span>
+        </span>
+        </div> -->
+      </div>
+    </div>
+  </mat-card>
+</div>
+
+<!-- <mat-menu #appMenu="matMenu">
+  <ng-template matMenuContent let-element="element">
+    <button mat-menu-item>Energy Performance {{element.tehaLgNo}}</button>
+    <button mat-menu-item>Drinking Water {{element.tehaLgNo}}</button>
+  </ng-template>
+</mat-menu> -->
+<mat-menu #filterMenu="matMenu">
+
+  <ng-template matMenuContent let-element="element">
+    <div>
+      <form class="menuFilterForm" (click)="stopPropagation($event)">
+        <mat-form-field appearance="outline">
+          <mat-label>{{'documentArchives.descriptionDocument' | translate}}</mat-label>
+          <input [value]="titleFilterText" (keyup)="onTitleFilterChanged($event)" matInput
+            placeholder="{{'documentArchives.descriptionDocument' | translate}}">
+          <mat-icon *ngIf="!titleFilterText;" matSuffix>search</mat-icon>
+          <mat-icon *ngIf="titleFilterText" class="cross-icon" (click)="titleFilterText=''; filterInvoices();"
+            matSuffix>close</mat-icon>
+
+        </mat-form-field>
+      </form>
+    </div>
+  </ng-template>
+</mat-menu>
+
+<ng-template #filledFilterIcon>
+  <mat-icon class="selected-filter-icon">filter_alt</mat-icon>
+</ng-template>

@@ -1,0 +1,641 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-shared-hello-card *ngIf="showHelloCard" fxFlex="50"></app-shared-hello-card>
+    <app-building-info-card fxFlex="50" *ngIf="showPropertyCard">
+    </app-building-info-card>
+    <app-person-overview-card fxFlex="50" *ngIf="showFlatCard"></app-person-overview-card>
+    <app-meter-details-overview-card *ngIf="showMeterCard" #meterCard [meterId]="meterId" fxFlex="50">
+    </app-meter-details-overview-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+
+      <app-search-autocomplete *ngIf="showPropertySearch && !orderId" (onOptionSelected)="propertyChange($event)">
+      </app-search-autocomplete>
+      <app-map-component *ngIf="!showUserMap" fxFlex="100"></app-map-component>
+      <app-map-component [isFromUser]="true" *ngIf="showUserMap" fxFlex="100"></app-map-component>
+    </div>
+  </div>
+
+  <div fxFlex="100" fxFlexGap="1">
+    <mat-card class="mat-dashboard-card p-5">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+        <div fxFlex>
+          <mat-card-title>
+            <span class="m-l-4" fxLayout="row" fxLayoutAlign="start center">
+
+              <button (click)="goBack()" [ngClass]="{ 'is-hidden': currentStep == 'STEP_0' || currentStep == 'STEP_4'}"
+                mat-icon-button>
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+
+              <span
+                [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' &&  currentStep != 'STEP_4' &&  currentStep != 'STEP_0'}">
+                {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.irFormTitle' | translate}}
+              </span>
+
+              <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }">
+                {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.irFormTitle' | translate}}
+              </span>
+
+              <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_3' }">
+                {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderSummary' | translate}}
+              </span>
+
+            </span>
+
+          </mat-card-title>
+        </div>
+
+        <div fxFlexAlign="end end">
+          <app-search-bar [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }" (changed)="applyFilter($event)">
+          </app-search-bar>
+          <app-search-bar placeHolder="{{'stockOverview.propertySearchPlaceholder' | translate}}' | translate}}"
+            [ngClass]="{ 'is-hidden': currentStep != 'STEP_0' }" (changed)="interimPropertyTable.applyFilter($event)">
+          </app-search-bar>
+        </div>
+      </div>
+
+      <mat-card-content>
+        <div fxLayout="column">
+          <!-- STEP 1 -->
+          <div
+            [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' && currentStep != 'STEP_3' && currentStep != 'STEP_0' }"
+            fxLayout="column">
+            <div class="you-have-ordered-text m-l-4">
+              <p [ngClass]="{ 'is-hidden': currentStep != 'STEP_0'}">{{'order.selectAProperty' | translate}}</p>
+              <p [ngClass]="{ 'is-hidden': currentStep != 'STEP_1'}">{{'order.selectAFlat' | translate}}</p>
+
+              <p [ngClass]="{ 'is-hidden':  currentStep != 'STEP_3' }">{{'order.irSummaryTitle' | translate}}</p>
+            </div>
+            <app-order-interim-property-table #interimPropertyTable (interimPropertyEvent)=gotoFlats($event)
+              [ngClass]=" { 'is-hidden': currentStep != 'STEP_0'}"></app-order-interim-property-table>
+            <!-- Table for Step 1 -->
+            <table mat-table #table [dataSource]="dataSource" fxHide.lt-md="true"
+              [ngClass]=" { 'is-hidden': currentStep != 'STEP_1' } ">
+              <ng-container matColumnDef="tehaUserno">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'stockOverview.tehaUserNo' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.tehaUserNo }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="adminUserno">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'stockOverview.adminUserNo' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.adminUserNo }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="userName">
+                <th mat-header-cell *matHeaderCellDef>{{'account.username' | translate}}</th>
+                <td mat-cell *matCellDef="let row">{{ row.tenantName }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="location">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'stockOverview.floor' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.floor | replaceNullWithDash}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let row">
+                  <a (click)="placeOrder(row.id)" mat-button color="link" fxLayoutAlign="end center">
+                    {{'order.continuetoUserData' | translate}} <mat-icon>chevron_right</mat-icon>
+                  </a>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+
+
+
+            <!-- ------------------------mobile view-------- -->
+
+
+            <div fxLayout="column" fxLayoutAlign="start center" fxHide.gt-sm="true" fxLayoutGap="20px"
+              *ngIf="dataSource" [ngClass]="{ 'is-hidden': currentStep !='STEP_1'}" class="font-resp">
+              <mat-card fxFlex fxHide.gt-sm="true" class="mat-dashboard-card w-100" fxLayout="column" fxLayoutGap="20px"
+                *ngFor="let item of dataSource.data">
+                <div fxFlex fxLayout="column" fxLayoutGap="10px">
+                  <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+                    <div fxFlex="47px" fxFlexAlign="center">
+                      <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+                    </div>
+                    <span fxFlex="50" class="support-text-b">{{'stockOverview.tehaUserNo' | translate}}:
+                      <span class="support-text">{{item.tehaUserNo}}</span></span>
+                    <div fxFlex="47px" fxFlexAlign="center">
+                      <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+                    </div>
+                    <span fxFlex="50" class="support-text-b">{{'account.username' | translate}}: <span
+                        class="support-text-b">{{ item.tenantName }}</span></span>
+                  </div>
+                  <div fxFlex fxLayout="row" fxLayoutAlign="center center">
+                    <div fxFlex="47px" fxFlexAlign="center">
+                      <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+                    </div>
+
+                    <span fxFlex="50" class="support-text-b">{{'stockOverview.adminUserNo' | translate}}:
+                      <span class="support-text">{{item.adminUserNo}}</span></span>
+                    <div fxFlex="47px" fxFlexAlign="center">
+                      <img src="./assets/images/tehanumber.svg" width="42" height="42" viewBox="0 0 42 42">
+                    </div>
+                    <span fxFlex="50" class="support-text-b">{{'stockOverview.floor' | translate}}: <span
+                        class="support-text">{{ item.floor | replaceNullWithDash}}</span></span>
+                  </div>
+                </div>
+                <mat-divider fxFlex inset="true"></mat-divider>
+                <div fxFlex fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="20px">
+                  <a (click)="placeOrder(item.id)" mat-button color="link" fxLayoutAlign="end center">
+                    {{'order.continuetoUserData' | translate}} <mat-icon>chevron_right</mat-icon>
+                  </a>
+
+                </div>
+              </mat-card>
+            </div>
+            <div fxLayout="row" fxLayoutAlign="space-evenly center"
+              [ngClass]=" { 'is-hidden': currentStep != 'STEP_1' } ">
+              <mat-paginator hidePageSize="true" #paginator [length]="dataSource?.data.length" [pageIndex]="0"
+                [pageSize]="pageSize">
+              </mat-paginator>
+            </div>
+
+            <!-- Table for Step 3 -->
+            <table fxHide.lt-md="true" class="summaryTable" mat-table #summaryTable [dataSource]="summaryDataSource"
+              [ngClass]=" { 'is-hidden': currentStep != 'STEP_3' } ">
+
+              <ng-container matColumnDef="tehauserno">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'stockOverview.tehaUserNo' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.tehauserno }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="adminuserno">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'stockOverview.adminUserNo' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.adminuserno }}</td>
+              </ng-container>
+              <ng-container matColumnDef="userMovingOut">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'order.userMovingOut' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.userMovingOut }}</td>
+              </ng-container>
+              <ng-container matColumnDef="moveOutDate">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'order.moveoutDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.moveOutDate | date: 'dd/MM/yyyy'}}</td>
+              </ng-container>
+              <ng-container matColumnDef="appointmentDate">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'order.appointmentRequestDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.appointmentDate | date: 'dd/MM/yyyy'}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="address">
+                <th mat-header-cell *matHeaderCellDef>{{'stockOverview.address' | translate}}</th>
+                <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="orderCreationDate">
+                <th mat-header-cell *matHeaderCellDef>
+                  {{'documentArchives.creationDate' | translate}}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.orderCreationDate | date: 'dd/MM/yyyy'}}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedSummaryColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedSummaryColumns"></tr>
+            </table>
+
+            <div class="m-b-4 m-4-4" [ngClass]=" { 'is-hidden': currentStep != 'STEP_3' } " *ngIf="summaryDataSource" class="font-resp m-t-4" fxHide.gt-sm="true">
+              <ng-container *ngFor="let element of summaryDataSource.data; let i=index">
+                <div class="simple-card">
+                  <div fxLayout="column" fxLayoutGap="20px">
+                    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'stockOverview.tehaUserNo' | translate}}:<br>
+                          {{ element.tehauserno }}
+                        </div>
+                      </div>
+
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'stockOverview.adminUserNo' | translate}}:<br>
+                          {{ element.adminuserno }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'order.userMovingOut' | translate}}:<br>
+                          {{ element.userMovingOut }}
+                        </div>
+                      </div>
+
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'order.moveoutDate' | translate}}:<br>
+                          {{ element.moveOutDate | date: 'dd/MM/yyyy'}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'order.appointmentRequestDate' | translate}}:<br>
+                          {{ element.appointmentDate | date: 'dd/MM/yyyy'}}
+                        </div>
+                      </div>
+
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'documentArchives.creationDate' | translate}}:<br>
+                          {{ element.orderCreationDate | date: 'dd/MM/yyyy'}}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+                      <div fxLayout="column" fxFlex="50">
+                        <div class="paragraph">
+                          {{'stockOverview.address' | translate}}:<br>
+                          {{ element.address }}
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+          <!-- STEP 2 -->
+          <form #firstForm="ngForm">
+            <div class="" fxLayout="column" fxLayoutGap="18px" [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }">
+              <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+                <div fxLayout="column" fxLayoutGap="33px">
+
+                  <h4>{{'order.userMovingOut' | translate}}</h4>
+                  <div fxLayout="column" fxLayoutGap="20px">
+
+                    <!-- for user moving out form -->
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutAlign="start center">
+
+                      <div>
+                        <mat-form-field class="extra-small-input">
+                          <mat-label>{{'account.salutation' | translate}}</mat-label>
+                          <mat-select name="salutationCodeOut" required class="placeholder-text-1"
+                            [(ngModel)]="userMovingOut.salutationCode" placeholder="">
+                            <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation"
+                              [value]="item.code">
+                              {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutAlign="start center">
+                      <div>
+                        <!-- class="extra-small-input mat-custom-extra-small-form-field" -->
+                        <mat-form-field class="extra-small-input ">
+                          <mat-label>{{'order.firstName' | translate}}</mat-label>
+                          <input matInput type="text" name="firstNameControl" class="form-control" required
+                            placeholder="John" [(ngModel)]="userMovingOut.firstName" appAlphabetOnlyDirective
+                            maxlength="50" />
+                        </mat-form-field>
+                      </div>
+                      <div>
+                        <mat-form-field class="extra-small-input ">
+                          <mat-label>{{'order.lastName' | translate}}</mat-label>
+                          <input name="lastNameControl" class="form-control" required matInput placeholder="Doe"
+                            [(ngModel)]="userMovingOut.lastName" appAlphabetOnlyDirective maxlength="50" />
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutAlign="start center">
+                      <div>
+                        <mat-form-field appearance="standard" class="">
+                          <mat-label>{{'order.moveoutDate' | translate}}</mat-label>
+                          <input name="dateControl" required matInput [matDatepicker]="picker"
+                            [(ngModel)]="userMovingOut.date" placeholder="dd-mm-yy">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div fxLayout.lt-md="column">
+                        <p>{{'order.bestAccessibility' | translate}}</p>
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center"
+                          fxLayoutGap="12px">
+                          <mat-form-field class="extra-small-input ">
+                            <input matInput [min]="'07:30 am'" [max]="'03:00 pm'" name="fromDateControl"
+                              placeholder="HH:MM XM" [(ngModel)]="preferredTimeRange.from" [ngxTimepicker]="darkPicker"
+                              readonly>
+                            <ngx-material-timepicker #darkPicker [theme]="darkTheme" (timeSet)="timeChange($event)">
+                            </ngx-material-timepicker>
+                          </mat-form-field>
+
+
+                          <p> {{'order.to' | translate}} </p>
+                          <mat-form-field class="extra-small-input ">
+                            <input matInput [min]="toMin" [max]="'03:00 pm'" name="toDateControl"
+                              placeholder="	HH:MM XM" [(ngModel)]="preferredTimeRange.to" [ngxTimepicker]="darkPicker1"
+                              readonly>
+                            <ngx-material-timepicker #darkPicker1 [theme]="darkTheme"></ngx-material-timepicker>
+                          </mat-form-field>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutAlign="start center">
+
+                      <mat-form-field class="extra-small-input " style="padding-top: 23px;">
+                        <mat-label>{{'order.telephoneNo' | translate}}</mat-label>
+                        <input matInput name="UMOPhoneControl" placeholder="123-456-9898"
+                          [(ngModel)]="userMovingOut.phone" appNumericSpecialCharactersOnly maxlength="20" />
+                      </mat-form-field>
+
+
+                      <div class="">
+                        <!-- <p><span class="requiredColor" >*</span></p> -->
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center"
+                          fxLayoutGap="12px">
+                          <mat-form-field appearance="standard">
+                            <mat-label>{{'order.appointmentRequestDate' | translate}}</mat-label>
+                            <input matInput name="appointmentDate" class="form-control" required
+                              [matDatepicker]="pickerAPRD" [(ngModel)]="readingRequest.appointmentDate"
+                              placeholder="dd-mm-yy">
+                            <mat-datepicker-toggle matSuffix [for]="pickerAPRD"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerAPRD></mat-datepicker>
+                          </mat-form-field>
+                          <div fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center">
+                            <p style="margin-left: 26px;">{{'order.notifyThrough' | translate}}<span
+                                class="requiredColor">*</span></p>
+                            <div fxLayout="row" fxLayoutGap="12px" style="margin-left: 26px;">
+                              <mat-checkbox [(ngModel)]="communicationMode.smsInd" name="smsInd"
+                                [required]="!communicationMode.letterInd"> {{'lookup.sms' | translate}} </mat-checkbox>
+                              <mat-checkbox [(ngModel)]="communicationMode.letterInd" name="letterInd"
+                                [required]="!communicationMode.smsInd"> {{'order.letterMail' | translate}}
+                              </mat-checkbox>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="40px" fxLayoutAlign="start center">
+                      <div style="padding-top: 20px;">
+                        <mat-form-field class="extra-small-input " style="margin-top: 29px;">
+                          <mat-label>{{'order.mobileNo' | translate}}</mat-label>
+                          <input name="mobile" required matInput placeholder="123-456-9898"
+                            [(ngModel)]="userMovingOut.mobile" appNumericSpecialCharactersOnly maxlength="20" />
+                        </mat-form-field>
+                      </div>
+
+
+                      <div>
+                        <p>{{'order.alternativeDateRange' | translate}}</p>
+                        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center"
+                          fxLayoutGap="12px">
+                          <mat-form-field appearance="standard" class="extra-small-input datePickerWith">
+
+                            <input matInput name="aFromDateControl" [matDatepicker]="pickerfrom"
+                              [(ngModel)]="alternativeDateRange.from" placeholder="dd-mm-yy">
+                            <mat-datepicker-toggle matSuffix [for]="pickerfrom"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerfrom></mat-datepicker>
+                          </mat-form-field>
+                          <p> {{'order.to' | translate}} </p>
+                          <mat-form-field appearance="standard" class="extra-small-input datePickerWith">
+
+                            <input matInput name="aToControl" [matDatepicker]="pickerto"
+                              [(ngModel)]="alternativeDateRange.to" placeholder="dd-mm-yy">
+                            <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+                            <mat-datepicker #pickerto></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div fxLayout="row" fxLayoutAlign.lt-md="center center" fxLayoutGap="40px"
+                      fxLayoutAlign="start center">
+                      <div>
+                        <mat-form-field class="extra-small-input ">
+                          <mat-label>{{'order.emailAddress' | translate}}</mat-label>
+                          <input matInput name="emailControl" pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" required
+                            placeholder="john.doe@gmail.com" [(ngModel)]="userMovingOut.email" maxlength="100" />
+                        </mat-form-field>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div fxHide.lt-md="true" class="vertical-separator"></div>
+
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="33px">
+                  <!-- for new user form -->
+                  <h4>
+                    <span fxFlex fxLayout="row" fxLayoutAlign.lt-md="center center" fxLayoutGap="32px">
+                      <span>{{'order.newUser' | translate}}</span>
+                      <mat-checkbox name="isVacant" [checked]="isVacant" #checkbox (change)="showOptions($event)">
+                        {{'order.vacant' | translate}}</mat-checkbox>
+                    </span>
+                  </h4>
+                  <form #alternativeForm="ngForm">
+                    <div fxLayout="column" fxLayoutGap="20px">
+
+                      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+
+                        <div>
+                          <mat-form-field class="extra-small-input">
+                            <mat-label>{{'account.salutation' | translate}}</mat-label>
+                            <mat-select [required]="!isVacant" [disabled]="isVacant" name="salutationCodeIn" required
+                              class="placeholder-text-1" [(ngModel)]="userMovingIn.salutationCode" placeholder="">
+                              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation"
+                                [value]="item.code">
+                                {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap="40px"
+                        fxLayoutAlign="start center">
+                        <div>
+                          <mat-form-field class="extra-small-input ">
+                            <mat-label>{{'order.firstName' | translate}}</mat-label>
+                            <input matInput name="newUserFirstNameControl" placeholder="John"
+                              [(ngModel)]="userMovingIn.firstName" appAlphabetOnlyDirective maxlength="50"
+                              [required]="!isVacant ? 'required' : null" [disabled]="isVacant" />
+                          </mat-form-field>
+                          <!-- <p><span *ngIf="!isVacant" class="requiredColor" >*</span></p> -->
+                        </div>
+                        <div>
+                          <mat-form-field class="extra-small-input ">
+                            <mat-label>{{'order.lastName' | translate}}</mat-label>
+                            <input matInput name="newUserLastNameControl" placeholder="Doe"
+                              [(ngModel)]="userMovingIn.lastName" appAlphabetOnlyDirective maxlength="50"
+                              [required]="!isVacant ? 'required' : null" [disabled]="isVacant" />
+                          </mat-form-field>
+                          <!-- <p><span *ngIf="!isVacant" class="requiredColor" >*</span></p> -->
+                        </div>
+                      </div>
+
+                      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+                        <div>
+                          <mat-form-field class="extra-small-input ">
+                            <mat-label>{{'order.telephoneNo' | translate}}</mat-label>
+                            <input matInput appNumericSpecialCharactersOnly maxlength="20"
+                              name="newUserTelephoneControl" placeholder="123-456-9898" [(ngModel)]="userMovingIn.phone"
+                              [required]="!isVacant ? 'required' : null" [disabled]="isVacant" />
+                          </mat-form-field>
+                          <!-- <p><span *ngIf="!isVacant" class="requiredColor" >*</span></p> -->
+
+                        </div>
+                      </div>
+
+                      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+                        <div>
+                          <mat-form-field class="extra-small-input ">
+                            <mat-label>{{'order.mobileNo' | translate}}</mat-label>
+                            <input matInput appNumericSpecialCharactersOnly maxlength="20" name="newUserMobileControl"
+                              placeholder="123-456-9898" [(ngModel)]="userMovingIn.mobile"
+                              [required]="!isVacant ? 'required' : null" [disabled]="isVacant" />
+                          </mat-form-field>
+                          <!-- <p><span *ngIf="!isVacant" class="requiredColor" >*</span></p> -->
+
+                        </div>
+                      </div>
+
+                      <div fxLayout="row" fxLayoutGap="40px" fxLayoutAlign="start center">
+                        <div class="">
+                          <!-- <p><span *ngIf="!isVacant" class="requiredColor" >*</span></p> -->
+                          <mat-form-field appearance="standard" class=" datePickerWith">
+                            <mat-label>{{'order.moveInDate' | translate}}</mat-label>
+                            <input matInput name="newUserMoveInDateControl" [matDatepicker]="pickermoveInDate"
+                              [disabled]="isVacant" [required]="!isVacant ? 'required' : null"
+                              [(ngModel)]="userMovingIn.date" placeholder="dd-mm-yy">
+                            <mat-datepicker-toggle matSuffix [for]="pickermoveInDate"></mat-datepicker-toggle>
+                            <mat-datepicker #pickermoveInDate></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+                <button mat-button mat-button class="primary-transparent-button" (click)="cancelOrder()">
+                  {{'account.cancel' | translate}}
+                </button>
+                <button (click)="stepper('STEP_3')" [disabled]="!firstForm.form.valid" mat-button
+                  class="primary-green-button">
+                  {{'order.next' | translate}}
+                </button>
+                <br />
+              </div>
+
+            </div>
+          </form>
+
+
+
+          <!-- STEP 3 -->
+          <div [ngClass]="{ 'is-hidden': currentStep !== 'STEP_3' }">
+            <form #confirmationForm="ngForm">
+              <div fxLayout="column" fxLayoutGap="20px">
+
+                <div fxLayout="row">
+                  <mat-checkbox fxFlex="50px" required name="termsInd" [(ngModel)]="readingRequest.termsInd">
+                  </mat-checkbox>
+                  <span fxFlex>
+                    {{'order.termsMessagePart1' | translate}} <a (click)="downloadPDF()">{{'order.termsMessagePart2' |
+                      translate}}</a> <span class="red">*</span>
+                  </span>
+                </div>
+
+                <div fxLayout="row">
+                  <mat-checkbox fxFlex="50px" required name="costsInd" [(ngModel)]="readingRequest.costsInd">
+                  </mat-checkbox>
+                  <span fxFlex>
+                    {{'order.interimReadingCostMessage' | translate}}
+                    {{'order.priceList' | translate}} <span class="red">*</span>
+                  </span>
+                </div>
+                <div fxLayout="row">
+                  <mat-checkbox fxFlex="50px" required name="dataProtectionInd"
+                    [(ngModel)]="readingRequest.dataProtectionInd">
+                  </mat-checkbox>
+                  <span fxFlex>
+                    {{'order.dataProtectionMessage' | translate}} <span class="red">*</span>
+                  </span>
+                </div>
+
+                <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+                  <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                    {{'account.cancel' | translate}}
+                  </button>
+                  <button (click)="stepper('STEP_4')" [disabled]="!confirmationForm.form.valid" mat-button
+                    class="primary-green-button">
+                    {{'order.confirm' | translate}}
+                  </button>
+                  <br />
+                </div>
+              </div>
+            </form>
+          </div>
+          <!-- step 4 -->
+          <div class="confirm-action p-t-8" [ngClass]="{ 'is-hidden': currentStep != 'STEP_4' }" fxLayout="column">
+            <div class="confirm-message-wrapper">
+              <div class="message-with-icon-wrapper" fxLayoutAlign="center center" fxLayoutGap="24px">
+
+                <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M43.7508 25.1461V27.0836C43.7455 36.3101 37.6722 44.4341 28.8244 47.0501C19.9766 49.6661 10.462 46.1509 5.44026 38.4108C0.418511 30.6708 1.0859 20.5495 7.08051 13.5359C13.0751 6.52218 22.9689 4.2868 31.3966 8.04196"
+                    stroke="#00A253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M45.8327 8.33301L22.916 31.2497L16.666 24.9997" stroke="#00A253" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                <span class="message">{{'order.orderConfirmationMessage' | translate}}</span>
+
+              </div>
+              <div class="confirmation-message-text p-t-8">
+                <p>{{'order.receivedOrder' | translate}}
+                  <br>
+                  <br>
+                  {{'order.emailMessage' | translate}}
+                  <br>
+                  <br>
+                  -- {{'order.tehaServiceTeam' | translate}}
+                </p>
+
+
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+              <button (click)="backToOrders()" mat-button class="primary-green-button">
+                {{'order.backToOrders' | translate}}
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

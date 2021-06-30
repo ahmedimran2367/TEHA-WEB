@@ -1,0 +1,91 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/deep";
+
+table {
+  width: 100%;
+
+  th {
+    min-width: auto;
+    text-align: left;
+    word-wrap: break-word;
+    span.right {
+      display: block;
+      width: 130px;
+      text-align: right !important;
+    }
+    span.center {
+      display: block;
+      width: 130px;
+      text-align: center !important;
+    }
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    min-height: 75px;
+    text-align: left;
+    span.right {
+      display: block;
+      width: 130px;
+      text-align: right !important;
+    }
+    span.center {
+      display: block;
+      width: 130px;
+      text-align: center !important;
+    }
+  }
+  td.centerAlign {
+    text-align: center;
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+  .link {
+    cursor: pointer;
+  }
+  .dangerHighlight {
+    color: red;
+  }
+}
+.menuFilterForm {
+  padding: 1vw;
+}
+
+.text-brightgreen.paragraph {
+  text-decoration: none;
+}
+
+.paginator {
+  display: block;
+  margin-right: 20vw;
+}
+
+.selected-filter-icon {
+  color: $primary;
+}
+.menu-button {
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
+}
+
+.cross-icon {
+  cursor: pointer;
+}
+.text-brightgreen paragraph m-r-20{
+
+  color: #00c95D;
+}
+.mat-card-content {
+  font-size: 15px;
+}
+.des-font{
+  width: 52px;
+}
+.description-font{
+  width: 80px;
+}

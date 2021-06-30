@@ -1,0 +1,167 @@
+<div fxLayout="column" fxLayoutAlign="start center" fxLayoutGap="24px" class="m-t-10 table-resp-2 font-resp" fxHide.lt-md="true">
+  <table mat-table class=" grid-table table-align" matSort aria-label="Elements">
+    <ng-container matColumnDef="tehaLgNo">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        <span class="right">{{'stockOverview.tehaLgNo' | translate}}</span>
+      </th>
+      <td class="sort align-c" mat-cell *matCellDef="let element">
+        {{ element.tehaLgNo }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="adminLgNo">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        <span>{{'stockOverview.adminLgNo' | translate}}</span>
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element"><span class="right">{{ element.adminLgNo }}</span></td>
+    </ng-container>
+
+    <ng-container matColumnDef="street">
+      <th class="align-s" mat-header-cell *matHeaderCellDef>
+        {{'stockOverview.street' | translate}}
+      </th>
+      <td class="align-s" mat-cell *matCellDef="let element">{{ element.street }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="postcode">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        <span class="right">{{'stockOverview.postcode' | translate}}</span>
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element"><span class="right">{{ element.postcode }}</span></td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="city">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        {{'stockOverview.city' | translate}}
+      </th>
+      <td class="align-c" mat-cell *matCellDef="let element">{{ element.place }}</td>
+    </ng-container>
+
+    
+    <ng-container matColumnDef="download">
+      <th class="align-c" mat-header-cell *matHeaderCellDef>
+        <span class="center">{{'documentArchives.downloadPdf' | translate}}</span>
+      </th>
+      <td class="align-c"  mat-cell *matCellDef="let element">
+        <span class="center">
+
+          <ng-container *ngIf="element.id; else disabledDownloadButtonTemplate">
+            <button (click)="downloadDocument(element.sepaDocumentInd, element.street, element.tehaLgNo)" mat-button>
+              <img src="./assets/images/download-bold.svg">
+            </button>
+          </ng-container>
+          <ng-template #disabledDownloadButtonTemplate>
+            <span><img src="./assets/images/download-dis.svg"></span>
+          </ng-template>
+        </span>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+
+<!-- ----------------------mobile view------------------- -->
+<div class="mat-mobile-resp" fxLayout="column" fxLayoutAlign="start center" fxHide.gt-sm="true" fxLayoutGap="20px"
+  *ngIf="dataSource" class="font-resp">
+  <mat-card fxFlex fxHide.gt-sm="true" class="mat-dashboard-card w-100" fxLayout="column" fxLayoutGap="20px"
+    *ngFor="let item of dataSource.data">
+    <div fxLayout="column" fxLayoutGap="10px">
+      <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+        <div fxFlex fxLayout="column">
+          <span fxFlex="50" class="support-text-b">{{item.street}}</span>
+        </div>
+      </div>
+      <mat-divider [inset]="true">
+      </mat-divider>
+      <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center start">
+        <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div class="acc-period" fxLayout="column" fxLayoutAlign="center start">
+            <span class="support-text-b word-break">{{'stockOverview.tehaLgNo' | translate}}: </span>
+            <span class="support-text word-break">{{item.tehaLgNo}}</span>
+          </div>
+        </div>
+        <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <span class="support-text-b word-break">{{'stockOverview.adminLgNo' | translate}}: </span>
+            <span class="support-text word-break">{{item.adminLgNo}}</span>
+          </div>
+        </div>
+      </div>
+      <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="center start">
+        <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div class="acc-period" fxLayout="column" fxLayoutAlign="center start">
+            <span class="support-text-b word-break">{{'stockOverview.postcode' | translate}}: </span>
+            <span class="support-text word-break">{{item.postcode}}</span>
+          </div>
+        </div>
+        <div fxFlex="50" fxLayout="row" fxLayoutGap="10px">
+          <div fxLayout="column" fxLayoutAlign="center start">
+            <span class="support-text-b word-break">{{'stockOverview.city' | translate}}: </span>
+            <span class="support-text word-break">{{item.place}}</span>
+          </div>
+        </div>
+      </div>
+
+      <mat-divider [inset]="true">
+      </mat-divider>
+      <div fxLayout="row" fxLayoutGap="20px" fxLayoutAlign="space-between start">
+
+        <div fxFlex fxLayout="row" fxLayoutAlign="start center">
+          <span class="support-text-b">{{'documentArchives.downloadPdf' | translate}}: </span>
+          <span class="support-text">
+              <button (click)="downloadDocument(item.sepaDocumentInd, item.street, item.tehaLgNo)" mat-button>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M5 5V2C5 0.89543 5.89543 0 7 0H13C14.1046 0 15 0.89543 15 2V5V9H20L10 17.5847L0 9H5V5ZM13 2V5V9V11H14.2967L10 14.9505L5.70326 11H7V9V5V2H13ZM17 20C18.1046 20 19 19.1046 19 18H1C1 19.1046 1.89543 20 3 20H17Z"
+                    fill="#565656" />
+                </svg>
+              </button>  
+          </span>
+        </div>
+      </div>
+      <!-- sipaaa--------- -->
+      <div fxHide.gt-sm="true" class="m-t-5">
+        <div fxLayout="column" fxLayoutGap="32px">
+
+          <div fxFlex="100" class="download-text text-align-center">
+            {{'documentArchives.downloadSepaStatement' | translate}}
+          </div>
+          <div fxLayoutAlign="center center">
+            <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="54px">
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                <img src="./assets/images/dash/PDFIcon.svg" width="50px" />
+                <span class="download-text"> {{'documentArchives.downloadPdf' | translate}}</span>
+              </div>
+              <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="54px">
+                <div>
+                  <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="15px">
+                    <img src="./assets/images/dash/Mail.svg" width="80px" />
+                    <div fxlayoutAlign="center center">
+                      <div class="download-text">
+                        <p>TEHA Technical House Service GambH<br>
+                          <span class="light">Von-Humboldt StrBe 4</span><br>
+                          <span class="light">64646 Heppenheim</span>
+                        </p>
+
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+  </mat-card>
+</div>

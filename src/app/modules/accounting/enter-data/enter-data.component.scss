@@ -1,0 +1,46 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/deep";
+
+  .search-autocomplete-input {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 21px;
+    /* identical to box height */
+    letter-spacing: 0.05em;
+    width: 300px;
+    color: #565656;
+  }
+
+  .search-autocomplete-icon-wrapper {
+    width: auto;
+    height: 50px;
+
+    margin-left: 22px;
+
+    .mat-icon {
+      width: 30px;
+      height: 30px;
+      font-size: 30px;
+
+      display: inline-flex;
+      vertical-align: middle;
+    }
+  
+    .mat-input-underline .mat-form-field-underline {
+      display: none;
+    }
+  }
+
+  .comp-tabs-title {
+    ::ng-deep {
+      .mat-ink-bar {
+        display: none !important;
+      }
+      .mat-tab-label-active {
+        border-bottom: 3px solid $brightgreen;
+      }
+    }
+  }

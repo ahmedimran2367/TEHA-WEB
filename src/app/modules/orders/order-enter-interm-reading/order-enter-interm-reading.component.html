@@ -1,0 +1,596 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-shared-hello-card *ngIf="showHelloCard" fxFlex="50"></app-shared-hello-card>
+    <app-building-info-card fxFlex="50" *ngIf="showPropertyCard">
+    </app-building-info-card>
+    <app-person-overview-card fxFlex="50" *ngIf="showFlatCard">
+    </app-person-overview-card>
+    <app-meter-details-overview-card *ngIf="showMeterCard" #meterCard [meterId]="meterId" fxFlex="50">
+    </app-meter-details-overview-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-search-autocomplete fxFlex="30" *ngIf="showPropertySearch && !orderId && indicatorToAccounting == null" (onOptionSelected)="propertyChange($event)">
+      </app-search-autocomplete>
+      <app-map-component *ngIf="!showUserMap" fxFlex="100"></app-map-component>
+      <app-map-component [isFromUser]="true" *ngIf="showUserMap" fxFlex></app-map-component>
+    </div>
+  </div>
+
+  <div fxFlex="100">
+    <mat-card class="mat-dashboard-card p-5">
+      <div fxLayout="row" fxLayoutAlign="center center">
+        <div fxFlex>
+            <mat-card-title>
+              <span fxLayout="row" fxLayoutAlign="start center">
+                <span *ngIf="currentStep != 4">
+                <button (click)="stepperBack()" mat-icon-button *ngIf="(route.snapshot.paramMap.get('id') == null &&
+                 currentStep == 2) || currentStep == 3 || currentStep != 0">
+                  <mat-icon>arrow_back</mat-icon>
+                </button>
+              </span>
+                <span *ngIf="currentStep == 1 || currentStep == 2 || currentStep == 0">
+                  {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.enterInterimReading' | translate}} 
+                </span>
+
+                <span *ngIf="currentStep == 3">
+                  {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderSummary' | translate}} 
+                </span>
+
+                <span *ngIf="currentStep == 4">
+                  {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderConfirmation' | translate}} 
+                  
+                </span>
+              </span>
+            </mat-card-title>
+        </div>
+        <div fxFlexAlign="end end">
+          <app-search-bar (changed)="applyFilter($event)" *ngIf="currentStep == 1"></app-search-bar>
+        </div>
+        <div fxFlexAlign="end end">
+          <app-search-bar placeHolder="{{'stockOverview.propertySearchPlaceholder' | translate}}' | translate}}" (changed)="enterInterimTableProperty.applyFilter($event)"  [ngClass]="{ 'is-hidden': currentStep != 0 }" ></app-search-bar>
+        </div>
+      </div>
+
+      <mat-card-content>
+
+        
+
+        <!-- STEP 1 -->
+        <div [ngClass]="{ 'is-hidden': currentStep != 1 && currentStep != 3 && currentStep != 0}" 
+          fxLayout="column">
+          <div class="you-have-ordered-text">
+            <p *ngIf="currentStep == 0">
+              {{'order.selectAProperty' | translate}}
+            </p>
+            <p *ngIf="currentStep == 1">
+              {{'order.selectAFlat' | translate}}
+            </p>
+            <p *ngIf="currentStep == 3">
+              {{'order.eirSummaryTitle' | translate}}
+            </p>
+          </div>
+        <!-- ********************** -->
+         <!--Table for STEP_0-->
+         <app-order-enter-enterim-property-table #enterInterimTableProperty  [ngClass]="{ 'is-hidden': currentStep != 0 }"  (enterPropertyEvent)=gotoFlats($event)></app-order-enter-enterim-property-table>
+          <!-- Table for STEP_1 -->
+          <table mat-table *ngIf="currentStep == 1" #readingTable [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="tehaUserNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'stockOverview.tehaUserNo' | translate}}</th>
+              <td mat-cell *matCellDef="let row">{{ row.tehaUserNo }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="adminUserNo">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'stockOverview.adminUserNo' | translate}}</th>
+              <td mat-cell *matCellDef="let row">{{ row.adminUserNo }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="userName">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'account.username' | translate}}</th>
+              <td mat-cell *matCellDef="let row">{{ row.tenantName }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="location">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'stockOverview.floor' | translate}}</th>
+              <td mat-cell *matCellDef="let row">{{ row.floor }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let row">
+                <a (click)="stepper(); stockOverService.flatId = row.id; getFlats(row.id, true);" mat-button color="link" fxLayoutAlign="end center">
+                  {{'order.continuetoUserData' | translate}} <mat-icon>chevron_right</mat-icon>
+                </a>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <div *ngIf="currentStep == 1" fxLayoutAlign="center center">
+            <mat-paginator hidePageSize="true" #paginator [length]="dataSource?.data.length" [pageSize]="defaultDataService.DefaultData.systemSettings.gridPageSize">
+            </mat-paginator>
+          </div>  
+          <div class="row">
+            <div fxFlex="70">
+              <!-- Table for STEP_3 -->
+              <table *ngIf="currentStep == 3" mat-table #summaryTable [dataSource]="summaryDataSource">
+    
+                <!-- <ng-container matColumnDef="tehaUserNo">
+                  <th mat-header-cell *matHeaderCellDef>{{'stockOverview.tehaUserNo' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.tehaUserNo }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="adminUserNo">
+                  <th mat-header-cell *matHeaderCellDef>{{'stockOverview.adminUserNo' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.adminUserNo }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="userMovingOut">
+                  <th mat-header-cell *matHeaderCellDef>{{'order.userMovingOut' | translate}}<br>
+                   
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.userMovingOut }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="movingOutDate">
+                  <th mat-header-cell *matHeaderCellDef>{{'order.moveoutDate' | translate}}
+                   
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.movingOutDate }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="address">
+                  <th mat-header-cell *matHeaderCellDef>{{'stockOverview.address' | translate}}
+                  </th>
+                  <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+                </ng-container> -->
+    
+               <ng-container matColumnDef="meterTypeDesc">
+                  <th mat-header-cell *matHeaderCellDef>{{'stockOverview.meterType' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.meterTypeDesc }}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="serialNumber">
+                  <th mat-header-cell *matHeaderCellDef>{{'stockOverview.meterSerialNo' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.serialNumber}}</td>
+                </ng-container>
+     
+                <ng-container matColumnDef="location">
+                  <th mat-header-cell *matHeaderCellDef>{{'order.installedLocation' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{showFullLocation(row.location)}}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="value">
+                  <th mat-header-cell *matHeaderCellDef>{{'order.counterReading' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.value | number}}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="lastReading">
+                  <th mat-header-cell *matHeaderCellDef>{{'order.lastReading' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">{{ row.lastReading | number}}</td>
+                </ng-container>
+    
+                <ng-container matColumnDef="image">
+                  <th mat-header-cell *matHeaderCellDef>{{'order.annex' | translate}}</th>
+                  <td mat-cell *matCellDef="let row">
+                    <img [src]="row.image" style="max-width:50px;max-height:50px"/>
+                  </td>
+                </ng-container>
+    
+                <ng-container matColumnDef="warning">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let row; let i = index">                    
+                    <label *ngIf="row.warning" customToolTip [contentTemplate]="assemblyTooltipTemplate" mat-button>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M22.4424 15.9532L15.4371 3.97762C14.7338 2.7584 13.4229 2.00166 12.0053 2C10.5875 1.99834 9.27626 2.75196 8.56422 3.97767L1.55628 15.9576C0.829606 17.1795 0.813166 18.7105 1.51703 19.9592C2.22148 21.2089 3.54051 21.9866 4.97525 21.9983L19.0131 21.9983C20.4628 21.9842 21.7793 21.2089 22.4836 19.9603C23.1871 18.7132 23.1714 17.1856 22.4424 15.9532ZM3.27894 16.9737L10.2921 4.98491C10.6472 4.37354 11.2986 3.99918 12.003 4C12.7073 4.00083 13.3584 4.37673 13.7077 4.98222L20.7186 16.9672C21.086 17.5885 21.0939 18.3533 20.7417 18.9777C20.389 19.603 19.7295 19.9913 19.0034 19.9984L4.98339 19.9983C4.27278 19.9925 3.61208 19.6029 3.25929 18.9771C2.90689 18.3519 2.91512 17.5855 3.27894 16.9737ZM12.0012 17.9983C12.5537 17.9983 13.0015 17.5506 13.0015 16.9983C13.0015 16.4461 12.5537 15.9983 12.0012 15.9983C11.4487 15.9983 11.0009 16.4461 11.0009 16.9983C11.0009 17.5506 11.4487 17.9983 12.0012 17.9983ZM13.0045 7.99835H11.0038V14.9983H13.0045V7.99835Z" fill="#EAC400"/>
+                        </svg>
+                    </label>                  
+                  </td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="displayedSummaryColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedSummaryColumns"></tr>
+              </table>
+              
+            </div>
+            <div *ngIf="currentStep == 3">
+              <div *ngIf="indicatorToAccounting == null" class='vertical-separator'>
+              </div>
+            </div>
+          
+            <div  fxFlex="4">
+            </div>
+             
+           
+            <div fxFlex="21" *ngIf="currentStep == 3">
+              <!-- Vertical separator -->
+             
+   
+             <!-- User Moving out Form  - Incomplete  (Please mark as complete when done) -->
+             <div *ngIf="indicatorToAccounting == null" fxLayout="column">
+   
+               <div fxLayoutGap="21px" fxLayout="column" fxLayoutAlign="space-between start">
+                 <h4>{{'order.userMovingOut' | translate}}</h4>
+                 <div fxLayout="row" fxLayoutGap="20px">
+   
+   
+                   <div class="m-t-4">
+                     <mat-form-field class="extra-small-input" appearance="standard">
+                         <mat-label>{{'account.salutation' | translate}}</mat-label>
+                         <mat-select name="salutationCodeOut" disabled class="placeholder-text-1" [(ngModel)]="interimReadingSelf.userMovingOut.salutationCode" placeholder="">
+                             <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                                 {{ 'miscellaneous.'+ utility.fixSalutationCode(item.code) | translate }}
+                             </mat-option>
+                         </mat-select>
+                     </mat-form-field>
+                   </div>
+   
+                 </div>
+                 <div fxLayout="row" fxLayoutGap="20px">
+   
+                     <mat-form-field class="extra-small-input" appearance="standard">
+                       <mat-label>{{'order.firstName' | translate}}</mat-label>
+                       <input name="moveOutfirstName" disabled [(ngModel)]="interimReadingSelf.userMovingOut.firstName" matInput placeholder="" />
+                     </mat-form-field>
+   
+                     <mat-form-field class="extra-small-input" appearance="standard">
+                       <mat-label>{{'order.lastName' | translate}}</mat-label>
+                     <input name="moveOutlastName" disabled [(ngModel)]="interimReadingSelf.userMovingOut.lastName" matInput placeholder="Doe" />
+                     </mat-form-field>
+                 </div>
+   
+               </div>
+               <div fxLayout="row" fxLayoutGap="20px">
+   
+   
+                 <div class="m-t-4">
+                   <p>{{'order.moveoutDate' | translate}}</p>
+                   <mat-form-field class="extra-small-input">
+                     <input name="moveOutdate" disabled matInput [matDatepicker]="pickerto" [(ngModel)]="interimReadingSelf.userMovingOut.date" placeholder="mm-dd-yyyy">
+                     <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+                     <mat-datepicker #pickerto></mat-datepicker>
+                   </mat-form-field> 
+                 </div>
+   
+               </div>
+               <div fxLayout="row" fxLayoutGap="20px" class="p-t-4">
+                 <h4>
+                   <span fxFlex fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="start center">
+                     <span>{{'order.userMovingIn' | translate}}</span>
+                     <mat-checkbox name="vacant" disabled [(ngModel)]="isVacant" (ngModelChange)="vacantChange()">{{'order.vacant' | translate}}</mat-checkbox>
+                   </span>
+                 </h4>
+               </div>
+   
+               <div>
+                 <div>
+                   <mat-form-field class="extra-small-input" appearance="standard">
+                       <mat-label>{{'account.salutation' | translate}}</mat-label>
+                       <mat-select name="salutationCodeIn" disabled class="placeholder-text-1" [(ngModel)]="interimReadingSelf.userMovingIn.salutationCode" [required]="!isVacant" [disabled]="isVacant" placeholder="">
+                           <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                               {{ 'miscellaneous.'+ utility.fixSalutationCode(item.code) | translate }}
+                           </mat-option>
+                       </mat-select>
+                   </mat-form-field>
+                 </div>
+                 <div fxLayout="row" fxLayoutGap="20px">
+                   <mat-form-field class="extra-small-input" appearance="standard">
+                     <mat-label>{{'order.firstName' | translate}}</mat-label>
+                     <input [required]="!isVacant" disabled name="moveInFirstName" [(ngModel)]="interimReadingSelf.userMovingIn.firstName" [disabled]="isVacant" matInput placeholder="" />
+                   </mat-form-field>
+                   <mat-form-field class="extra-small-input" appearance="standard">
+                     <mat-label>{{'order.lastName' | translate}}</mat-label>
+                     <input [required]="!isVacant" disabled name="moveInLastName" [(ngModel)]="interimReadingSelf.userMovingIn.lastName" [disabled]="isVacant" matInput placeholder="Doe" />
+                   </mat-form-field>
+                 </div>
+                 <div class="m-t-4">
+                   <p>{{'order.moveInDate' | translate}}</p>
+                   <mat-form-field class="extra-small-input">
+                     <input [required]="!isVacant" disabled name="moveInDate" [disabled]="isVacant" matInput [matDatepicker]="pickerin" [(ngModel)]="interimReadingSelf.userMovingIn.date" placeholder="mm-dd-yyyy">
+                     <mat-datepicker-toggle matSuffix [for]="pickerin"></mat-datepicker-toggle>
+                     <mat-datepicker #pickerin></mat-datepicker>
+                   </mat-form-field> 
+                 </div>
+               </div>
+             </div>
+           </div>
+          </div>        
+          
+        
+        </div>
+        <ng-template #assemblyTooltipTemplate>
+          <div fxLayout="column">
+            <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+              <span>{{'order.pcycr' | translate}}</span> 
+            </div>
+          </div>
+        </ng-template>  
+        <ng-template #assemblyErrorTooltipTemplate>
+          <div fxLayout="column">
+            <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+              <span>{{'order.pcyeopmr' | translate}}</span> 
+            </div>
+          </div>
+        </ng-template>  
+        <!-- STEP 2 -->
+        <div class="p-b-4 p-t-4" *ngIf="currentStep == 2" fxLayout="column">
+          <form #firstForm="ngForm">
+            <div fxLayout="row" fxLayoutGap="40px">
+              <div fxFlex="70">
+                <!-- Table for STEP_2 -->
+                <table mat-table fxFlex #enterInterimTable [dataSource]="enterInterimTableDataSource">
+  
+                  <ng-container matColumnDef="warning">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row; let i = index">                    
+                      <label *ngIf="getWarningCriteria(row.id)" customToolTip [contentTemplate]="assemblyTooltipTemplate" mat-button>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M22.4424 15.9532L15.4371 3.97762C14.7338 2.7584 13.4229 2.00166 12.0053 2C10.5875 1.99834 9.27626 2.75196 8.56422 3.97767L1.55628 15.9576C0.829606 17.1795 0.813166 18.7105 1.51703 19.9592C2.22148 21.2089 3.54051 21.9866 4.97525 21.9983L19.0131 21.9983C20.4628 21.9842 21.7793 21.2089 22.4836 19.9603C23.1871 18.7132 23.1714 17.1856 22.4424 15.9532ZM3.27894 16.9737L10.2921 4.98491C10.6472 4.37354 11.2986 3.99918 12.003 4C12.7073 4.00083 13.3584 4.37673 13.7077 4.98222L20.7186 16.9672C21.086 17.5885 21.0939 18.3533 20.7417 18.9777C20.389 19.603 19.7295 19.9913 19.0034 19.9984L4.98339 19.9983C4.27278 19.9925 3.61208 19.6029 3.25929 18.9771C2.90689 18.3519 2.91512 17.5855 3.27894 16.9737ZM12.0012 17.9983C12.5537 17.9983 13.0015 17.5506 13.0015 16.9983C13.0015 16.4461 12.5537 15.9983 12.0012 15.9983C11.4487 15.9983 11.0009 16.4461 11.0009 16.9983C11.0009 17.5506 11.4487 17.9983 12.0012 17.9983ZM13.0045 7.99835H11.0038V14.9983H13.0045V7.99835Z" fill="#EAC400"/>
+                          </svg>
+                      </label>   
+                      <label *ngIf="getErrorofWater(row.id)" customToolTip [contentTemplate]="assemblyErrorTooltipTemplate" mat-button>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd" d="M22.4424 15.9532L15.4371 3.97762C14.7338 2.7584 13.4229 2.00166 12.0053 2C10.5875 1.99834 9.27626 2.75196 8.56422 3.97767L1.55628 15.9576C0.829606 17.1795 0.813166 18.7105 1.51703 19.9592C2.22148 21.2089 3.54051 21.9866 4.97525 21.9983L19.0131 21.9983C20.4628 21.9842 21.7793 21.2089 22.4836 19.9603C23.1871 18.7132 23.1714 17.1856 22.4424 15.9532ZM3.27894 16.9737L10.2921 4.98491C10.6472 4.37354 11.2986 3.99918 12.003 4C12.7073 4.00083 13.3584 4.37673 13.7077 4.98222L20.7186 16.9672C21.086 17.5885 21.0939 18.3533 20.7417 18.9777C20.389 19.603 19.7295 19.9913 19.0034 19.9984L4.98339 19.9983C4.27278 19.9925 3.61208 19.6029 3.25929 18.9771C2.90689 18.3519 2.91512 17.5855 3.27894 16.9737ZM12.0012 17.9983C12.5537 17.9983 13.0015 17.5506 13.0015 16.9983C13.0015 16.4461 12.5537 15.9983 12.0012 15.9983C11.4487 15.9983 11.0009 16.4461 11.0009 16.9983C11.0009 17.5506 11.4487 17.9983 12.0012 17.9983ZM13.0045 7.99835H11.0038V14.9983H13.0045V7.99835Z" 
+                          fill="red"/>
+                          </svg>
+                      </label>                 
+                    </td>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="meterTypeDesc">
+                    <th mat-header-cell *matHeaderCellDef>{{'stockOverview.meterType' | translate}}</th>
+                    <td mat-cell *matCellDef="let row">
+                      <div class="mat-custom-table-form-field">
+                        <input name="meterTypeDesc{{row.id}}" tabindex="-1" [ngModel]="row.meterTypeDesc" matInput readonly/>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="serialNumber">
+                    <th mat-header-cell *matHeaderCellDef>{{'stockOverview.meterSerialNo' | translate}}</th>
+                    <td mat-cell *matCellDef="let row">
+                      <div class="mat-custom-table-form-field">
+                        <input name="serialNumber{{row.id}}" tabindex="-1" [ngModel]="row.serialNumber" matInput readonly/>
+                      </div>
+                    </td>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="location">
+                    <th mat-header-cell *matHeaderCellDef>{{'order.installedLocation' | translate}}</th>
+                    <td mat-cell *matCellDef="let row">
+                      <div class="mat-custom-table-form-field">
+                        <input name="location{{row.id}}" tabindex="-1" matInput [ngModel]="showFullLocation(row.location)" placeholder="" readonly/>
+                      </div>
+  
+  
+                    </td>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="value">
+                    <th mat-header-cell *matHeaderCellDef>{{'order.counterReading' | translate}}</th>
+                    <td mat-cell *matCellDef="let row">
+  
+                      <div class="mat-custom-table-form-field" [matTooltip]="allMoveOutReadingsInd && indicatorToAccounting != null ? allMoveOutReadingsTooltip : null" [matTooltipPosition]="'above'"> 
+                        <input required name="Value{{row.id}}" (blur)="calculateWarningCriteria(row.id)"
+                         [ngClass]="{'warrningInput' : getWarningCriteria(row.id), 'errorInput' : getErrorClassCriteria(row.id) || getErrorofWater(row.id)}"
+                        matInput [ngModel]="getValue(row.id)" (input)="valueChange($event.target.value, row.id)" placeholder="" numbersOnly="true"
+                        [disabled]="allMoveOutReadingsInd && indicatorToAccounting != null" />
+                      </div>
+                    </td>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="lastReading">
+                    <th mat-header-cell *matHeaderCellDef>{{'order.lastReading' | translate}}</th>
+                    <td mat-cell *matCellDef="let row">
+  
+                      <div class="mat-custom-table-form-field">
+                        <input name="lastReading{{row.id}}" tabindex="-1" [ngClass]="{'warrningInput' : getWarningCriteria(row.id)}" matInput value="{{getReading(row.id ) | number}}" placeholder="" readonly/>
+                      </div>
+  
+                    </td>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="image">
+                    <th mat-header-cell *matHeaderCellDef>{{'order.annex' | translate}}</th>
+                    <td mat-cell *matCellDef="let row; let i = index" class="image-upload">                    
+                      <input name="fileupload{{i}}" #fileInput (click)="fileInput.value = null" id="file-input{{i}}" type="file" accept="image/*" multiple (change)="attachImage($event, row.id)"/>
+                      <label for="file-input{{i}}" mat-button >
+                        <svg  [matTooltip]="attachmenttooltipText" [matTooltipPosition]="'above'"  width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M11.3429 4.54368L12.7679 5.94702L6.44974 12.3628C6.1327 12.6863 6.1327 13.2071 6.44974 13.5307C6.75058 13.8378 7.25315 13.8364 7.55079 13.529L14.5022 6.46741C15.517 5.43179 15.517 3.76857 14.5022 2.73294C13.5339 1.74484 11.8208 1.76682 10.8718 2.73482L3.28454 10.437C1.57154 12.1844 1.57154 14.9904 3.28454 16.7378C4.94795 18.4346 7.80544 18.407 9.44287 16.7362L18.2919 7.74899L19.717 9.1522L10.8696 18.1378C8.45572 20.6008 4.31008 20.6409 1.85633 18.1379C-0.619061 15.6127 -0.619061 11.562 1.85804 9.03517L9.44533 1.33301C11.1687 -0.425057 14.1701 -0.463563 15.9307 1.33316C17.7075 3.14642 17.7075 6.05393 15.9291 7.86883L8.98186 14.9262C7.90719 16.0361 6.10934 16.0411 5.02113 14.9304C3.94224 13.8292 3.94224 12.0643 5.02293 10.9612L11.3429 4.54368Z"
+                            fill="#565656" />
+                        </svg>
+                      </label>                    
+                    </td>
+                  </ng-container>
+  
+                  <ng-container matColumnDef="imageView">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let row">
+                      <div *ngIf="getImage(row.id)" fxLayoutAlign="center center">
+                          <span 
+                              class="m-l-3">{{getImageLength(row.id)}}</span>
+                              <mat-icon>upload_file</mat-icon>
+                          <span title="Remove" style="cursor: pointer;"
+                              (click)="removeUpload(row.id)" class="m-l-3">X</span>
+                      </div>
+                  </td>
+                  </ng-container>
+  
+                  <tr mat-header-row *matHeaderRowDef="enterInterimTableDisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: enterInterimTableDisplayedColumns;"></tr>
+                </table>
+              </div>
+  
+              <!-- Vertical separator -->
+              <div *ngIf="indicatorToAccounting == null" class='vertical-separator'>
+              </div>
+  
+              <!-- User Moving out Form  - Incomplete  (Please mark as complete when done) -->
+              <div *ngIf="indicatorToAccounting == null" fxLayout="column">
+  
+                <div fxLayoutGap="21px" fxLayout="column" fxLayoutAlign="space-between start">
+                  <h4>{{'order.userMovingOut' | translate}}</h4>
+                  <div fxLayout="row" fxLayoutGap="20px">
+    
+    
+                    <div class="m-t-4">
+                      <mat-form-field class="extra-small-input" appearance="standard">
+                          <mat-label>{{'account.salutation' | translate}}</mat-label>
+                          <mat-select name="salutationCodeOut" required class="placeholder-text-1" [(ngModel)]="interimReadingSelf.userMovingOut.salutationCode" placeholder="">
+                              <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                                  {{ 'miscellaneous.'+ utility.fixSalutationCode(item.code) | translate }}
+                              </mat-option>
+                          </mat-select>
+                      </mat-form-field>
+                    </div>
+    
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+  
+                      <mat-form-field class="extra-small-input" appearance="standard">
+                        <mat-label>{{'order.firstName' | translate}}</mat-label>
+                        <input name="moveOutfirstName" required [(ngModel)]="interimReadingSelf.userMovingOut.firstName" matInput placeholder="" />
+                      </mat-form-field>
+  
+                      <mat-form-field class="extra-small-input" appearance="standard">
+                        <mat-label>{{'order.lastName' | translate}}</mat-label>
+                      <input name="moveOutlastName" required [(ngModel)]="interimReadingSelf.userMovingOut.lastName" matInput placeholder="Doe" />
+                      </mat-form-field>
+                  </div>
+  
+                </div>
+                <div fxLayout="row" fxLayoutGap="20px">
+  
+  
+                  <div class="m-t-4">
+                    <p>{{'order.moveoutDate' | translate}}</p>
+                    <mat-form-field class="extra-small-input">
+                      <input name="moveOutdate" required matInput [matDatepicker]="pickerto" [(ngModel)]="interimReadingSelf.userMovingOut.date" placeholder="mm-dd-yyyy">
+                      <mat-datepicker-toggle matSuffix [for]="pickerto"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerto></mat-datepicker>
+                    </mat-form-field> 
+                  </div>
+  
+                </div>
+                <div fxLayout="row" fxLayoutGap="20px" class="p-t-4">
+                  <h4>
+                    <span fxFlex fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="start center">
+                      <span>{{'order.userMovingIn' | translate}}</span>
+                      <mat-checkbox name="vacant" [(ngModel)]="isVacant" (ngModelChange)="vacantChange()">{{'order.vacant' | translate}}</mat-checkbox>
+                    </span>
+                  </h4>
+                </div>
+  
+                <div>
+                  <div>
+                    <mat-form-field class="extra-small-input" appearance="standard">
+                        <mat-label>{{'account.salutation' | translate}}</mat-label>
+                        <mat-select name="salutationCodeIn" required class="placeholder-text-1" [(ngModel)]="interimReadingSelf.userMovingIn.salutationCode" [required]="!isVacant" [disabled]="isVacant" placeholder="">
+                            <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                                {{ 'miscellaneous.'+ utility.fixSalutationCode(item.code) | translate }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div fxLayout="row" fxLayoutGap="20px">
+                    <mat-form-field class="extra-small-input" appearance="standard">
+                      <mat-label>{{'order.firstName' | translate}}</mat-label>
+                      <input [required]="!isVacant" name="moveInFirstName" [(ngModel)]="interimReadingSelf.userMovingIn.firstName" [disabled]="isVacant" matInput placeholder="" />
+                    </mat-form-field>
+                    <mat-form-field class="extra-small-input" appearance="standard">
+                      <mat-label>{{'order.lastName' | translate}}</mat-label>
+                      <input [required]="!isVacant" name="moveInLastName" [(ngModel)]="interimReadingSelf.userMovingIn.lastName" [disabled]="isVacant" matInput placeholder="Doe" />
+                    </mat-form-field>
+                  </div>
+                  <div class="m-t-4">
+                    <p>{{'order.moveInDate' | translate}}</p>
+                    <mat-form-field class="extra-small-input">
+                      <input [required]="!isVacant" name="moveInDate" [disabled]="isVacant" matInput [matDatepicker]="pickerin" [(ngModel)]="interimReadingSelf.userMovingIn.date" placeholder="mm-dd-yyyy">
+                      <mat-datepicker-toggle matSuffix [for]="pickerin"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerin></mat-datepicker>
+                    </mat-form-field> 
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+              <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                {{'account.cancel' | translate}}
+              </button>
+              <button (click)="stepper()" [disabled]="!firstForm.form.valid" mat-button class="primary-green-button">
+                {{ (indicatorToAccounting != null ? 'accounting.saveBackUserData': 'order.next') | translate}}
+              </button>
+              <br />
+            </div>
+          </form>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="p-b-4 p-t-4" *ngIf="currentStep == 3">
+          <div>
+            <form #secondForm="ngForm">
+            <div fxLayout="column" fxLayoutGap="20px">
+              <div *ngIf="currentStep == 3" fxLayout="column" fxLayoutGap="20px" fxLayoutAlign="end start">
+                <mat-checkbox required name="termsInd" [(ngModel)]="interimReadingSelf.termsInd">{{'order.termsMessagePart1' | translate}} <a (click)="downloadPDF()">{{'order.termsMessagePart2' |
+                  translate}}</a>
+                </mat-checkbox>
+                <mat-checkbox required name='costsInd' [(ngModel)]="interimReadingSelf.costsInd">{{'order.interimReadingCostMessage' | translate}}
+                  {{'order.priceList' | translate}}
+                </mat-checkbox>
+                <mat-checkbox required name='dataProtectionInd' [(ngModel)]="interimReadingSelf.dataProtectionInd">{{'order.dataProtectionMessage' | translate}}
+                </mat-checkbox>
+              </div>
+
+              <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+                <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                  {{'account.cancel' | translate}}
+                </button>
+                <button (click)="stepper()" [disabled]="!secondForm.form.valid" mat-button class="primary-green-button">
+                  {{'order.confirm' | translate}}
+                </button>
+              </div>
+            </div>
+          </form>
+          </div>
+        </div>
+
+        <!-- step 4 -->
+        <div class="confirm-message-wrapper p-t-16 p-b-8" *ngIf="currentStep == 4"
+          fxLayout="column" fxLayoutGap="40px">
+
+          <div class="confirm-message-wrapper">
+            <div class="message-with-icon-wrapper" fxLayoutAlign="center center" fxLayoutGap="24px">
+
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M43.7508 25.1461V27.0836C43.7455 36.3101 37.6722 44.4341 28.8244 47.0501C19.9766 49.6661 10.462 46.1509 5.44026 38.4108C0.418511 30.6708 1.0859 20.5495 7.08051 13.5359C13.0751 6.52218 22.9689 4.2868 31.3966 8.04196"
+                  stroke="#00A253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M45.8327 8.33301L22.916 31.2497L16.666 24.9997" stroke="#00A253" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="message">{{'order.orderConfirmationMessage' | translate}}</span>
+
+            </div>
+            <div class="confirmation-message-text p-t-8">
+              <p>{{'order.eirReciveMsg' | translate}}
+                <br>
+                <br>
+                {{'order.emailMessage' | translate}}
+                <br>
+                <br>
+                -- {{'order.tehaServiceTeam' | translate}}
+              </p>
+
+            </div>
+          </div>
+
+
+
+          <div class="p-t-8" fxFlex fxLayoutAlign="end center">
+            <button routerLink="/orders" mat-button class="primary-green-button">{{'order.backToOrders' | translate}}</button>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

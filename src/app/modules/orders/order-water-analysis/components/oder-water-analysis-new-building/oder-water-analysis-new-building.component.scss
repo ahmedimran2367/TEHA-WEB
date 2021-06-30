@@ -1,0 +1,22 @@
+@import "../../../../../shared/styles/spacing";
+@import "../../../../../shared/styles/colors";
+@import "../../../../../shared/styles/typography";
+@import "../../../../../shared/styles/confirmationmessage";
+@import "../../../../../shared/styles/orderscommon";
+@import "../../../../../shared/styles/deep";
+
+.no-rec-icon {
+    .mat-icon {
+      margin-top: -40px;
+      width: 125px;
+      height: 125px;
+      font-size: 110px;
+    }
+}
+.mat-place {
+  ::ng-deep {
+    .mat-form-field-infix {
+      border-top: 0;
+    }
+  }
+}

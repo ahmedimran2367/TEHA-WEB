@@ -1,0 +1,172 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+    <app-shared-hello-card message="{{helloCardText}}" fxFlex="50"></app-shared-hello-card>
+    <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+      <app-map-component [isFromUser]="true" fxFlex="100"></app-map-component>
+    </div>
+  </div>
+
+
+
+  <mat-card fxHide.lt-md="true" class="mat-dashboard-card overflow-hide " fxLayoutGap="10px"
+    fxFlex="0 0 calc(75vh - 60px)" fxFlex.lt-lg="0 0 calc(75vh - 124px)">
+    <div class="card-header m-l-5">
+      <div fxLayout="row" class="w-100" fxLayoutAlign="space-between center">
+        <mat-card-title fxFlex>
+          <span fxLayout="row" class="header-3" fxLayoutAlign="start center">
+            {{'order.myOrdersOverview' | translate}}
+          </span>
+        </mat-card-title>
+        <div fxFlex="30" fxLayoutAlign.lt-md="center start" fxLayoutAlign="end start">
+          <app-search-bar placeHolder="{{'order.ordersSearchPlacholder' | translate}}"
+            (enterPressed)="orderTable.freeTextSearch($event)" (backspace)="orderTable.freeTextSearch($event,true)">
+          </app-search-bar>
+        </div>
+      </div>
+    </div>
+
+    <div fxLayout="row">
+      <div fxFlex class="font-resp" fxLayoutAlign="end">
+        <button class="text-blue header-4" mat-button [matMenuTriggerFor]="menu">
+          {{'order.createNewOrder' | translate}}
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <!-- <button (click)="navigateToOrder('plumbingFlat')" mat-menu-item>
+              <span>{{'order.orderPlumbingFlat' | translate}}</span>
+            </button>
+            <button (click)="navigateToOrder('plumbingMeter')" mat-menu-item>
+              <span>{{'order.orderPlumbingMeter' | translate}}</span>
+            </button> -->
+          <button (click)="navigateToOrder('plumbingMeter')" mat-menu-item>
+            <span>{{'order.orderPlumbing' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('orderReadingProperty')" mat-menu-item>
+            <span>{{'order.floatRequestReadingProperty' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('orderReadingFlat')" mat-menu-item>
+            <span>{{'order.floatRequestReadingFlat' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('orderReadingMeter')" mat-menu-item>
+            <span>{{'order.floatRequestReadingMeter' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('interimReading')" mat-menu-item>
+            <span>{{'order.irFormTitle' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('postInterimReading')" mat-menu-item>
+            <span>{{'order.enterInterimReading' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('energyCertificate')" mat-menu-item>
+            <span>{{'order.requestEnergyCertificate' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('smokeDetectorTestFlat')" mat-menu-item>
+            <span>{{'order.orderSmokeDetectorTestFlat' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('smokeDetectorTestMeter')" mat-menu-item>
+            <span>{{'order.orderSmokeDetectorTestMeter' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('drinkingWaterSampling')" mat-menu-item>
+            <span>{{'order.requestDWA' | translate}}</span>
+          </button>
+          <mat-divider class="m-l-5 m-r-5"></mat-divider>
+          <button (click)="navigateToOrder('offer')" mat-menu-item>
+            <span>{{'order.offerRequest' | translate}}</span>
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <mat-card-content>
+
+      <div class="order-table overflow-auto">
+        <app-order-table #orderTable></app-order-table>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+  <mat-card fxHide.gt-sm="true" class="mat-dashboard-card">
+    <div fxLayout="column" fxLayoutAlign="center" class="w-100 overflow-hide">
+      <mat-card-title fxFlex>
+        <span fxLayout="row" class="header-4" fxLayoutAlign="center center">
+          {{'order.myOrdersOverview' | translate}}
+        </span>
+      </mat-card-title>
+      <div fxFlex fxLayout="column" fxLayoutGap="20px">
+        <app-search-bar placeHolder="{{'order.ordersSearchPlacholder' | translate}}"
+            (enterPressed)="orderTable.freeTextSearch($event)" (backspace)="orderTable.freeTextSearch($event,true)">
+          </app-search-bar>
+          <div fxLayout="row">
+            <div fxFlex class="font-resp" fxLayoutAlign="center center">
+              <button class="text-blue header-4" mat-button [matMenuTriggerFor]="menu">
+                {{'order.createNewOrder' | translate}}
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </button>
+              <mat-menu #menu="matMenu">
+                <!-- <button (click)="navigateToOrder('plumbingFlat')" mat-menu-item>
+                    <span>{{'order.orderPlumbingFlat' | translate}}</span>
+                  </button>
+                  <button (click)="navigateToOrder('plumbingMeter')" mat-menu-item>
+                    <span>{{'order.orderPlumbingMeter' | translate}}</span>
+                  </button> -->
+                <button (click)="navigateToOrder('plumbingMeter')" mat-menu-item>
+                  <span>{{'order.orderPlumbing' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('orderReadingProperty')" mat-menu-item>
+                  <span>{{'order.floatRequestReadingProperty' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('orderReadingFlat')" mat-menu-item>
+                  <span>{{'order.floatRequestReadingFlat' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('orderReadingMeter')" mat-menu-item>
+                  <span>{{'order.floatRequestReadingMeter' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('interimReading')" mat-menu-item>
+                  <span>{{'order.irFormTitle' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('postInterimReading')" mat-menu-item>
+                  <span>{{'order.enterInterimReading' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('energyCertificate')" mat-menu-item>
+                  <span>{{'order.requestEnergyCertificate' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('smokeDetectorTestFlat')" mat-menu-item>
+                  <span>{{'order.orderSmokeDetectorTestFlat' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('smokeDetectorTestMeter')" mat-menu-item>
+                  <span>{{'order.orderSmokeDetectorTestMeter' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('drinkingWaterSampling')" mat-menu-item>
+                  <span>{{'order.requestDWA' | translate}}</span>
+                </button>
+                <mat-divider class="m-l-5 m-r-5"></mat-divider>
+                <button (click)="navigateToOrder('offer')" mat-menu-item>
+                  <span>{{'order.offerRequest' | translate}}</span>
+                </button>
+              </mat-menu>
+            </div>
+          </div>
+      </div>
+    </div>    
+</mat-card>
+  <div class="order-table overflow-auto" fxHide.gt-sm="true">
+    <app-order-table #orderTable></app-order-table>
+  </div>
+</div>

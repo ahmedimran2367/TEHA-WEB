@@ -1,0 +1,28 @@
+<mat-card class="mat-dashboard-card font-resp" fxLayout="column" fxFlexFill>
+    <mat-card-content fxLayout="row" fxFlex fxLayoutGap="24px" fxLayoutAlign="center">
+        <div fxFlex="70" fxLayoutGap="24px" fxLayout="row" fxFlexAlign="center">
+            <div fxFlex="134px" class="m-l-10 hello-card-icon-wrapper" fxLayoutAlign="center center">
+                <img src="/assets/images/Meter Green.png">
+            </div>
+            <div fxLayout="column" fxLayoutAlign="center start" fxLayoutGap="10px">
+                <span class="o-wrap header-2 text-black">
+                    {{meterType}}
+                </span>
+                <span class="header-4 m-t-5 m-b-5 text-gray">
+                    {{'stockOverview.meterSerialNo' | translate}} {{serialNumber}}
+                </span>
+                <span class="paragraph text-gray">{{street}}</span>
+                <span class="paragraph text-gray">{{zipcode}}</span>
+                <span class="paragraph text-gray">{{city}}</span>
+            </div>
+        </div>
+        <mat-divider class="m-t-5 m-b-5" [vertical]="true"></mat-divider>
+        <div fxFlex="30" fxFlexAlign="center">
+            <p class="header-4">{{firstName}}</p>
+            <p class="paragraph m-t-5 m-b-5 text-gray">{{'stockOverview.adminUserNo' | translate}}<br>{{adminUserNo}}</p>
+            <p class="paragraph m-t-5 m-b-5 text-gray">{{'stockOverview.tehaUserNo' | translate}}<br>{{tehaUserNo}}</p>
+
+        </div>
+    </mat-card-content>
+
+</mat-card>

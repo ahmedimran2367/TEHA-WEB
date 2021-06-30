@@ -1,0 +1,131 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/confirmationmessage";
+@import "../../../shared/styles/orderscommon";
+@import "../../../shared/styles/formfields";
+
+.ml4 {
+  margin-left: 20px;
+}
+
+.search-bar input {
+  width: 400px;
+  height: 40px;
+  border: transparent;
+  outline: none;
+}
+
+.search-bar svg {
+  width: 15px;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.is-hidden-overview-card {
+  display: none;
+  visibility: collapse;
+}
+
+
+.panel {
+  padding-left: 30px;
+  padding-top: 30px;
+
+  .inner-panel {
+    // padding-left: 10px;
+  }
+}
+
+
+.search {
+  margin-top: -70px;
+}
+
+.confirmed-order p {
+  color: $primary;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+  padding-top: 50px;
+}
+
+
+
+.confirmed-order svg {
+  margin-right: 25px;
+  margin-top: 32px;
+}
+
+.confirmed-order {
+  margin-bottom: 30px;
+}
+
+.confirm-order2 {
+  color: $secondary;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  padding-bottom: 30px;
+}
+
+.check-box {
+  margin-top: 15px;
+}
+
+.check-box .example-margin {
+  margin-bottom: 18px;
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+}
+
+.check-box .example-margin a {
+  text-decoration: none;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+.formFieldWidth480 .mat-form-field-infix {
+  width: 80px;
+}
+
+:host ::ng-deep .mat-header-cell {
+  justify-content: center;
+  text-align: center;
+}
+.vertical-separator {
+  // height: 250px;
+  // opacity: 0.6;
+  
+  // border: 0.75px solid #808080;
+
+  // /* Line 4 */
+
+width: 377px;
+height: 0px;
+
+border: 0.75px solid #808080;
+transform: rotate(90deg);
+  
+}
+.requiredColor{
+  color: red;
+}

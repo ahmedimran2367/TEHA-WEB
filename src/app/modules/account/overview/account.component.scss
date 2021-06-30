@@ -1,0 +1,71 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/deep";
+
+.hideOverflow {
+  overflow: hidden;
+}
+
+.is-hidden {
+  width: 0px !important;
+  height: 0px !important;
+  display: none;
+  visibility: collapse;
+}
+
+::ng-deep .no-padding .mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+.sub-title {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+
+  color: #1d2932;
+}
+
+.primary-icon {
+  color: $primary;
+}
+.panel-members-form {
+}
+
+.save-b{
+  padding-bottom: 15px;
+}
+
+.assign-building-autocomplete {
+  width: 205px;
+  height: 30px;
+
+  background: #ffffff;
+  box-shadow: 0px 1px 0px rgba(8, 8, 8, 0.15);
+  border-radius: 0px 5px;
+
+  .mat-icon {
+    margin-left: 6px;
+    width: 14px;
+    height: 14px;
+    font-size: 14px;
+  }
+}
+.comp-tabs-title {
+  ::ng-deep {
+    .mat-tab-body {
+      margin-top: 10px;
+    }
+    .mat-ink-bar {
+      display: none !important;
+    }
+    .mat-tab-label-active {
+      border-bottom: 3px solid $brightgreen;
+    }
+  }
+}

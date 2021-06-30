@@ -1,0 +1,916 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+  <div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+    <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+      <app-shared-hello-card *ngIf="showHelloCard" fxFlex="50"></app-shared-hello-card>
+      <app-building-info-card fxFlex="50" *ngIf="showPropertyCard">
+      </app-building-info-card>
+      <app-person-overview-card fxFlex="50" *ngIf="showFlatCard">
+      </app-person-overview-card>
+      <app-meter-details-overview-card *ngIf="showMeterCard" #meterCard [meterId]="meterId" fxFlex="50">
+      </app-meter-details-overview-card>
+      <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+        <app-search-autocomplete fxFlex="30" *ngIf="showPropertySearch && !orderId"
+          (onOptionSelected)="propertyChange($event)">
+        </app-search-autocomplete>
+        <app-map-component *ngIf="!showUserMap" fxFlex="70"></app-map-component>
+        <app-map-component [isFromUser]="true" *ngIf="showUserMap" fxFlex></app-map-component>
+      </div>
+    </div>
+  </div>
+  <div fxFlex="100" fxFlexGap="1" class="font-resp">
+    <mat-card class="mat-dashboard-card">
+      <div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="start center">
+        <div fxFlex fxLayoutAlign="start center">
+          <mat-card-title>
+            <span fxLayout="row" fxLayoutAlign="center center">
+              <button mat-icon-button (click)="goBack()"
+                [ngClass]="{ 'is-hidden': currentStep === 'STEP_1' || currentStep === 'STEP_6' }">
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+              <span
+                [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' && currentStep != 'STEP_2' && currentStep != 'STEP_3'}">
+                {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderEnergyCertificate' | translate}}
+              </span>
+
+              <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_4' && currentStep != 'STEP_5' }">
+                {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderSummary' | translate}}
+              </span>
+
+              <span [ngClass]="{ 'is-hidden': currentStep != 'STEP_6' }">
+                {{orderId ? ('admin.edit' | translate)+' --' : ''}} {{'order.orderConfirmation' | translate}}
+              </span>
+            </span>
+
+
+          </mat-card-title>
+        </div>
+
+        <div fxFlexAlign="end end">
+          <!-- <app-search-bar [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }"></app-search-bar> -->
+          <div fxFlexAlign="end end">
+            <app-search-bar placeHolder="{{'stockOverview.propertySearchPlaceholder' | translate}}' | translate}}"
+              [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }" (changed)="energyTableComponet.applyFilter($event)">
+            </app-search-bar>
+          </div>
+        </div>
+      </div>
+
+      <mat-card-content>
+
+        <!--STEP_0 PROPERTY GRID-->
+        <app-order-energy-certificate-property-table (postPropertyEvent)=gotoOrderForm($event) #energyTableComponet
+          [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }"></app-order-energy-certificate-property-table>
+        <!--End-->
+        <!-- STEP 2 -->
+        <form #firstForm="ngForm">
+          <div class="p-b-4 p-t-4 form-group" [ngClass]="{ 'is-hidden': currentStep != 'STEP_2' }" fxLayout="column">
+            <div fxLayout.lt-lg="column" fxLayout="row" fxLayoutGap="50px">
+              <div fxFlex="30" fxLayoutAlign="center" fxLayoutAlign.lt-lg="start">
+                <div fxLayout="column" fxLayoutAlign="center start">
+                  <h4 class="header-4">{{'order.theBuilding' | translate}} <span class="red">*</span></h4>
+                  <div fxLayout="column" fxLayoutGap="12px">
+                    <mat-radio-group name="buildingTypeControl" required class="building-radio-group form-control"
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.buildingType">
+                      <mat-radio-button *ngFor="let type of buildingTypes"
+                        class="support-text m-b-4 building-radio-button" [value]="type">{{type}}</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <h4>{{'order.buildingImage' | translate}}<span class="red"> *</span></h4>
+                  <div fxLayout="column" fxLayoutGap="12px">
+                    <table>
+                      <thead>
+
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td class="image-upload ">
+                            <input style="display: none;" name="fileupload1" required #fileInput1
+                              (click)="fileInput1.value = null" id="file-input1" type="file"
+                              (change)="attachImage($event,0)" />
+                            <label for="file-input1" mat-button style="cursor: pointer;">
+                              <mat-icon [matTooltip]="tooltipText" [matTooltipPosition]="'above'">
+                                attach_file</mat-icon>
+                            </label>
+                          </td>
+                          <td>
+                            <div *ngIf="orderEnergyPerformanceRequestNew?.imagesContents[0]?.content!=null"
+                              fxLayoutAlign="center center">
+                              <img
+                                [src]="showimage(orderEnergyPerformanceRequestNew?.imagesContents[0]?.content, orderEnergyPerformanceRequestNew?.imagesContents[0]?.filename)"
+                                style="max-width:60px;max-height:60px" />
+                              <span title="Remove" style="cursor: pointer;"
+                                (click)="orderEnergyPerformanceRequestNew.imagesContents[0].content=null"
+                                class="m-l-3">X</span>
+                            </div>
+
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="image-upload">
+                            <input style="display: none;" name="fileupload2" required #fileInput2
+                              (click)="fileInput2.value = null" id="file-input2" type="file"
+                              (change)="attachImage($event,1)" />
+                            <label for="file-input2" mat-button style="cursor: pointer;">
+                              <mat-icon [matTooltip]="tooltipText" [matTooltipPosition]="'above'">
+                                attach_file</mat-icon>
+                            </label>
+                          </td>
+                          <td>
+                            <div *ngIf="orderEnergyPerformanceRequestNew?.imagesContents[1]?.content!=null"
+                              fxLayoutAlign="center center">
+                              <img
+                                [src]="showimage(orderEnergyPerformanceRequestNew?.imagesContents[1]?.content, orderEnergyPerformanceRequestNew?.imagesContents[1]?.filename)"
+                                style="max-width:60px;max-height:60px" />
+                              <span title="Remove" style="cursor: pointer;"
+                                (click)="orderEnergyPerformanceRequestNew.imagesContents[1].content=null"
+                                class="m-l-3">X</span>
+                            </div>
+
+                          </td>
+                        </tr>
+                        <tr>
+                          <td class="image-upload">
+                            <input style="display: none;" name="fileupload3" required #fileInput3
+                              (click)="fileInput3.value = null" id="file-input3" type="file"
+                              (change)="attachImage($event,2)" />
+                            <label for="file-input3" mat-button style="cursor: pointer;">
+                              <mat-icon [matTooltip]="tooltipText" [matTooltipPosition]="'above'">
+                                attach_file</mat-icon>
+                            </label>
+                          </td>
+                          <td>
+                            <div *ngIf="orderEnergyPerformanceRequestNew?.imagesContents[2]?.content!=null"
+                              fxLayoutAlign="center center">
+                              <img
+                                [src]="showimage(orderEnergyPerformanceRequestNew?.imagesContents[2]?.content, orderEnergyPerformanceRequestNew?.imagesContents[2]?.filename)"
+                                style="max-width:60px;max-height:60px" />
+                              <span title="Remove" style="cursor: pointer;"
+                                (click)="orderEnergyPerformanceRequestNew.imagesContents[2].content=null"
+                                class="m-l-3">X</span>
+                            </div>
+
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                </div>
+              </div>
+
+              <mat-divider [vertical]="true">
+              </mat-divider>
+
+              <div fxFlex="30" fxLayout.lt-md="column" fxLayout="row" fxLayoutGap="24px">
+                <div fxLayout="column" fxLayoutGap="14px">
+                  <mat-form-field class="smaller-input placeholder-text-1 m-b-0" appearance="standard">
+                    <mat-label>{{'order.yearOfConstruction' | translate}}</mat-label>
+                    <input name="yearOfConstructionControl" class="form-control" required pattern="[0-9]{4}" min="0"
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.yearOfConstruction" matInput placeholder="1999"
+                      onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4" />
+                  </mat-form-field>
+
+                  <mat-form-field class="smaller-input placeholder-text-1 m-b-0" appearance="standard">
+                    <mat-label>{{'order.yearOfHeating' | translate}}</mat-label>
+                    <input numbersOnly="true" name="yearOfHeatingControl" class="form-control" required
+                      onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4" pattern="[0-9]{4}"
+                      min="0" [(ngModel)]="orderEnergyPerformanceRequestNew.yearOfHeating" matInput
+                      placeholder="1999" />
+                  </mat-form-field>
+
+                  <mat-form-field class="smaller-input placeholder-text-1 m-b-0" appearance="standard">
+                    <mat-label>{{'order.renewalOfHeating' | translate}}</mat-label>
+                    <input name="renewalHeatingControl" class="form-control"
+                      onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4" pattern="[0-9]{4}"
+                      min="0" [(ngModel)]="orderEnergyPerformanceRequestNew.renewalOfHeating" matInput
+                      placeholder="2019" />
+                  </mat-form-field>
+
+                  <mat-form-field class="smaller-input placeholder-text-1 m-b-0" appearance="standard">
+                    <mat-label>{{'order.heatableArea' | translate}} (m<sup>2</sup>)</mat-label>
+                    <input numbersOnly="true" maxlength="7" name="heatableAreaControl" class="form-control" required
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.heatableUsableArea" matInput placeholder="150" />
+                  </mat-form-field>
+
+                  <mat-form-field class="smaller-input placeholder-text-1 m-b-0" appearance="standard">
+                    <mat-label>{{'order.noResidentialUnits' | translate}}</mat-label>
+                    <input onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4"
+                      name="residentialControl" class="form-control" required min="0"
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.noOfResidentialUnits" matInput placeholder="5" />
+                  </mat-form-field>
+                  <div fxLayout="column" fxLayoutGap="12px">
+                    <mat-label class="support-text">{{'order.measurementTake' | translate}} <span class="red">*</span>
+                    </mat-label>
+                    <div fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start">
+                      <mat-radio-group name="wwzControl" class="form-control" required
+                        [(ngModel)]="orderEnergyPerformanceRequestNew.measurmentWithWWZInd" fxLayoutGap="12px">
+                        <mat-radio-button class="support-text" [value]="true"> {{'order.yes' | translate}}
+                        </mat-radio-button>
+                        <mat-radio-button class="support-text" [value]="false"> {{'order.no' | translate}}
+                        </mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                </div>
+
+                <div fxLayout="column" fxLayoutGap="30px">
+                  <div fxLayout="column" fxLayoutGap="15px">
+                    <mat-label class="support-text">{{'order.monumentProtection' | translate}} <span
+                        class="red">*</span></mat-label>
+                    <mat-radio-group name="monumentProtectionControl" class="form-control" required
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.monumentProtectionInd" fxLayoutGap="24px">
+                      <mat-radio-button class="support-text" [value]="true">{{'order.yes' | translate}}
+                      </mat-radio-button>
+                      <mat-radio-button class="support-text" [value]="false">{{'order.no' | translate}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="15px">
+                    <mat-label class="support-text">{{'order.isBCool' | translate}} <span class="red">*</span>
+                    </mat-label>
+                    <mat-radio-group name="buildingCooledControl" class="form-control" required
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.buildingCooledInd" fxLayoutGap="24px">
+                      <mat-radio-button class="support-text" [value]="true">{{'order.yes' | translate}}
+                      </mat-radio-button>
+                      <mat-radio-button class="support-text" [value]="false">{{'order.no' | translate}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="15px">
+                    <mat-label class="support-text">{{'order.buildingWithBasement' | translate}} <span
+                        class="red">*</span></mat-label>
+                    <mat-radio-group name="buildingWithBasementControl" class="form-control" required fxLayout="column"
+                      fxLayoutGap="12px" [(ngModel)]="orderEnergyPerformanceRequestNew.buildingWithBasement">
+                      <div fxLayoutGap="24px">
+                        <mat-radio-button class="support-text" value="Yes">{{'order.yes' | translate}}
+                        </mat-radio-button>
+                        <mat-radio-button class="support-text" value="No">{{'order.no' | translate}}
+                        </mat-radio-button>
+                      </div>
+                      <div>
+                        <mat-radio-button class="support-text" value="Partially">{{'order.partially' | translate}}
+                        </mat-radio-button>
+                      </div>
+                    </mat-radio-group>
+                  </div>
+                  <div fxLayout="column" fxLayoutGap="15px">
+                    <mat-label class="support-text">{{'order.basementheated' | translate}} <span class="red">*</span>
+                    </mat-label>
+                    <mat-radio-group name="basementHeatedControl" class="form-control" required fxLayoutGap="24px"
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.basementHeatedInd">
+                      <mat-radio-button class="support-text" [value]="true">{{'order.yes' | translate}}
+                      </mat-radio-button>
+                      <mat-radio-button class="support-text" [value]="false">{{'order.no' | translate}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+
+              <mat-divider [vertical]="true">
+              </mat-divider>
+
+              <div fxFlex="30" fxLayout="column" fxLayoutGap="24px">
+                <div fxLayoutGap="24px">
+                  <h4 class="header-4 m-b-6">{{'order.heatingSystem' | translate}} <span class="red">*</span></h4>
+                  <p class="support-text">{{'order.psOne' | translate}}</p>
+
+                  <mat-radio-group name="heatingSystemControl" class="form-control" required
+                    [(ngModel)]="orderEnergyPerformanceRequestNew.heatingSystem" fxLayout="row" fxLayoutGap="24px">
+                    <mat-radio-button class="support-text m-b-4" value="F">{{'order.floorHeating' | translate}}
+                    </mat-radio-button>
+                    <mat-radio-button class="support-text m-b-4" value="C">{{'order.centralHeating' | translate}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+
+                <div>
+                  <h4 class="header-4 m-b-6">{{'order.energySource' | translate}} <span class="red">*</span></h4>
+                  <p class="support-text">{{'order.psOne' | translate}}</p>
+
+                  <mat-radio-group name="energySourceControl" class="form-control" required
+                    [(ngModel)]="orderEnergyPerformanceRequestNew.energySource" fxLayout="row" fxLayoutGap="12px">
+                    <div fxLayout="column" fxLayoutGap="12px">
+                      <mat-radio-button class="support-text m-b-4" value="Heating Oil">{{'order.heatingOil' |
+                        translate}}</mat-radio-button>
+                      <mat-radio-button class="support-text m-b-4" value="Liquid Gas">{{'order.liquidGas' |
+                        translate}}
+                      </mat-radio-button>
+                      <mat-radio-button class="support-text m-b-4" value="District Heating">{{'order.districtHeating'
+                        |
+                        translate}}</mat-radio-button>
+                      <mat-radio-button class="support-text m-b-4" value="Electricity">{{'order.electricity' |
+                        translate}}</mat-radio-button>
+                    </div>
+
+                    <div fxLayout="column" fxLayoutGap="12px">
+                      <mat-radio-button class="support-text m-b-4" value="Natural Gas">{{'order.naturalGas' |
+                        translate}}</mat-radio-button>
+                      <mat-radio-button class="support-text m-b-4" value="Wood">{{'order.wood' | translate}}
+                      </mat-radio-button>
+                      <mat-radio-button class="support-text m-b-4" value="Heat Pump">{{'order.heatPump' | translate}}
+                      </mat-radio-button>
+                    </div>
+                  </mat-radio-group>
+                </div>
+                <div>
+                  <h4 class="header-4 m-b-6">{{'order.airCondition' | translate}}<span class="red"> *</span></h4>
+                  <p class="support-text">{{'order.isAirConditionAvailable' | translate}}</p>
+
+                  <mat-radio-group name="airconditionControl" class="form-control" required
+                    (change)="valueChange($event)" [(ngModel)]="orderEnergyPerformanceRequestNew.airConditionerInd"
+                    fxLayout="row" fxLayoutGap="12px">
+                    <div fxLayout="column" fxLayoutGap="12px">
+                      <mat-radio-button class="support-text m-b-4" [value]="true"> {{'order.yes' | translate}}
+                      </mat-radio-button>
+
+                    </div>
+
+                    <div fxLayout="column" fxLayoutGap="12px">
+                      <mat-radio-button class="support-text m-b-4" [value]="false"> {{'order.no' | translate}}
+                      </mat-radio-button>
+
+                    </div>
+                  </mat-radio-group>
+                </div>
+                <div *ngIf="showNextServiceInput">
+                  <mat-form-field appearance="standard" class="placeholder-text-1 ">
+                    <mat-label>{{'order.nextServiceDate' | translate}}</mat-label>
+                    <input required name="nextServiceDate" matInput [matDatepicker]="pickerapp"
+                      [(ngModel)]="orderEnergyPerformanceRequestNew.nextServiceDate" placeholder="dd-mm-yy">
+                    <mat-datepicker-toggle matSuffix [for]="pickerapp"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerapp></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+
+            </div>
+            <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+              <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                {{'account.cancel' | translate}}
+              </button>
+              <button (click)="stepper('STEP_3')" [disabled]="!firstForm.form.valid" mat-button
+                class="primary-green-button">
+                {{'order.next' | translate}}
+              </button>
+              <br />
+            </div>
+          </div>
+        </form>
+
+        <!-- STEP 3 -->
+        <form #secondForm="ngForm">
+          <div class="p-b-4 p-t-4 form-group" [ngClass]="{ 'is-hidden': currentStep != 'STEP_3' }">
+            <div>
+              <div fxLayout="column" fxLayoutGap="20px">
+                <!-- div for energy certificate tables -->
+                <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="35px" fxFlex>
+                  <div fxFlex="60">
+                    <h4 class="header-4 m-l-15">{{'order.consumptionForTE' | translate}}</h4>
+                    <div class="mat-card-content-overflow table-align">
+                      <table #thermalEnergyConsumptionTable [dataSource]="thermalEnergyTableDataSource" mat-table
+                        class="full-width-table ">
+                        <ng-container matColumnDef="period">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.period' |
+                            translate}} <span class="red">*</span></th>
+                          <td class="dateRange align-c" mat-cell *matCellDef="let row; let i = index"
+                            style="overflow: visible;">
+                            <mat-form-field appearance="outline" (click)="picker.open()">
+                              <mat-date-range-input [rangePicker]="picker">
+                                <input matStartDate placeholder="Start date" name="thermalPeriodControl{{i}}"
+                                  [(ngModel)]="thermalArray[i].startDate" required>
+                                <input matEndDate placeholder="End date" name="thermalPeriodControlNew{{i}}"
+                                  [(ngModel)]="thermalArray[i].endDate" required>
+                              </mat-date-range-input>
+                              <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+
+                            <!-- <input class="mat-custom-period-field form-control" matInput placeholder="Select Period" [rangePicker]="picker" (click)="picker.open()">
+                              <mat-date-range-picker #picker></mat-date-range-picker> -->
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amount">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.amount' |
+                            translate}} <span class="red">*</span></th>
+                          <td class="align-c" mat-cell *matCellDef="let row; let i = index">
+                            <div class="mat-custom-table-form-field">
+                              <input [ngClass]="{'errorInput' : getErrorThermalHotWater(i, 'thermalAmountControl')}"
+                                numbersOnly="true" maxlength="15" name="thermalAmountControl{{i}}" class="form-control"
+                                required matInput
+                                [(ngModel)]="orderEnergyPerformanceRequestNew.thermalEnergy[i].amount" />
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="unit">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.unit' | translate}}
+                            <span class="red">*</span>
+                          </th>
+                          <td class="align-c" mat-cell *matCellDef="let row; let i = index">
+                            <div class="mat-custom-table-form-field">
+                              <input appAlphaNumericOnly maxlength="10" name="thermalUnitControl{{i}}"
+                                [ngClass]="{'errorInput' : getErrorThermalHotWater(i, 'thermalUnitControl')}"
+                                class="form-control" required matInput
+                                [(ngModel)]="orderEnergyPerformanceRequestNew.thermalEnergy[i].unit" />
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="vacanyPercentage">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.vacancyIn' |
+                            translate}} %
+                            <span class="red">*</span>
+                          </th>
+                          <td class="align-c" mat-cell *matCellDef="let row; let i = index">
+                            <div class="mat-custom-table-form-field">
+                              <input maxlength="5" name="thermalVacancyControl{{i}}"
+                                [ngClass]="{'errorInput' : getErrorThermalHotWater(i, 'thermalVacancyControl')}"
+                                class="form-control" required matInput
+                                [(ngModel)]="orderEnergyPerformanceRequestNew.thermalEnergy[i].vacancyPercentage" />
+                            </div>
+                          </td>
+                        </ng-container>
+
+
+
+                        <tr mat-header-row *matHeaderRowDef="thermalEnergyDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: thermalEnergyDisplayedColumns;"></tr>
+                      </table>
+                    </div>
+                  </div>
+
+                  <mat-divider [vertical]="true">
+                  </mat-divider>
+
+                  <div fxLayout="column" fxFlex="40" fxLayoutGap="24px">
+                    <h4 class="header-4 m-l-15">{{'order.ahwUsed' | translate}}</h4>
+                    <div class="mat-card-content-overflow table-align">
+                      <table #hotWaterUsedTable [dataSource]="hotWaterTableDataSource" mat-table fxFlex
+                        class="full-width-table">
+                        <ng-container matColumnDef="period">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.period' |
+                            translate}} <span class="red">*</span></th>
+                          <td class="dateRange align-c" mat-cell *matCellDef="let row; let i = index">
+                            <mat-form-field appearance="outline" (click)="picker.open()">
+                              <mat-date-range-input [rangePicker]="picker">
+                                <input matStartDate placeholder="Start date" name="hotPeriodControl{{i}}"
+                                  [(ngModel)]="hotWaterArray[i].startDate" required>
+                                <input matEndDate placeholder="End date" name="hotPeriodControlNew{{i}}"
+                                  [(ngModel)]="hotWaterArray[i].endDate" required>
+                              </mat-date-range-input>
+                              <mat-date-range-picker #picker></mat-date-range-picker>
+                            </mat-form-field>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="amount">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.amount' |
+                            translate}} <span class="red">*</span></th>
+                          <td class="align-c" mat-cell *matCellDef="let row; let i = index">
+                            <div class="mat-custom-table-form-field">
+                              <input numbersOnly="true" maxlength="15" name="hotAmountControl{{i}}"
+                                [ngClass]="{'errorInput' : getErrorThermalHotWater(i, 'hotAmountControl')}"
+                                class="form-control" required matInput
+                                [(ngModel)]="orderEnergyPerformanceRequestNew.hotWater[i].amount" />
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="unit">
+                          <th class="header-4 align-c" mat-header-cell *matHeaderCellDef>{{'order.unit' | translate}}
+                            <span class="red">*</span>
+                          </th>
+                          <td class="align-c" mat-cell *matCellDef="let row; let i = index">
+                            <div class="mat-custom-table-form-field">
+                              <input maxlength="10" name="hotUnitControl{{i}}"
+                                [ngClass]="{'errorInput' : getErrorThermalHotWater(i, 'hotUnitControl')}"
+                                class="form-control" required matInput
+                                [(ngModel)]="orderEnergyPerformanceRequestNew.hotWater[i].unit" />
+                            </div>
+                          </td>
+                        </ng-container>
+
+
+
+                        <tr mat-header-row *matHeaderRowDef="hotWaterUsedDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: hotWaterUsedDisplayedColumns;"></tr>
+                      </table>
+                    </div>
+                    <div class="m-l-15" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="start center">
+                      <mat-label class="support-text">{{'order.hotWaterGeneration' | translate}} <span
+                          class="red">*</span></mat-label>
+                      <mat-radio-group name="hotWaterGenerationControl" class="form-control" required
+                        [(ngModel)]="orderEnergyPerformanceRequestNew.hotWaterIncludedInd" fxLayoutGap="12px">
+                        <mat-radio-button class="support-text" [value]="true"> {{'order.yes' | translate}}
+                        </mat-radio-button>
+                        <mat-radio-button class="support-text" [value]="false"> {{'order.no' | translate}}
+                        </mat-radio-button>
+                      </mat-radio-group>
+
+                    </div>
+                    <mat-form-field class="smaller-input placeholder-text-1 m-b-0" appearance="standard">
+                      <mat-label>{{'order.averageTemperature' | translate}}</mat-label>
+                      <input numbersOnly="true" name="hotWaterTemperature" class="form-control" required
+                        onkeypress='return event.charCode >= 48 && event.charCode <= 57' min="0"
+                        [(ngModel)]="orderEnergyPerformanceRequestNew.hotWaterTemperature" matInput placeholder="60" />
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div fxLayout="row" fxLayout.lt-lg="column">
+                  <!-- div for Renovation Measure -->
+                  <div fxLayout="column" class="m-l-15">
+                    <h4 class="header-4">{{'order.renovationMeasure' | translate}}</h4>
+                    <div fxLayout="row wrap" fxLayoutGap="70px" fxLayoutAlign="start center">
+                      <mat-form-field class="smaller-input placeholder-text-1" appearance="standard">
+                        <mat-label>{{'order.facadeInsulationYear' | translate}}</mat-label>
+                        <input onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4"
+                          name="facadeControl" class="form-control" required pattern="[0-9]{4}"
+                          [(ngModel)]="orderEnergyPerformanceRequestNew.facadeInsulationYear" matInput
+                          placeholder="1999" />
+                      </mat-form-field>
+
+                      <mat-form-field class="smaller-input placeholder-text-1" appearance="standard">
+                        <mat-label>{{'order.roofInsulationYear' | translate}}</mat-label>
+                        <input onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4"
+                          name="roofControl" class="form-control" required pattern="[0-9]{4}"
+                          [(ngModel)]="orderEnergyPerformanceRequestNew.roofInsulationYear" matInput
+                          placeholder="1999" />
+                      </mat-form-field>
+
+                      <mat-form-field class="smaller-input placeholder-text-1" appearance="standard">
+                        <mat-label>{{'order.solarSystemYear' | translate}}</mat-label>
+                        <input onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4"
+                          name="solarControl" class="form-control" required pattern="[0-9]{4}"
+                          [(ngModel)]="orderEnergyPerformanceRequestNew.solarSystemYear" matInput placeholder="1999" />
+                      </mat-form-field>
+
+
+                    </div>
+                    <div fxLayout="row wrap" fxLayoutGap="70px" fxLayoutAlign="start center">
+                      <mat-form-field class="smaller-input placeholder-text-1" appearance="standard">
+                        <mat-label>{{'order.renovationWindowsYear' | translate}}</mat-label>
+                        <input onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4"
+                          name="renovationWindowsYear" class="form-control" required pattern="[0-9]{4}"
+                          [(ngModel)]="orderEnergyPerformanceRequestNew.renovationWindowsYear" matInput
+                          placeholder="1999" />
+                      </mat-form-field>
+
+                      <mat-form-field class="smaller-input placeholder-text-1" appearance="standard">
+                        <mat-label> {{'order.insulationCeilingYear' | translate}}</mat-label>
+                        <input onkeypress='return event.charCode >= 48 && event.charCode <= 57' maxlength="4"
+                          name="insulationCeilingYear" class="form-control" required pattern="[0-9]{4}"
+                          [(ngModel)]="orderEnergyPerformanceRequestNew.insulationCeilingYear" matInput
+                          placeholder="1999" />
+                      </mat-form-field>
+
+                    </div>
+                  </div>
+
+                  <div fxFlex></div>
+
+                  <!-- div for cancel and next button -->
+                  <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+                    <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                      {{'account.cancel' | translate}}
+                    </button>
+                    <button (click)="stepper('STEP_4')" mat-button [disabled]="!secondForm.form.valid"
+                      class="primary-green-button">
+                      {{'order.next' | translate}}
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- step 4 -->
+        <div class="p-b-4 p-t-4" [ngClass]="{ 'is-hidden': currentStep != 'STEP_1' }" fxLayout="column"
+          fxLayoutGap="40px">
+
+          <div fxLayout="row" fxLayout.lt-lg="column" fxLayoutGap="24px">
+            <div fxLayout="column" fxLayoutGap="24px">
+
+              <h4 class="header-4">{{'order.theBuilding' | translate}}</h4>
+              <mat-radio-group>
+                <mat-radio-button checked>{{orderEnergyPerformanceRequestNew.buildingType}}</mat-radio-button>
+              </mat-radio-group>
+
+              <div fxLayout="row" fxLayoutGap="24px">
+                <div fxLayout="column">
+                  <h4 class="header-4">{{'order.renovationMeasure' | translate}}</h4>
+                  <div class=" mat-custom-extra-small-form-field" fxLayoutGap="5px">
+                    <p>{{'order.yearOfConstruction' | translate}}</p>
+                    <input [disabled]="isVacant" matInput [value]="orderEnergyPerformanceRequestNew.yearOfConstruction"
+                      placeholder="1999" />
+                  </div>
+
+                  <div class=" mat-custom-extra-small-form-field">
+                    <p>{{'order.renewalOfHeating' | translate}}</p>
+                    <input [disabled]="isVacant" matInput [value]="orderEnergyPerformanceRequestNew.renewalOfHeating"
+                      placeholder="2019" numbersOnly="true" />
+                  </div>
+
+                  <div class=" mat-custom-extra-small-form-field">
+                    <p>{{'order.noResidentialUnits' | translate}}</p>
+                    <input [disabled]="isVacant" matInput
+                      [value]="orderEnergyPerformanceRequestNew.noOfResidentialUnits" placeholder="5"
+                      numbersOnly="true" />
+                  </div>
+
+                </div>
+
+                <div fxLayout="column">
+
+                  <div class=" mat-custom-extra-small-form-field" fxLayoutGap="5px">
+                    <p>{{'order.yearOfHeating' | translate}}</p>
+                    <input [disabled]="isVacant" matInput [value]="orderEnergyPerformanceRequestNew.yearOfHeating"
+                      placeholder="2000" numbersOnly="true" />
+                  </div>
+                  <div class=" mat-custom-extra-small-form-field" fxLayoutGap="5px">
+                    <p>{{'order.yearOfHeating' | translate}}</p>
+                    <input [disabled]="isVacant" matInput [value]="orderEnergyPerformanceRequestNew.yearOfHeating"
+                      placeholder="2000" numbersOnly="true" />
+                  </div>
+                  <div class=" mat-custom-extra-small-form-field" fxLayoutGap="5px">
+                    <p>Insulation Ceiling Year</p>
+                    <input [disabled]="isVacant" matInput
+                      [value]="orderEnergyPerformanceRequestNew.insulationCeilingYear" placeholder="2000"
+                      numbersOnly="true" />
+                  </div>
+                  <div class=" mat-custom-extra-small-form-field" fxLayoutGap="5px">
+                    <p>Renovation Windows Year</p>
+                    <input [disabled]="isVacant" matInput
+                      [value]="orderEnergyPerformanceRequestNew.renovationWindowsYear" placeholder="2000"
+                      numbersOnly="true" />
+                  </div>
+
+                  <div class=" mat-custom-extra-small-form-field" fxLayoutGap="5px">
+                    <p class="mat-custom-field-margin">{{'order.heatableArea' | translate}} (m<sup>2</sup>)</p>
+                    <input [disabled]="isVacant" matInput [value]="orderEnergyPerformanceRequestNew.heatableUsableArea"
+                      placeholder="150" numbersOnly="true" />
+                  </div>
+
+                </div>
+              </div>
+
+              <div fxLayout="column" fxLayoutGap="18px">
+                <div fxLayout="row" fxLayoutGap="24px">
+                  <mat-label>{{'order.monumentProtection' | translate}}</mat-label>
+                  <mat-radio-group>
+                    <mat-radio-button checked> {{orderEnergyPerformanceRequestNew.monumentProtectionInd===true? 'Yes'
+                      :
+                      'No'}} </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+                <div fxLayout="row" fxLayoutGap="24px">
+                  <mat-label>{{'order.isBCool' | translate}}</mat-label>
+                  <mat-radio-group>
+                    <mat-radio-button checked> {{orderEnergyPerformanceRequestNew.buildingCooledInd===true? 'Yes' :
+                      'No'}} </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+
+            <mat-divider [vertical]="true">
+            </mat-divider>
+
+            <div fxLayout="column" fxLayoutGap="40px" fxLayoutAlign="center space-around">
+
+              <div fxLayout="row" fxLayoutGap="17px">
+                <mat-label>{{'order.buildingWithBasement' | translate}}</mat-label>
+                <mat-radio-group>
+                  <mat-radio-button checked> {{orderEnergyPerformanceRequestNew.buildingWithBasement}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div fxLayout="row" fxLayoutGap="52px">
+                <mat-label> {{'order.basementheated' | translate}}</mat-label>
+                <mat-radio-group>
+                  <mat-radio-button checked> {{orderEnergyPerformanceRequestNew.basementHeatedInd===true? 'Yes' :
+                    'No'}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div fxLayout="column">
+                <h4>{{'order.heatingSystem' | translate}}</h4>
+                <mat-radio-group>
+                  <mat-radio-button checked> {{orderEnergyPerformanceRequestNew.heatingSystem==='F'? 'Floor Heating' :
+                    'Central Heating'}} </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+              <div fxLayout="column">
+                <h4>{{'order.energySource' | translate}}</h4>
+                <mat-radio-group>
+                  <mat-radio-button checked> {{orderEnergyPerformanceRequestNew.energySource}} </mat-radio-button>
+                </mat-radio-group>
+              </div>
+
+            </div>
+
+            <mat-divider [vertical]="true">
+            </mat-divider>
+
+            <div fxLayout="column" fxFlex>
+              <div fxLayout="column">
+                <h4 class="header-4">{{'order.consumptionForTE' | translate}}</h4>
+
+                <!-- Here for thermal energy -->
+                <div class="mat-card-content-overflow" style="max-height: 170px;">
+                  <table #thermalEnergyConsumptionTable [dataSource]="orderEnergyPerformanceRequestNew.thermalEnergy"
+                    mat-table class="full-width-table">
+                    <ng-container matColumnDef="period">
+                      <th mat-header-cell *matHeaderCellDef>{{'order.period' | translate}}</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field mat-custom-period-field">
+                          <input class="mat-custom-period-field" disabled matInput value="{{row.period}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef>{{'order.amount' | translate}}</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field">
+                          <input numbersOnly="true" class="mat-custom-summary-field" disabled matInput
+                            value="{{row.amount}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="unit">
+                      <th mat-header-cell *matHeaderCellDef>{{'order.unit' | translate}}</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field">
+                          <input appAlphaNumericOnly maxlength="10" class="mat-custom-summary-field" disabled matInput
+                            value="{{row.unit}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="vacanyPercentage">
+                      <th mat-header-cell *matHeaderCellDef>Vacancy in %</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field">
+                          <input maxlength="5" class="mat-custom-summary-field" disabled matInput
+                            value="{{row.vacancyPercentage}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="thermalEnergyDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: thermalEnergyDisplayedColumns;"></tr>
+                  </table>
+                </div>
+
+              </div>
+
+              <div fxLayout="column">
+                <h4 class="header-4 m-t-8">{{'order.ahwUsed' | translate}}</h4>
+
+                <!-- here for hot water -->
+                <div class="mat-card-content-overflow" style="max-height: 100px;">
+                  <table #hotWaterUsedTable [dataSource]="orderEnergyPerformanceRequestNew.hotWater" mat-table
+                    class="full-width-table">
+                    <ng-container matColumnDef="period">
+                      <th mat-header-cell *matHeaderCellDef>{{'order.period' | translate}}</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field mat-custom-period-field">
+                          <input class="mat-custom-period-field" disabled matInput value="{{row.period}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="amount">
+                      <th mat-header-cell *matHeaderCellDef>{{'order.amount' | translate}}</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field">
+                          <input disabled matInput value="{{row.amount}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="unit">
+                      <th mat-header-cell *matHeaderCellDef>{{'order.unit' | translate}}</th>
+                      <td mat-cell *matCellDef="let row; let i = index">
+                        <div class="mat-custom-table-form-field">
+                          <input maxlength="10" disabled matInput value="{{row.unit}}" />
+                        </div>
+                      </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="hotWaterUsedDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: hotWaterUsedDisplayedColumns;"></tr>
+                  </table>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+          <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+            <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+              {{'account.cancel' | translate}}
+            </button>
+            <button (click)="stepper('STEP_5')" mat-button class="primary-green-button">
+              {{'order.next' | translate}}
+            </button>
+          </div>
+
+
+        </div>
+
+        <!-- Step 5 -->
+        <form #confirmForm="ngForm">
+          <div class="p-t-4 p-b-4 form-group" [ngClass]="{ 'is-hidden': currentStep != 'STEP_5' }" fxLayout="column"
+            fxLayoutGap="14px">
+
+            <div class="you-have-ordered-text p-t-4 ">
+              <p>{{'order.tmfEnergyCertificate' | translate}}
+                <br>
+                <br>
+
+                {{'order.checkMsg' | translate}}
+              </p>
+
+
+            </div>
+            <mat-checkbox name="termsControl" required [(ngModel)]="orderEnergyPerformanceRequestNew.termsInd"
+              class="p-t-8 form-control support-text">{{'order.termsMessagePart1' | translate}} <a
+                (click)="downloadPDF()">{{'order.termsMessagePart2' |
+                translate}}</a><span class="red">*</span>
+            </mat-checkbox>
+            <mat-checkbox class="form-control support-text" name="costsControl" required
+              [(ngModel)]="orderEnergyPerformanceRequestNew.costsInd">{{'order.certificateCostMsg' | translate}}
+              {{'order.priceList' | translate}} <span class="red">*</span>
+            </mat-checkbox>
+            <mat-checkbox class="form-control support-text" name="dataControl" required
+              [(ngModel)]="orderEnergyPerformanceRequestNew.dataProtectionInd">
+              {{'order.dataProtectionMessage' | translate}} <span class="red">*</span>
+            </mat-checkbox>
+
+
+            <div fxLayout="row" fxLayoutGap="5px" fxLayoutAlign="end end">
+              <button (click)="cancelOrder()" mat-button class="primary-transparent-button">
+                {{'account.cancel' | translate}}
+              </button>
+              <button (click)="submitOrder()" [disabled]="!confirmForm.form.valid" mat-button
+                class="primary-green-button">
+                {{'order.confirm' | translate}}
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Step 6 -->
+        <div class="p-t-16 p-b-8" [ngClass]="{ 'is-hidden': currentStep != 'STEP_6' }" fxLayout="column"
+          fxLayoutGap="40px">
+
+          <div class="confirm-message-wrapper">
+            <div class="message-with-icon-wrapper" fxLayoutAlign="center center" fxLayoutGap="24px">
+
+              <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M43.7508 25.1461V27.0836C43.7455 36.3101 37.6722 44.4341 28.8244 47.0501C19.9766 49.6661 10.462 46.1509 5.44026 38.4108C0.418511 30.6708 1.0859 20.5495 7.08051 13.5359C13.0751 6.52218 22.9689 4.2868 31.3966 8.04196"
+                  stroke="#00A253" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M45.8327 8.33301L22.916 31.2497L16.666 24.9997" stroke="#00A253" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span class="message">{{'order.orderConfirmationMessage' | translate}}</span>
+
+            </div>
+            <div class="confirmation-message-text p-t-8">
+              <p>{{'order.receivedOrder' | translate}}
+                <br>
+                <br>
+                {{'order.emailMessage' | translate}}
+                <br>
+                <br>
+                -- {{'order.tehaServiceTeam' | translate}}
+              </p>
+
+            </div>
+          </div>
+
+
+
+          <div class="p-t-8" fxFlex fxLayoutAlign="end center">
+            <button (click)="backToOrders()" mat-button class="primary-green-button">{{'order.backToOrders' |
+              translate}}</button>
+          </div>
+        </div>
+
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

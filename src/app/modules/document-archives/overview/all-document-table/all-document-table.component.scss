@@ -1,0 +1,108 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+
+
+
+table {
+  width: 100%;
+
+  th {
+    min-width: auto;
+    text-align: left;
+    word-wrap: break-word;
+    span.right-prop {
+      display: block;
+      width: 170px;
+      text-align: right !important;
+    }
+    span.center-prop {
+      display: block;
+      width: 170px;
+      text-align: center !important;
+    }
+    span.right {
+      display: block;
+      width: 95px;
+      text-align: right !important;
+    }
+    span.left {
+      display: block;
+      width: 100px;
+      text-align: left !important;
+    }
+    span.left-title {
+      display: block;
+      width: 200px;
+      text-align: left !important;
+    }
+    span.center {
+      display: block;
+      width: 85px;
+      text-align: center !important;
+    }
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    min-height: 75px;
+    text-align: left;
+    span.right-prop {
+      display: block;
+      width: 170px;
+      text-align: right !important;
+    }
+    span.center-prop {
+      display: block;
+      width: 170px;
+      text-align: center !important;
+    }
+    span.right {
+      display: block;
+      width: 85px;
+      text-align: right !important;
+    }
+    span.left {
+      display: block;
+      width: 100px;
+      text-align: left !important;
+    }
+    span.left-title {
+      display: block;
+      width: 200px;
+      text-align: left !important;
+    }
+    span.center {
+      display: block;
+      width: 85px;
+      text-align: center !important;
+    }
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+
+  .dangerHighlight {
+    color: red;
+  }
+}
+
+
+.menuFilterForm {
+  padding: 1vw;
+}
+
+.selected-filter-icon {
+  color: $primary;
+}
+.menu-button {
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
+}
+
+.cross-icon {
+  cursor: pointer
+}
+

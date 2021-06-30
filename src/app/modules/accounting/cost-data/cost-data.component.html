@@ -1,0 +1,1275 @@
+<mat-accordion class="teams-accord font-resp">
+    <form #costDataForm="ngForm">
+        <mat-expansion-panel [expanded]="costType=='energy'" class="m-0" (opened)="openExpension('energy',true)"
+            (closed)="openExpension('energy',false)">
+            <mat-expansion-panel-header fxLayout="row">
+                <mat-panel-title fxLayout="row" fxLayoutAlign="start center">
+                    <span class="m-l-10 header-3" [ngClass]="{'costTypeError' : haveError('energy')}">{{'accounting.energyCost' | translate}}</span>
+                    <span class="p-l-3 placeholder-text-1">{{'accounting.enteries' |
+                        translate}}: ({{getFilledCostConcepts('energy')}})</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutGap="15px" class="p-l-6" fxLayoutAlign="start center">
+                        <span class="header-4">{{'accounting.grossAmount' | translate}}: <span
+                                class="placeholder-text-1">{{totalNetAmount('energy') | germanDecimal }} €</span></span>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <table class="m-b-10">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 200px;">{{'accounting.costConcept' | translate}}</th>
+                        <th>{{'order.unit' | translate}}</th>
+                        <th>{{'accounting.consumption' | translate}}</th>
+                        <th>{{'accounting.amountGross' | translate}} <span class="text-red">*</span></th>
+                        <th>{{'accounting.vat' | translate}}% <span class="text-red">*</span></th>
+                        <th>{{'accounting.netAmount' | translate}}</th>
+                        <th>{{'documentArchives.dateOfInvoice' | translate}} <span class="text-red">*</span></th>
+                        <th>{{'accounting.lastConsumption' | translate}}</th>
+                        <th colspan="2">{{'accounting.uploadInvoice' | translate}}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <ng-container *ngFor="let costConcept of costData?.cost?.energy;let x = index">
+                    <tbody class="m-t-5" [attr.id]="costConcept.conceptId">
+
+                        <ng-container *ngFor="let cost of costConcept.cost;let i = index">
+                            <tr [fxHide]="!costConcept.showRow && i != 0">
+                                <td *ngIf="i == 0">
+                                    <button *ngIf="costConcept.cost.length>1"
+                                        (click)="costConcept.showRow = costConcept.showRow ? false : true"
+                                        mat-icon-button>
+                                        <mat-icon *ngIf="costConcept?.showRow">expand_less</mat-icon>
+                                        <mat-icon *ngIf="!costConcept?.showRow">expand_more</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="i == 0 && !isInternal(costConcept.conceptCode) && (costConcept.conceptId < 1)" class="cost-select">
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="costConcept.description" matTooltipPosition="above"
+                                            (selectionChange)="onConceptTypeChange('energy',costConcept.conceptId,$event)"
+                                            [disabled]="(costConcept.conceptId>0)"
+                                            [required]="(costConcept.conceptId<0)" name="conceptCode{{x}}{{i}}"
+                                            [(ngModel)]="costConcept.conceptCode" class="support-text"
+                                            placeholder="">
+                                            <mat-option [disabled]="type.internalInd"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.energyCostType"
+                                                [value]="+type.code" [matTooltip]="type.value" matTooltipPosition="above">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                </td>
+                                <td *ngIf="i == 0 && (isInternal(costConcept.conceptCode) || (costConcept.conceptId>0))" class="customText">
+                                    <span class="textCostConcept">{{costConcept.conceptName}}</span>
+                                    <!-- <div><textarea  class="textCostConcept" readonly value="{{'accounting.internalTehaInvoice' | translate}}" name="{{costConcept.conceptId}}internalTehaInvoice{{x}}{{i}}"></textarea></div> -->
+                                </td>
+                                <td *ngIf="i != 0"></td>
+                                <td *ngIf="i != 0"></td>
+                                <td><input class="number" type="text" disabled name="units{{x}}{{i}}" [(ngModel)]="costConcept.units">
+                                </td>
+                                <td><input type="text" [readonly]="(readonlyInd)" required
+                                        (ngModelChange)="cost.consumption=$event; energyConsumptionWarning(costConcept.conceptId,cost.costId,'c')"
+                                        [ngClass]="{'errorInput' : getInputError('consumption',x, i),'number':true}"
+                                        name="consumption{{x}}{{i}}" [ngModel]="cost.consumption"
+                                        currencyMask
+                                        [options]="inputOptions"
+                                        numbersOnly="true" maxlength="15"></td>
+                                <td><input type="text" [readonly]="(readonlyInd)" required
+                                        (ngModelChange)="cost.amountBrutto=$event; calculateNetAmount('energy',cost.costId,costConcept.conceptId)"
+                                        [ngClass]="{'errorInput' : getInputError('amountBrutto',x, i),'number':true}"
+                                        name="amountBrutto{{x}}{{i}}" [ngModel]="cost.amountBrutto" numbersOnly="true"
+                                        maxlength="15"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text"  [readonly]="(readonlyInd)" required
+                                        (ngModelChange)="cost.vat=$event; calculateNetAmount('energy',cost.costId,costConcept.conceptId)"
+                                        [ngClass]="{'errorInput' : getInputError('vat',x, i),'number':true}" name="vat{{x}}{{i}}"
+                                        [ngModel]="cost.vat" numbersOnly="true"
+                                        currencyMask
+                                        [options]="{'nullable':true,prefix:'',precision: 0,align:'center',thousands: '.'}">
+                                </td>
+                                <td><input type="text" disabled [readonly]="(readonlyInd)" name="amountNetto{{x}}{{i}}"
+                                        [ngModel]="cost?.amountNetto" 
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td class="date-input">
+                                    <span class="datepicker-position"><input *ngIf="isSpecificEnergyCostConcept(costConcept.conceptCode)"
+                                        name="invoiceDate{{x}}{{i}}" [readonly]="(readonlyInd)"
+                                        [ngModel]="cost.invoiceDate"
+                                        (ngModelChange)="cost.invoiceDate= utility.setDateFormat($event);energyConsumptionWarning(costConcept.conceptId,cost.costId,'d')"
+                                        [matDatepicker]="picker" (click)="picker.open()" required
+                                        [ngClass]="{'errorInput' : getInputError('invoiceDate',x, i),'number':true}" readonly>
+                                    <input *ngIf="!isSpecificEnergyCostConcept(costConcept.conceptCode)"
+                                        name="invoiceDate{{x}}{{i}}" [readonly]="(readonlyInd)"
+                                        [min]="accountingService.currentBillingPeroid.from"
+                                        [max]="accountingService.currentBillingPeroid.to" [ngModel]="cost.invoiceDate"
+                                        (ngModelChange)="cost.invoiceDate= utility.setDateFormat($event);energyConsumptionWarning(costConcept.conceptId,cost.costId,'d')"
+                                        [matDatepicker]="picker" (click)="picker.open()" required
+                                        [ngClass]="{'errorInput' : getInputError('invoiceDate',x, i),'number':true}" readonly>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <svg (click)="picker.open()" class="svg-date" width="18" height="18"
+                                        style="left: 5px;" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                            fill="#565656" />
+                                    </svg></span>
+                                    
+                                </td>
+                                <td *ngIf="i == 0"><input name="totalAmountLastPeriod{{x}}{{i}}" type="text" disabled
+                                        [ngModel]="costConcept.totalAmountLastPeriod" readonly="true" class="number"
+                                        currencyMask
+                                        [options]="inputOptions"></td>
+                                <td *ngIf="i != 0"></td>
+                                <td class="image-upload">
+
+
+                                    <input [disabled]="readonlyInd" name="fileupload1{{x}}{{i}}" #fileInput
+                                        (click)="fileInput.value = null" id="file-input1{{x}}{{i}}" type="file" multiple
+                                        (change)="attachImage($event,costConcept.conceptId,'energy',cost.costId)" />
+                                    <label for="file-input1{{x}}{{i}}" mat-button>
+                                        <mat-icon [ngClass]="{'disableButton' : readonlyInd}" [matTooltip]="attachmenttooltipText" [matTooltipPosition]="'above'">
+                                            attach_file</mat-icon>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div *ngIf="cost.invoiceFileContents != null && cost.invoiceFileContents != [] && cost.invoiceFileContents?.length != 0" fxLayoutAlign="center center">
+                                        <span class="m-l-3">{{cost.invoiceFileContents?.length}}</span>
+                                            <mat-icon>upload_file</mat-icon>
+                                        <span title="Remove" style="cursor: pointer;"
+                                            (click)="cost.invoiceFileContents=[]" class="m-l-3">X</span>
+                                    </div>
+                                </td>
+                                <td *ngIf="i == 0">
+                                    <button [disabled]="readonlyInd"
+                                        (click)="addCostDetail('energy',costConcept.conceptCode,false,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <mat-icon [matTooltip]="addTooltip" [matTooltipPosition]="'above'">
+                                            add_circle_outline</mat-icon>
+                                    </button>
+                                    <button *ngIf="((costConcept.conceptId < 0) || (costConcept.deleteInd==true))" [disabled]="(readonlyInd)"
+                                        (click)="deleteCostConcept('energy' ,costConcept.conceptId)" mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                    <button [disabled]="(readonlyInd)" mat-button [matMenuTriggerFor]="menu" #menuTrigger mat-icon-button  [matTooltip]="(costConcept.comments=='' || costConcept.comments==null)?yourComment:costConcept.comments" [matTooltipPosition]="'above'">
+                                        <mat-icon>message</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <div fxLayout="row" class="p-3" fxLayoutAlign="center center">
+                                            
+                                            <textarea (click)="stopPropagation($event)"  [(ngModel)]="costConcept.comments" name="costComment{{x}}{{costConcept.conceptId}}{{i}}"></textarea>
+                                            <button mat-icon-button>
+                                                <mat-icon>done</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="deleteComment('energy',cost.costId,costConcept.conceptId)">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-menu>
+                                </td>
+                                <td *ngIf="i != 0">
+                                    <button [disabled]="(readonlyInd)"
+                                        (click)="deleteCost('energy' ,costConcept.conceptCode,cost.costId,i,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                </td>
+                                <td>
+                                    <label *ngIf="isToolTip('energy',costConcept.conceptId)" customToolTip
+                                        [contentTemplate]="tooltipTemplate" [originX]="'start'" [offsetX]="-300" mat-icon-button>
+                                        <mat-icon>info</mat-icon>
+                                    </label>
+                                </td>
+                                <td *ngIf="cost.warning">
+                                    <label customToolTip [originX]="'start'" [offsetX]="-300" [contentTemplate]="this[cost.warningTemplate]" mat-button>
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M22.4424 15.9532L15.4371 3.97762C14.7338 2.7584 13.4229 2.00166 12.0053 2C10.5875 1.99834 9.27626 2.75196 8.56422 3.97767L1.55628 15.9576C0.829606 17.1795 0.813166 18.7105 1.51703 19.9592C2.22148 21.2089 3.54051 21.9866 4.97525 21.9983L19.0131 21.9983C20.4628 21.9842 21.7793 21.2089 22.4836 19.9603C23.1871 18.7132 23.1714 17.1856 22.4424 15.9532ZM3.27894 16.9737L10.2921 4.98491C10.6472 4.37354 11.2986 3.99918 12.003 4C12.7073 4.00083 13.3584 4.37673 13.7077 4.98222L20.7186 16.9672C21.086 17.5885 21.0939 18.3533 20.7417 18.9777C20.389 19.603 19.7295 19.9913 19.0034 19.9984L4.98339 19.9983C4.27278 19.9925 3.61208 19.6029 3.25929 18.9771C2.90689 18.3519 2.91512 17.5855 3.27894 16.9737ZM12.0012 17.9983C12.5537 17.9983 13.0015 17.5506 13.0015 16.9983C13.0015 16.4461 12.5537 15.9983 12.0012 15.9983C11.4487 15.9983 11.0009 16.4461 11.0009 16.9983C11.0009 17.5506 11.4487 17.9983 12.0012 17.9983ZM13.0045 7.99835H11.0038V14.9983H13.0045V7.99835Z"
+                                                fill="#EAC400" />
+                                        </svg>
+                                    </label>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <ng-container>
+                            <tr *ngIf="showOilPalletsOrLiquidGasSection('OilPallets',costConcept.conceptCode)">
+                                <td colSpan="10">
+                                    <div fxLayout="row" class="m-t-3">
+                                        <div fxFlex="50" fxLayout="column">
+                                            <span class="p-l-10 header-4"
+                                                fxFlex="100">{{'accounting.energyCostEnteredOilPalletsMsg' |
+                                                translate}}. : *</span>
+                                            <div fxFlex="100" fxLayout="row" fxLayoutGap="50px" class="p-10">
+                                                <mat-form-field fxFlex="30" class="placeholder-text-1">
+                                                    <mat-label class="header-4">{{'accounting.openingBalanceQty' |
+                                                        translate}}</mat-label>
+                                                    <input matInput placeholder="" [readonly]="(readonlyInd)"
+                                                        name="openingQuantity{{x}}{{i}}"
+                                                        [ngModel]="costConcept.quantities.openingQuantity"
+                                                        numbersOnly="true" maxlength="15"
+                                                        currencyMask
+                                                        [options]="inputOptions">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="30" class="placeholder-text-1">
+                                                    <mat-label class="header-4">{{'accounting.closingStock' |
+                                                        translate}} </mat-label>
+                                                    <input matInput placeholder="" [readonly]="(readonlyInd)"
+                                                        name="closingQuantity{{x}}{{i}}" required
+                                                        [ngClass]="{'errorInput' : getInputError('closingQuantity',x, i)}"
+                                                        [ngModel]="costConcept.quantities.closingQuantity"
+                                                        numbersOnly="true" maxlength="15"
+                                                        currencyMask
+                                                        [options]="inputOptions">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="30" class="placeholder-text-1">
+                                                    <mat-label class="header-4">{{'accounting.openingBalanceGross' |
+                                                        translate}}</mat-label>
+                                                    <input matInput placeholder="" [readonly]="(readonlyInd)"
+                                                        name="openingAmount{{x}}{{i}}"
+                                                        [ngModel]="costConcept.quantities.openingAmount"
+                                                        currencyMask
+                                                        [options]="inputOptions">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr *ngIf="showOilPalletsOrLiquidGasSection('LiquidGas',costConcept.conceptCode)">
+                                <td colSpan="10">
+                                    <div fxLayout="row" class="m-t-3">
+                                        <div fxFlex="50" fxLayout="column">
+                                            <span class="p-l-10 header-4"
+                                                fxFlex="100">{{'accounting.energyCostEnteredLiquidGasMsg' | translate}}. : *</span>
+                                            <div fxFlex="100" fxLayout="row" fxLayoutGap="50px" class="p-10">
+                                                <mat-form-field fxFlex="30" class="placeholder-text-1">
+                                                    <mat-label class="header-4">{{'accounting.openingBalanceQty' |
+                                                        translate}}</mat-label>
+                                                    <input matInput placeholder="" [readonly]="(readonlyInd)"
+                                                        name="openingQuantitya{{x}}{{i}}"
+                                                        [ngModel]="costConcept.quantities.openingQuantity"
+                                                        numbersOnly="true" maxlength="15"
+                                                        currencyMask
+                                                        [options]="inputOptions">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="30" class="placeholder-text-1">
+                                                    <mat-label class="header-4">{{'accounting.closingStock' |
+                                                        translate}}</mat-label>
+                                                    <input matInput placeholder="" [readonly]="(readonlyInd)" required
+                                                        [ngClass]="{'errorInput' : getInputError('closingQuantitya',x, i)}"
+                                                        name="closingQuantitya{{x}}{{i}}"
+                                                        [ngModel]="costConcept.quantities.closingQuantity"
+                                                        numbersOnly="true" maxlength="15"
+                                                        currencyMask
+                                                        [options]="inputOptions">
+                                                </mat-form-field>
+                                                <mat-form-field fxFlex="30" class="placeholder-text-1">
+                                                    <mat-label class="header-4">{{'accounting.openingBalanceGross' |
+                                                        translate}}</mat-label>
+                                                    <input matInput placeholder="" [readonly]="(readonlyInd)"
+                                                        name="openingAmounta{{x}}{{i}}"
+                                                        [ngModel]="costConcept.quantities.openingAmount"
+                                                        currencyMask
+                                                        [options]="inputOptions">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+
+                </ng-container>
+
+            </table>
+
+
+            <button [disabled]="(costData?.cost?.energy?.length>0 || readonlyInd)" (click)="addNewCostConcept('energy')"
+                mat-flat-button class="header-4 text-blue">
+                <mat-icon class="m-r-3">add_circle_outline</mat-icon>{{'accounting.addCostConcept' | translate}}
+            </button>
+            <!-- <div> <textarea id="w3review" name="w3review" rows="4" cols="50">  
+            </textarea> </div> -->
+
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="costType=='heating'" class="m-0" (opened)="openExpension('heating',true)"
+            (closed)="openExpension('heating',false)">
+            <mat-expansion-panel-header fxLayout="row">
+                <mat-panel-title fxLayoutAlign="start center" fxLayout="row"  >
+                    <span class="m-l-10 header-3" [ngClass]="{'costTypeError' : haveError('heating')}">{{'accounting.heatingCost' | translate}}</span>
+                    <span class="p-l-3  placeholder-text-1">{{'accounting.enteries'
+                        | translate}}: ({{getFilledCostConcepts('heating')}})</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutGap="15px" class="p-l-6" fxLayoutAlign="start center">
+                        <span class="header-4">{{'accounting.grossAmount' | translate}}: <span
+                                class="placeholder-text-1">{{totalNetAmount('heating') | germanDecimal }} €</span></span>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <table class="m-b-10">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 200px;">{{'accounting.costConcept' | translate}}</th>
+                        <th>{{'accounting.amountGross' | translate}} <span class="text-red">*</span></th>
+                        <th>{{'accounting.vat' | translate}}% <span class="text-red">*</span></th>
+                        <th>{{'accounting.netAmount' | translate}}</th>
+                        <th>{{'accounting.wageShare' | translate}}</th>
+                        <th>{{'accounting.wageShareType' | translate}}</th>
+                        <th>{{'documentArchives.dateOfInvoice' | translate}} <span class="text-red">*</span></th>
+                        <!-- <th>{{'accounting.lastConsumption' | translate}}</th> -->
+                        <th colspan="2">{{'accounting.uploadInvoice' | translate}}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <ng-container *ngFor="let costConcept of costData?.cost?.heating;let x = index">
+                    <tbody class="m-t-5" [attr.id]=costConcept.conceptId>
+                        <ng-container *ngFor="let cost of costConcept.cost;let i = index">
+                            <tr [fxHide]="!costConcept.showRow && i != 0">
+                                <td *ngIf="i == 0">
+                                    <button *ngIf="costConcept.cost.length>1"
+                                        (click)="costConcept.showRow = costConcept.showRow ? false : true"
+                                        mat-icon-button>
+                                        <mat-icon *ngIf="costConcept?.showRow">expand_less</mat-icon>
+                                        <mat-icon *ngIf="!costConcept?.showRow">expand_more</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="i == 0 && !isInternal(costConcept.conceptCode) && (costConcept.conceptId < 0)">
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="costConcept.description" matTooltipPosition="above"
+                                            (selectionChange)="onConceptTypeChange('heating',costConcept.conceptId,$event)"
+                                            [required]="(costConcept.conceptId<0)" name="conceptCodea{{x}}{{i}}"
+                                            [(ngModel)]="costConcept.conceptCode" class="support-text"
+                                            placeholder="">
+                                            <mat-option [disabled]="type.internalInd"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.heatingCostType"
+                                                [value]="+type.code" [matTooltip]="type.value" matTooltipPosition="above">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                    <div><textarea class="textCostConcept" placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i == 0 && (isInternal(costConcept.conceptCode) || ((costConcept.conceptId>0)))" class="customText">
+                                    <span class="textCostConcept">{{costConcept.conceptName}}</span>
+                                    <div *ngIf="!isInternal(costConcept.conceptCode)" ><textarea [disabled]="cost.internalInd"
+                                        [readonly]="(readonlyInd)" class="textCostConcept" placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                    <div *ngIf="isInternal(costConcept.conceptCode)" ><textarea class="textCostConcept" readonly value="{{'accounting.internalTehaInvoice' | translate}}" name="{{costConcept.conceptId}}internalTehaInvoice{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i != 0"></td>
+                                <td *ngIf="i != 0"></td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        (ngModelChange)="cost.amountBrutto=$event; calculateNetAmount('heating',cost.costId,costConcept.conceptId)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('amountBruttoa',x, i),'number':true}"
+                                        name="amountBruttoa{{x}}{{i}}" [ngModel]="cost.amountBrutto" numbersOnly="true"
+                                        maxlength="15"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        (ngModelChange)="cost.vat=$event; calculateNetAmount('heating',cost.costId,costConcept.conceptId)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('vata',x, i),'number':true}" name="vata{{x}}{{i}}"
+                                        [ngModel]="cost.vat" numbersOnly="true"
+                                        currencyMask
+                                        [options]="{'nullable':true,prefix:'',precision: 0,align:'center',thousands: '.'}">
+                                </td>
+                                <td><input type="text" disabled
+                                        name="amountNettoa{{x}}{{i}}"
+                                        [ngModel]="cost?.amountNetto" currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        [ngClass]="{'errorInput' : (wageShareIsMax('heating',costConcept.conceptId ,cost.costId,'wageShareh',x,i)),'number':true}"
+                                        name="wageShareh{{x}}{{i}}" [(ngModel)]="cost.wageShare"
+                                        pattern="^(0*(\d{1,2}(\,\d+)?)|\,\d+|100(\,0+$)?)$"
+                                        numbersOnly="true"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td>
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="cost.wageShareDescription" matTooltipPosition="above"
+                                            [disabled]="costConcept.internalInd || cost.internalInd"
+                                            name="wageShareTypeh{{x}}{{i}}"
+                                            [readonly]="(readonlyInd || (cost.internalInd))"
+                                            [(ngModel)]="cost.wageShareTypeId" class="support-text"
+                                            [ngClass]="{'errorInput' : (isWageShareTypeError('heating',costConcept.conceptId ,cost.costId,'wageShareTypeh',x,i))}"
+                                            (selectionChange)="onWageShareTypeChange('heating',costConcept.conceptId,cost.costId,$event)"
+                                            placeholder="">
+                                            <mat-option 
+                                                [value]="null">{{'accounting.selectOption' | translate}}</mat-option>
+                                            <mat-option [matTooltip]="type.value" matTooltipPosition="above"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.wageShareType"
+                                                [value]="type.code">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                </td>
+                                <td class="date-input">
+                                    <span class="datepicker-position">
+                                    <input [disabled]="(costConcept.internalInd || cost.internalInd)"
+                                        [readonly]="(readonlyInd)" [min]="accountingService.currentBillingPeroid.from"
+                                        [max]="accountingService.currentBillingPeroid.to"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('invoiceDatea',x, i)}"
+                                        name="invoiceDatea{{x}}{{i}}" [ngModel]="cost.invoiceDate"
+                                        (ngModelChange)="cost.invoiceDate= utility.setDateFormat($event)"
+                                        [matDatepicker]="picker" (click)="picker.open()">
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <svg (click)="picker.open()" class="svg-date" width="18" height="18"
+                                        style="left: 5px;" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                            fill="#565656" />
+                                    </svg>
+                                </span>
+                                </td>
+                                <!-- <td *ngIf="i == 0"><input name="totalAmountLastPerioda{{x}}{{i}}" type="text" [(ngModel)]="costConcept.totalAmountLastPeriod"  readonly="true" ></td>
+                            <td *ngIf="i != 0"></td> -->
+                                <td class="image-upload">
+                                    <input
+                                    [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))"
+                                        name="fileupload2{{x}}{{i}}" #fileInput (click)="fileInput.value = null"
+                                        id="file-input2{{x}}{{i}}" type="file" multiple
+                                        (change)="attachImage($event,costConcept.conceptId,'heating',cost.costId)" />
+                                    <label for="file-input2{{x}}{{i}}" mat-button>
+                                        <mat-icon [ngClass]="{'disableButton' : (costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))}" [matTooltip]="attachmenttooltipText" [matTooltipPosition]="'above'">
+                                            attach_file</mat-icon>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div *ngIf="cost.invoiceFileContents != null && cost.invoiceFileContents != [] && cost.invoiceFileContents?.length != 0" fxLayoutAlign="center center">
+                                        <span 
+                                            class="m-l-3">{{cost.invoiceFileContents?.length}}</span>
+                                            <mat-icon>upload_file</mat-icon>
+                                        <span title="Remove" style="cursor: pointer;"
+                                            (click)="cost.invoiceFileContents=[]" class="m-l-3">X</span>
+                                    </div>
+                                </td>
+                                <td *ngIf="i == 0">
+                                    <button
+                                        (click)="addCostDetail('heating',costConcept.conceptCode,false,costConcept.conceptId)"
+                                        [disabled]="(costConcept.internalInd || readonlyInd)" mat-icon-button>
+                                        <mat-icon [matTooltip]="addTooltip" [matTooltipPosition]="'above'">
+                                            add_circle_outline</mat-icon>
+                                    </button>
+                                    <button *ngIf="((costConcept.conceptId < 0) || (costConcept.deleteInd==true))"
+                                        [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="deleteCostConcept('heating' ,costConcept.conceptId)" mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))" mat-button [matMenuTriggerFor]="menu" #menuTrigger mat-icon-button  [matTooltip]="(costConcept.comments=='' || costConcept.comments==null)?yourComment:costConcept.comments" [matTooltipPosition]="'above'">
+                                        <mat-icon>message</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <div fxLayout="row" class="p-3" fxLayoutAlign="center center">
+                                            <textarea (click)="stopPropagation($event)" [(ngModel)]="costConcept.comments" name="costComment{{x}}{{costConcept.conceptId}}{{i}}"></textarea>
+                                            <button mat-icon-button>
+                                                <mat-icon>done</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="deleteComment('heating',cost.costId,costConcept.conceptId)">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-menu>
+                                </td>
+                                <td *ngIf="i != 0">
+                                    <button (click)="deleteCost('heating' ,costConcept.conceptCode,cost.costId,i,costConcept.conceptId,costConcept.conceptId)"
+                                        [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd))"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                </td>
+                                <td>
+                                    <label *ngIf="isToolTip('heating',costConcept.conceptId)" customToolTip [originX]="'start'" [offsetX]="-150"
+                                        [contentTemplate]="tooltipTemplate" mat-icon-button>
+                                        <mat-icon>info</mat-icon>
+                                    </label>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </ng-container>
+            </table>
+
+            <button (click)="addNewCostConcept('heating')" [disabled]="readonlyInd" mat-flat-button
+                class="header-4 text-blue">
+                <mat-icon class="m-r-3">add_circle_outline</mat-icon>{{'accounting.addCostConcept' | translate}}
+            </button>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="costType=='heatingAdditional'" class="m-0"
+            (opened)="openExpension('heatingAdditional',true)" (closed)="openExpension('heatingAdditional',false)">
+            <mat-expansion-panel-header fxLayout="row">
+                <mat-panel-title fxLayoutAlign="start center" fxLayout="row"  >
+                    <span class="m-l-10 header-3" [ngClass]="{'costTypeError' : haveError('heatingAdditional')}">{{'accounting.additionalHeatingCost' | translate}}</span>
+                    <span 
+                        class="p-l-3  placeholder-text-1">{{'accounting.enteries' | translate}}:
+                        ({{getFilledCostConcepts('heatingAdditional')}})</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <span class="header-4">{{'accounting.grossAmount' | translate}}: <span
+                                class="placeholder-text-1">
+                                {{(totalNetAmount('heatingAdditional')) | germanDecimal }} €</span></span>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <table class="m-b-10">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 200px;">{{'accounting.costConcept' | translate}}</th>
+                        <th>{{'accounting.amountGross' | translate}} <span class="text-red">*</span></th>
+                        <th>{{'accounting.vat' | translate}}% <span class="text-red">*</span></th>
+                        <th>{{'accounting.netAmount' | translate}}</th>
+                        <th>{{'accounting.wageShare' | translate}}</th>
+                        <th>{{'accounting.wageShareType' | translate}}</th>
+                        <th>{{'documentArchives.dateOfInvoice' | translate}} <span class="text-red">*</span></th>
+                        <!-- <th>{{'accounting.lastConsumption' | translate}}</th> -->
+                        <th colspan="2">{{'accounting.uploadInvoice' | translate}}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <ng-container *ngFor="let costConcept of costData?.cost?.heatingAdditional;let x = index">
+                    <tbody class="m-t-5" [attr.id]=costConcept.conceptId>
+                        <ng-container *ngFor="let cost of costConcept.cost;let i = index">
+                            <tr [fxHide]="!costConcept.showRow && i != 0">
+                                <td *ngIf="i == 0">
+                                    <button *ngIf="costConcept.cost.length>1"
+                                        (click)="costConcept.showRow = costConcept.showRow ? false : true"
+                                        mat-icon-button>
+                                        <mat-icon *ngIf="costConcept?.showRow">expand_less</mat-icon>
+                                        <mat-icon *ngIf="!costConcept?.showRow">expand_more</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="i == 0 && !isInternal(costConcept.conceptCode) && (costConcept.conceptId < 1)">
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="costConcept.description" matTooltipPosition="above"
+                                            (selectionChange)="onConceptTypeChange('heatingAdditional',costConcept.conceptId,$event)"
+                                            [required]="(costConcept.conceptId>0)" name="conceptCodec{{x}}{{i}}"
+                                            class="support-text" placeholder=""
+                                            [(ngModel)]="costConcept.conceptCode">
+                                            <mat-option [disabled]="type.internalInd"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.additionalHeatingCostType"
+                                                [value]="+type.code"
+                                                [matTooltip]="type.value" matTooltipPosition="above">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                    <div><textarea class="textCostConcept"placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i == 0 && (isInternal(costConcept.conceptCode) || (costConcept.conceptId>0))" class="customText">
+                                    <span class="textCostConcept">{{costConcept.conceptName}}</span>
+                                    <div *ngIf="!isInternal(costConcept.conceptCode)" ><textarea [disabled]="cost.internalInd"
+                                        [readonly]="(readonlyInd)" class="textCostConcept" placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                    <div *ngIf="isInternal(costConcept.conceptCode)" ><textarea class="textCostConcept" readonly value="{{'accounting.internalTehaInvoice' | translate}}" name="{{costConcept.conceptId}}internalTehaInvoice{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i != 0"></td>
+                                <td *ngIf="i != 0"></td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        (ngModelChange)="cost.amountBrutto=$event; calculateNetAmount('heatingAdditional',cost.costId,costConcept.conceptId)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('amountBruttoc',x, i),'number':true}"
+                                        name="amountBruttoc{{x}}{{i}}" [ngModel]="cost.amountBrutto" numbersOnly="true"
+                                        maxlength="15"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        (ngModelChange)="cost.vat=$event; calculateNetAmount('heatingAdditional',cost.costId,costConcept.conceptId)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('vatc',x, i),'number':true}" name="vatc{{x}}{{i}}"
+                                        [ngModel]="cost.vat" numbersOnly="true"
+                                        currencyMask
+                                        [options]="{'nullable':true,prefix:'',precision: 0,align:'center',thousands: '.'}">
+                                </td>
+                                <td><input type="text" disabled
+                                        name="amountNettoc{{x}}{{i}}"
+                                        [ngModel]="cost?.amountNetto" currencyMask
+                                        [options]="inputOptions" >
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd ||cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        [ngClass]="{'errorInput' : (wageShareIsMax('heatingAdditional',costConcept.conceptId ,cost.costId,'wageSharec',x,i)),'number':true}"
+                                        name="wageSharec{{x}}{{i}}" [(ngModel)]="cost.wageShare"
+                                        pattern="^(0*(\d{1,2}(\,\d+)?)|\,\d+|100(\,0+$)?)$"
+                                        numbersOnly="true"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td>
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="cost.wageShareDescription" matTooltipPosition="above"
+                                            [disabled]="costConcept.internalInd || cost.internalInd"
+                                            [readonly]="(readonlyInd)"
+                                            name="wageShareTypec{{x}}{{i}}"
+                                            [readonly]="(readonlyInd || (cost.internalInd))"
+                                            [(ngModel)]="cost.wageShareTypeId" class="support-text"
+                                            [ngClass]="{'errorInput' : (isWageShareTypeError('heatingAdditional',costConcept.conceptId ,cost.costId,'wageShareTypec',x,i))}"
+                                            (selectionChange)="onWageShareTypeChange('heatingAdditional',costConcept.conceptId,cost.costId,$event)"
+                                            placeholder="">
+                                            <mat-option 
+                                                [value]="null">{{'accounting.selectOption' | translate}}</mat-option>
+                                            <mat-option
+                                                [matTooltip]="type.value" matTooltipPosition="above"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.wageShareType"
+                                                [value]="type.code">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                </td>
+
+                                <td class="date-input">
+                                    <span class="datepicker-position">
+                                    <input [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('invoiceDatec',x, i)}"
+                                        name="invoiceDatec{{x}}{{i}}"
+                                        [readonly]="(readonlyInd || (cost.internalInd))"
+                                        [min]="accountingService.currentBillingPeroid.from"
+                                        [max]="accountingService.currentBillingPeroid.to" [ngModel]="cost.invoiceDate"
+                                        (ngModelChange)="cost.invoiceDate= utility.setDateFormat($event)"
+                                        [matDatepicker]="picker" (click)="picker.open()" readonly>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <svg (click)="picker.open()" class="svg-date" width="18" height="18"
+                                        style="left: 5px;" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                            fill="#565656" />
+                                    </svg>
+                                </span>
+                                </td>
+                                <!-- <td *ngIf="i == 0"><input name="totalAmountLastPeriodc{{x}}{{i}}" type="text" [(ngModel)]="costConcept.totalAmountLastPeriod" ></td>
+                            <td *ngIf="i != 0"></td> -->
+                                <td class="image-upload">
+
+
+                                    <input
+                                    [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))"
+                                        name="fileupload4{{x}}{{i}}" #fileInput (click)="fileInput.value = null"
+                                        id="file-input4{{x}}{{i}}" type="file" multiple
+                                        (change)="attachImage($event,costConcept.conceptId,'heatingAdditional',cost.costId)" />
+                                    <label for="file-input4{{x}}{{i}}" mat-button>
+                                        <mat-icon [ngClass]="{'disableButton' : (costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))}" [matTooltip]="attachmenttooltipText" [matTooltipPosition]="'above'">
+                                            attach_file</mat-icon>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div *ngIf="cost.invoiceFileContents != null && cost.invoiceFileContents != [] && cost.invoiceFileContents?.length != 0" fxLayoutAlign="center center">
+                                        <span 
+                                            class="m-l-3">{{cost.invoiceFileContents?.length}}</span>
+                                            <mat-icon>upload_file</mat-icon>
+                                        <span title="Remove" style="cursor: pointer;"
+                                            (click)="cost.invoiceFileContents=[]" class="m-l-3">X</span>
+                                    </div>
+                                </td>
+                                <td *ngIf="i == 0">
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="addCostDetail('heatingAdditional',costConcept.conceptCode,false,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <mat-icon [matTooltip]="addTooltip" [matTooltipPosition]="'above'">
+                                            add_circle_outline</mat-icon>
+                                    </button>
+                                    <button *ngIf="((costConcept.conceptId < 0) || (costConcept.deleteInd==true))"
+                                        [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="deleteCostConcept('heatingAdditional' ,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))" mat-button [matMenuTriggerFor]="menu" #menuTrigger mat-icon-button  [matTooltip]="(costConcept.comments=='' || costConcept.comments==null)?yourComment:costConcept.comments" [matTooltipPosition]="'above'">
+                                        <mat-icon>message</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <div fxLayout="row" class="p-3" fxLayoutAlign="center center">
+                                            <textarea (click)="stopPropagation($event)" [(ngModel)]="costConcept.comments" name="costComment{{x}}{{costConcept.conceptId}}{{i}}"></textarea>
+                                            <button mat-icon-button>
+                                                <mat-icon>done</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="deleteComment('heatingAdditional',cost.costId,costConcept.conceptId)">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-menu>
+                                </td>
+                                <td *ngIf="i != 0">
+                                    <button
+                                        [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd))"
+                                        (click)="deleteCost('heatingAdditional' ,costConcept.conceptCode,cost.costId,i,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                </td>
+                                <td>
+                                    <label *ngIf="isToolTip('heatingAdditional',costConcept.conceptId)" customToolTip [originX]="'start'" [offsetX]="-150"
+                                        [contentTemplate]="tooltipTemplate" mat-icon-button>
+                                        <mat-icon>info</mat-icon>
+                                    </label>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </ng-container>
+            </table>
+
+            <button [disabled]="readonlyInd" (click)="addNewCostConcept('heatingAdditional')" mat-flat-button
+                class="header-4 text-blue">
+                <mat-icon class="m-r-3">add_circle_outline</mat-icon>{{'accounting.addCostConcept' | translate}}
+            </button>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="costType=='hotWaterAdditional'" class="m-0"
+            (opened)="openExpension('hotWaterAdditional',true)" (closed)="openExpension('hotWaterAdditional',false)">
+            <mat-expansion-panel-header fxLayout="row">
+                <mat-panel-title fxLayoutAlign="start center" fxLayout="row"  >
+                    <span class="m-l-10 header-3" [ngClass]="{'costTypeError' : haveError('hotWaterAdditional')}">{{'accounting.additionalHotWaterCost' | translate}}</span>
+                    <span class="p-l-3  placeholder-text-1">{{'accounting.enteries' | translate}}:
+                        ({{getFilledCostConcepts('hotWaterAdditional')}})</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <span class="header-4">{{'accounting.grossAmount' | translate}}: <span
+                                class="placeholder-text-1">{{(totalNetAmount('hotWaterAdditional')) | germanDecimal }} €</span></span>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <table class="m-b-10">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 200px;">{{'accounting.costConcept' | translate}}</th>
+                        <th>{{'accounting.amountGross' | translate}} <span class="text-red">*</span></th>
+                        <th>{{'accounting.vat' | translate}}% <span class="text-red">*</span></th>
+                        <th>{{'accounting.netAmount' | translate}}</th>
+                        <th>{{'accounting.wageShare' | translate}}</th>
+                        <th>{{'accounting.wageShareType' | translate}}</th>
+                        <th>{{'documentArchives.dateOfInvoice' | translate}} <span class="text-red">*</span></th>
+                        <!-- <th>{{'accounting.lastConsumption' | translate}}</th> -->
+                        <th>{{'accounting.uploadInvoice' | translate}}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <ng-container *ngFor="let costConcept of costData?.cost?.hotWaterAdditional;let x = index">
+                    <tbody class="m-t-5" [attr.id]=costConcept.conceptId>
+                        <ng-container *ngFor="let cost of costConcept.cost;let i = index">
+                            <tr [fxHide]="!costConcept.showRow && i != 0">
+                                <td *ngIf="i == 0">
+                                    <button *ngIf="costConcept.cost.length>1"
+                                        (click)="costConcept.showRow = costConcept.showRow ? false : true"
+                                        mat-icon-button>
+                                        <mat-icon *ngIf="costConcept?.showRow">expand_less</mat-icon>
+                                        <mat-icon *ngIf="!costConcept?.showRow">expand_more</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="i == 0 && !isInternal(costConcept.conceptCode) && (costConcept.conceptId < 1)">
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="costConcept.description" matTooltipPosition="above"
+                                            (selectionChange)="onConceptTypeChange('hotWaterAdditional',costConcept.conceptId,$event)"
+                                            [required]="(costConcept.conceptId>0)" name="conceptCoded{{x}}{{i}}"
+                                            [(ngModel)]="costConcept.conceptCode" class="support-text"
+                                            placeholder="">
+                                            <mat-option [disabled]="type.internalInd"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.additionalHotWaterCostType"
+                                                [value]="+type.code"  [matTooltip]="type.value" matTooltipPosition="above">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                    <div><textarea class="textCostConcept"placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i == 0 && (isInternal(costConcept.conceptCode) || (costConcept.conceptId>0))" class="customText">
+                                    <span class="textCostConcept">{{costConcept.conceptName}}</span>
+                                    <div *ngIf="!isInternal(costConcept.conceptCode)" ><textarea [disabled]="cost.internalInd"
+                                        [readonly]="(readonlyInd)" class="textCostConcept" placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                    <div *ngIf="isInternal(costConcept.conceptCode)" ><textarea class="textCostConcept" readonly value="{{'accounting.internalTehaInvoice' | translate}}" name="{{costConcept.conceptId}}internalTehaInvoice{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i != 0"></td>
+                                <td *ngIf="i != 0"></td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        (ngModelChange)="cost.amountBrutto=$event; calculateNetAmount('hotWaterAdditional',cost.costId,costConcept.conceptId)"
+                                        required [ngClass]="{'errorInput' : getInputError('amountBruttod',x, i),'number':true}"
+                                        name="amountBruttod{{x}}{{i}}" [ngModel]="cost.amountBrutto" numbersOnly="true"
+                                        maxlength="15"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        (ngModelChange)="cost.vat=$event; calculateNetAmount('hotWaterAdditional',cost.costId,costConcept.conceptId)"
+                                        required [ngClass]="{'errorInput' : getInputError('vatd',x, i),'number':true}"
+                                        name="vatd{{x}}{{i}}" [ngModel]="cost.vat" numbersOnly="true"
+                                        currencyMask
+                                        [options]="{'nullable':true,prefix:'',precision: 0,align:'center',thousands: '.'}">
+                                </td>
+                                <td><input type="text" disabled
+                                        name="amountNettod{{x}}{{i}}"
+                                        [ngModel]="cost?.amountNetto" currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        [ngClass]="{'errorInput' : (wageShareIsMax('hotWaterAdditional',costConcept.conceptId ,cost.costId,'wageShared',x,i)),'number':true}"
+                                        name="wageShared{{x}}{{i}}" [(ngModel)]="cost.wageShare"
+                                        pattern="^(0*(\d{1,2}(\,\d+)?)|\,\d+|100(\,0+$)?)$"
+                                        numbersOnly="true"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td>
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select  [matTooltip]="cost.wageShareDescription" matTooltipPosition="above"
+                                            [disabled]="costConcept.internalInd || cost.internalInd"
+                                            [readonly]="(readonlyInd)"
+                                            name="wageShareTyped{{x}}{{i}}"
+                                            [readonly]="(readonlyInd || (cost.internalInd))"
+                                            [(ngModel)]="cost.wageShareTypeId" class="support-text"
+                                            [ngClass]="{'errorInput' : (isWageShareTypeError('hotWaterAdditional',costConcept.conceptId ,cost.costId,'wageShareTyped',x,i))}"
+                                            (selectionChange)="onWageShareTypeChange('hotWaterAdditional',costConcept.conceptId,cost.costId,$event)"
+                                            placeholder="">
+                                            <mat-option 
+                                                [value]="null">{{'accounting.selectOption' | translate}}</mat-option>
+                                            <mat-option
+                                                [matTooltip]="type.value" matTooltipPosition="above"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.wageShareType"
+                                                [value]="type.code">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                </td>
+                                <!-- <td *ngIf="i != 0"></td> -->
+                                <td class="date-input">
+                                    <span  class="datepicker-position">
+                                    <input [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('invoiceDated',x, i)}"
+                                        name="invoiceDated{{x}}{{i}}"
+                                        [readonly]="(readonlyInd || (cost.internalInd))"
+                                        [min]="accountingService.currentBillingPeroid.from"
+                                        [max]="accountingService.currentBillingPeroid.to" [ngModel]="cost.invoiceDate"
+                                        (ngModelChange)="cost.invoiceDate= utility.setDateFormat($event)"
+                                        [matDatepicker]="picker" (click)="picker.open()" readonly>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <svg (click)="picker.open()" class="svg-date" width="18" height="18"
+                                        style="left: 5px;" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                            fill="#565656" />
+                                    </svg>
+                                </span>
+                                </td>
+                                <!-- <td *ngIf="i == 0"><input name="totalAmountLastPeriodd{{x}}{{i}}" type="text" [(ngModel)]="costConcept.totalAmountLastPeriod"  readonly="true" ></td>
+                            <td *ngIf="i != 0"></td> -->
+                                <td class="image-upload">
+
+
+                                    <input
+                                    [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))"
+                                        name="fileupload5{{x}}{{i}}" #fileInput (click)="fileInput.value = null"
+                                        id="file-input5{{x}}{{i}}" type="file" multiple
+                                        (change)="attachImage($event,costConcept.conceptId,'hotWaterAdditional',cost.costId)" />
+                                    <label for="file-input5{{x}}{{i}}" mat-button>
+                                        <mat-icon [ngClass]="{'disableButton' : (costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))}" [matTooltip]="attachmenttooltipText" [matTooltipPosition]="'above'">
+                                            attach_file</mat-icon>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div *ngIf="cost.invoiceFileContents != null && cost.invoiceFileContents != [] && cost.invoiceFileContents?.length != 0" fxLayoutAlign="center center">
+                                        <span 
+                                            class="m-l-3">{{cost.invoiceFileContents?.length}}</span>
+                                            <mat-icon>upload_file</mat-icon>
+                                        <span title="Remove" style="cursor: pointer;"
+                                            (click)="cost.invoiceFileContents=[]" class="m-l-3">X</span>
+                                    </div>
+                                </td>
+                                <td *ngIf="i == 0">
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="addCostDetail('hotWaterAdditional',costConcept.conceptCode,false,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <mat-icon [matTooltip]="addTooltip" [matTooltipPosition]="'above'">
+                                            add_circle_outline</mat-icon>
+                                    </button>
+                                    <button *ngIf="((costConcept.conceptId < 0) || (costConcept.deleteInd==true))"
+                                        [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="deleteCostConcept('hotWaterAdditional' ,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))" mat-button [matMenuTriggerFor]="menu" #menuTrigger mat-icon-button  [matTooltip]="(costConcept.comments=='' || costConcept.comments==null)?yourComment:costConcept.comments" [matTooltipPosition]="'above'">
+                                        <mat-icon>message</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <div fxLayout="row" class="p-3" fxLayoutAlign="center center">
+                                            <textarea (click)="stopPropagation($event)" [(ngModel)]="costConcept.comments" name="costComment{{x}}{{costConcept.conceptId}}{{i}}"></textarea>
+                                            <button mat-icon-button>
+                                                <mat-icon>done</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="deleteComment('hotWaterAdditional',cost.costId,costConcept.conceptId)">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-menu>
+                                </td>
+
+                                <td *ngIf="i != 0">
+                                    <button
+                                        [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd))"
+                                        (click)="deleteCost('hotWaterAdditional' ,costConcept.conceptCode,cost.costId,i,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                </td>
+                                <td>
+                                    <label *ngIf="isToolTip('hotWaterAdditional',costConcept.conceptId)" customToolTip [originX]="'start'" [offsetX]="-150"
+                                        [contentTemplate]="tooltipTemplate" mat-icon-button>
+                                        <mat-icon>info</mat-icon>
+                                    </label>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </ng-container>
+            </table>
+
+            <button [disabled]="readonlyInd" (click)="addNewCostConcept('hotWaterAdditional')" mat-flat-button
+                class="header-4 text-blue">
+                <mat-icon class="m-r-3">add_circle_outline</mat-icon>{{'accounting.addCostConcept' | translate}}
+            </button>
+        </mat-expansion-panel>
+        <mat-expansion-panel [expanded]="costType=='additionalCosts'" class="m-0"
+            (opened)="openExpension('additionalCosts',true)" (closed)="openExpension('additionalCosts',false)">
+            <mat-expansion-panel-header fxLayout="row">
+                <mat-panel-title fxLayoutAlign="start center" fxLayout="row"  >
+                    <span class="m-l-10 header-3" [ngClass]="{'costTypeError' : haveError('additionalCosts')}">{{'accounting.houseCost' | translate}}</span>
+                    <span class="p-l-3  placeholder-text-1">{{'accounting.enteries' | translate}}:
+                        ({{getFilledCostConcepts('additionalCosts')}})</span>
+                </mat-panel-title>
+                <mat-panel-description fxLayoutAlign="end center">
+                    <div fxLayout="row" fxLayoutGap="15px">
+                        <span class="header-4">{{'accounting.grossAmount' | translate}}: <span
+                                class="placeholder-text-1">{{(totalNetAmount('additionalCosts')) | germanDecimal }} €</span></span>
+                    </div>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <table class="m-b-10">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width: 200px;">{{'accounting.costConcept' | translate}}</th>
+                        <th>{{'accounting.amountGross' | translate}} <span class="text-red">*</span></th>
+                        <th>{{'accounting.vat' | translate}}% <span class="text-red">*</span></th>
+                        <th>{{'accounting.netAmount' | translate}}</th>
+                        <th>{{'accounting.wageShare' | translate}}</th>
+                        <th>{{'accounting.wageShareType' | translate}}</th>
+                        <th>{{'accounting.calculationKey' | translate}}</th>
+                        <th>{{'documentArchives.dateOfInvoice' | translate}} <span class="text-red">*</span></th>
+                        <!-- <th>{{'accounting.lastConsumption' | translate}}</th> -->
+                        <th>{{'accounting.uploadInvoice' | translate}}</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <ng-container *ngFor="let costConcept of costData?.cost?.additionalCosts[0].items;let x = index">
+                    <tbody class="m-t-5" [attr.id]=costConcept.conceptId>
+                        <ng-container *ngFor="let cost of costConcept.cost;let i = index">
+                            <tr [fxHide]="!costConcept.showRow && i != 0">
+                                <td *ngIf="i == 0">
+                                    <button *ngIf="costConcept.cost.length>1"
+                                        (click)="costConcept.showRow = costConcept.showRow ? false : true"
+                                        mat-icon-button>
+                                        <mat-icon *ngIf="costConcept?.showRow">expand_less</mat-icon>
+                                        <mat-icon *ngIf="!costConcept?.showRow">expand_more</mat-icon>
+                                    </button>
+                                </td>
+                                <td *ngIf="i == 0 && !isInternal(costConcept.conceptCode) && (costConcept.conceptId < 1)">
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="costConcept.description" matTooltipPosition="above"
+                                            (selectionChange)="onConceptTypeChange('additionalCosts',costConcept.conceptId,$event)"
+                                            [required]="(costConcept.conceptId>0)" name="conceptCodeb{{x}}{{i}}"
+                                            [(ngModel)]="costConcept.conceptCode" class="support-text"
+                                            placeholder="">
+                                            <mat-option [disabled]="type.internalInd"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.houseCostType"
+                                                [value]="+type.code"  [matTooltip]="type.value" matTooltipPosition="above">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                    <div><textarea class="textCostConcept" placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i == 0 && (isInternal(costConcept.conceptCode) || (costConcept.conceptId>0))" class="customText">
+                                    <span class="textCostConcept">{{costConcept.conceptName}}</span>
+                                    <div *ngIf="!isInternal(costConcept.conceptCode)" ><textarea [disabled]="cost.internalInd"
+                                        [readonly]="(readonlyInd)" class="textCostConcept" placeholder="{{'accounting.yourTextForBilling' | translate}}" [(ngModel)]="costConcept.description" name="{{costConcept.conceptId}}conceptComment{{x}}{{i}}"></textarea></div>
+                                    <div *ngIf="isInternal(costConcept.conceptCode)" ><textarea class="textCostConcept" readonly value="{{'accounting.internalTehaInvoice' | translate}}" name="{{costConcept.conceptId}}internalTehaInvoice{{x}}{{i}}"></textarea></div>
+                                </td>
+                                <td *ngIf="i != 0"></td>
+                                <td *ngIf="i != 0"></td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        (ngModelChange)="cost.amountBrutto=$event; calculateNetAmount('additionalCosts',cost.costId,costConcept.conceptId)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('amountBruttob',x, i),'number':true}"
+                                        name="amountBruttob{{x}}{{i}}" [ngModel]="cost.amountBrutto" numbersOnly="true"
+                                        maxlength="15"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        (ngModelChange)="cost.vat=$event; calculateNetAmount('additionalCosts',cost.costId,costConcept.conceptId)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('vatb',x, i),'number':true}" name="vatb{{x}}{{i}}"
+                                        [ngModel]="cost.vat" numbersOnly="true"
+                                        currencyMask
+                                        [options]="{'nullable':true,prefix:'',precision: 0,align:'center',thousands: '.'}">
+                                </td>
+                                <td><input type="text" disabled
+                                        name="amountNettob{{x}}{{i}}"
+                                        [ngModel]="cost?.amountNetto" currencyMask
+                                        [options]="inputOptions"></td>
+                                <td><input type="text" [disabled]="costConcept.internalInd || cost.internalInd"
+                                        [readonly]="(readonlyInd)"
+                                        [ngClass]="{'errorInput' : ((wageShareIsMax('additionalCosts',costConcept.conceptId ,cost.costId,'wageSharehouse',x,i))),'number':true}"
+                                        name="wageSharehouse{{x}}{{i}}" [(ngModel)]="cost.wageShare"
+                                        pattern="^(0*(\d{1,2}(\,\d+)?)|\,\d+|100(\,0+$)?)$"
+                                        numbersOnly="true"
+                                        currencyMask
+                                        [options]="inputOptions">
+                                </td>
+                                <td>
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select  [matTooltip]="cost.wageShareDescription" matTooltipPosition="above"
+                                            [disabled]="costConcept.internalInd || cost.internalInd"
+                                            name="wageShareTypehouse{{x}}{{i}}"
+                                            [readonly]="(readonlyInd || (cost.internalInd))"
+                                            [(ngModel)]="cost.wageShareTypeId" class="support-text"
+                                            (selectionChange)="onWageShareTypeChange('additionalCosts',costConcept.conceptId,cost.costId,$event)"
+                                            [ngClass]="{'errorInput' : (isWageShareTypeError('additionalCosts',costConcept.conceptId ,cost.costId,'wageShareTypehouse',x,i))}"
+                                            placeholder="">
+                                            <mat-option 
+                                                [value]="null">{{'accounting.selectOption' | translate}}</mat-option>
+                                            <mat-option
+                                                [matTooltip]="type.value" matTooltipPosition="above"
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.wageShareType"
+                                                [value]="type.code">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                </td>
+                                <td *ngIf="i==0">
+                                    <mat-form-field class="comp-mat-select">
+                                        <mat-select [matTooltip]="costConcept.calculationKeyDescription" matTooltipPosition="above"
+                                            [disabled]="costConcept.internalInd || cost.internalInd || (costConcept.conceptId > 0)"
+                                            [required]="(!cost.internalInd)"
+                                            [readonly]="(readonlyInd)"
+                                            name="calculationKeyb{{x}}{{i}}" [(ngModel)]="costConcept.calculationKey"
+                                            (selectionChange)="onCalculationKeyChange(costConcept.conceptId,cost.costId,$event)"
+                                            class="support-text" placeholder="">
+                                            <mat-option
+                                                *ngFor="let type of defaultDataService.DefaultData.lookUps.calculationKey"
+                                                [value]="type.code" [matTooltip]="type.value" matTooltipPosition="above">{{type.value}}</mat-option>
+                                        </mat-select>
+                                        <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                    </mat-form-field>
+                                </td>
+                                <td *ngIf="i != 0"></td>
+                                <td class="date-input">
+                                    <span  class="datepicker-position">
+                                    <input [disabled]="(costConcept.internalInd || cost.internalInd)"
+                                        [readonly]="(readonlyInd)"
+                                        [required]="(!cost.internalInd)"
+                                        [ngClass]="{'errorInput' : getInputError('invoiceDateb',x, i)}"
+                                        name="invoiceDateb{{x}}{{i}}"
+                                        [readonly]="(readonlyInd || (cost.internalInd))"
+                                        [min]="accountingService.currentBillingPeroid.from"
+                                        [max]="accountingService.currentBillingPeroid.to" [ngModel]="cost.invoiceDate"
+                                        (ngModelChange)="cost.invoiceDate= utility.setDateFormat($event)"
+                                        [matDatepicker]="picker" (click)="picker.open()" readonly>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                    <svg (click)="picker.open()" class="svg-date" width="18" height="18"
+                                        style="left: 5px;" viewBox="0 0 18 18" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                            d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                            fill="#565656" />
+                                    </svg>
+                                </span>
+                                </td>
+                                <!-- <td *ngIf="i == 0"><input name="totalAmountLastPeriodb{{x}}{{i}}" type="text" [(ngModel)]="costConcept.totalAmountLastPeriod"  readonly="true" ></td>
+                            <td *ngIf="i != 0"></td> -->
+                                <td class="image-upload">
+
+
+                                    <input
+                                    [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))"
+                                        name="fileupload3{{x}}{{i}}" #fileInput (click)="fileInput.value = null"
+                                        id="file-input3{{x}}{{i}}" type="file" multiple
+                                        (change)="attachImage($event,costConcept.conceptId,'additionalCosts',cost.costId)" />
+                                    <label for="file-input3{{x}}{{i}}" mat-button
+                                    [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))">
+                                        <mat-icon [ngClass]="{'disableButton' : (costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))}" [matTooltip]="attachmenttooltipText" [matTooltipPosition]="'above'">
+                                            attach_file</mat-icon>
+                                    </label>
+                                </td>
+                                <td>
+                                    <div *ngIf="cost.invoiceFileContents != null && cost.invoiceFileContents != [] && cost.invoiceFileContents?.length != 0" fxLayoutAlign="center center">
+                                        <span 
+                                            class="m-l-3">{{cost.invoiceFileContents?.length}}</span>
+                                            <mat-icon>upload_file</mat-icon>
+                                        <span title="Remove" style="cursor: pointer;"
+                                            (click)="cost.invoiceFileContents=[]" class="m-l-3">X</span>
+                                    </div>
+                                </td>
+                                <td *ngIf="i == 0">
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="addCostDetail('additionalCosts',costConcept.conceptCode,false,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <mat-icon [matTooltip]="addTooltip" [matTooltipPosition]="'above'">
+                                            add_circle_outline</mat-icon>
+                                    </button>
+                                    <button *ngIf="((costConcept.conceptId < 0) || (costConcept.deleteInd==true))"
+                                        [disabled]="(costConcept.internalInd || readonlyInd)"
+                                        (click)="deleteCostConcept('additionalCosts' ,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                    <button [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd) || isInternal(costConcept.conceptCode))" mat-button [matMenuTriggerFor]="menu" #menuTrigger mat-icon-button  [matTooltip]="(costConcept.comments=='' || costConcept.comments==null)?yourComment:costConcept.comments" [matTooltipPosition]="'above'">
+                                        <mat-icon>message</mat-icon>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <div fxLayout="row" class="p-3" fxLayoutAlign="center center">
+                                            <textarea (click)="stopPropagation($event)" [(ngModel)]="costConcept.comments" name="costComment{{x}}{{costConcept.conceptId}}{{i}}"></textarea>
+                                            <button mat-icon-button>
+                                                <mat-icon>done</mat-icon>
+                                            </button>
+                                            <button mat-icon-button (click)="deleteComment('additionalCosts',cost.costId,costConcept.conceptId)">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                        </div>
+                                    </mat-menu>
+                                </td>
+                                <td *ngIf="i != 0">
+                                    <button
+                                        [disabled]="(costConcept.internalInd || readonlyInd || (cost.internalInd))"
+                                        (click)="deleteCost('additionalCosts' ,costConcept.conceptCode,cost.costId,i,costConcept.conceptId)"
+                                        mat-icon-button>
+                                        <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'"
+                                            src="./assets/images/trash.svg">
+                                    </button>
+                                </td>
+                                <td>
+                                    <label *ngIf="isToolTip('additionalCosts',costConcept.conceptId)" customToolTip [originX]="'start'" [offsetX]="-150"
+                                        [contentTemplate]="tooltipTemplate" mat-icon-button>
+                                        <mat-icon>info</mat-icon>
+                                    </label>
+                                </td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </ng-container>
+            </table>
+            <div fxLayout="row" *ngIf="costData!=null">
+                <div fxFlex="70" fxLayout="column">
+                    <div fxLayout="row" fxLayoutGap="20px" class="p-l-10" *ngIf="generalElectricityConceptrIsExists()">
+                        <label class="header-4"
+                            [ngClass]="{'errorText' : getInputError('generalElectricityIndb',1, 2)}">
+                            {{'accounting.generalElectricityIncludedMsg' | translate}} *
+                        </label>
+                        <mat-radio-group [disabled]="readonlyInd" [required]="(!readonlyInd) && isRequired()"
+                            name="generalElectricityIndb12" [readonly]="readonlyInd"
+                            [(ngModel)]="costData.cost.additionalCosts[0].generalElectricityInd">
+                            <mat-radio-button class="header-4 m-r-5" [value]="true">{{'order.yes' | translate}}
+                            </mat-radio-button>
+                            <mat-radio-button class="header-4" [value]="false">{{'order.no' | translate}}
+                            </mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div fxFlex="100" fxLayout="row" fxLayoutGap="50px" class="p-10">
+                        <mat-form-field fxFlex="30" class="placeholder-text-1">
+                            <mat-label class="header-4">{{'accounting.waterConsumption' | translate}} [m³]</mat-label>
+                            <input [disabled]="readonlyInd" name="waterConsumptiob{{x}}{{i}}" matInput placeholder=""
+                                [readonly]="readonlyInd"
+                                [(ngModel)]="costData.cost.additionalCosts[0].waterConsumption"
+                                currencyMask
+                                [options]="inputOptions">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="30" class="placeholder-text-1">
+                            <mat-label class="header-4">{{'accounting.waterWasteWater' | translate}} [€ / m³]
+                            </mat-label>
+                            <input [disabled]="readonlyInd" name="wastewaterb{{x}}{{i}}" matInput placeholder=""
+                                [readonly]="readonlyInd" [(ngModel)]="costData.cost.additionalCosts[0].wastewater"
+                                currencyMask
+                                [options]="inputOptions">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <button [disabled]="readonlyInd" (click)="addNewCostConcept('additionalCosts')" mat-flat-button
+                class="header-4 text-blue">
+                <mat-icon class="m-r-3">add_circle_outline</mat-icon>{{'accounting.addCostConcept' | translate}}
+            </button>
+        </mat-expansion-panel>
+    </form>
+</mat-accordion>
+<div class="font-resp m-t-10 m-r-4" fxLayout="row" fxLayoutAlign="end center">
+    <button routerLink="/accounting/overview/review" mat-button
+        class="primary-transparent-button wide placeholder-text-1">{{'account.cancel' | translate}}</button>
+    <button [disabled]="(readonlyInd)" mat-button
+        class="primary-green-button wide placeholder-text-1" (click)="save()">{{'account.save' | translate}}</button>
+</div>
+<ng-template #tooltipTemplate>
+    <div fxLayout="column">
+        <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+            <span>{{toolTipText}}</span>
+        </div>
+    </div>
+</ng-template>
+<ng-template #energyWarningBoth>
+    <div fxLayout="column">
+        <div class="energyWarningTooltip" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+            <span>{{'accounting.energyWarningConsunption' | translate}}</span><br>
+            <span>{{'accounting.energyWarningDate' | translate}}</span>
+        </div>
+    </div>
+</ng-template>
+<ng-template #energyWarningConsunption>
+    <div fxLayout="column">
+        <div class="energyWarningTooltip" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+            <span>{{'accounting.energyWarningConsunption' | translate}}</span>
+        </div>
+    </div>
+</ng-template>
+<ng-template #energyWarningDate>
+    <div fxLayout="column">
+        <div class="energyWarningTooltip" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+            <span>{{'accounting.energyWarningDate' | translate}}</span>
+        </div>
+    </div>
+</ng-template>

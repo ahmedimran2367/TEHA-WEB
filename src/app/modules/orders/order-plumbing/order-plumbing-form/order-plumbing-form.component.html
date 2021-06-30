@@ -1,0 +1,244 @@
+<form #firstForm="ngForm">
+<div fxLayout="row" fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxFlex fxLayoutGap="50px" fxLayoutAlign="space-around start" class="panel font-resp">
+  <div fxFLex>
+    <div fxLayout="column" fxLayoutGap="10px">
+      <h3 class="p-b-4"> {{'order.appointmentDetails' | translate}}</h3>
+      <div class="inner-panel" fxLayout="row" fxFlex fxLayoutGap="24px" fxLayoutAlign="space-between center">
+        <div fxFlex fxLayout="column">
+          <label>
+            {{'order.appointmentDate' | translate}}
+          </label>
+          <mat-form-field class="smaller-input" appearance="standard" [floatLabel]="floatLabelControl.value">
+            <input name="appointmentDate" [(ngModel)]="orderPlumbingRequestNew.appointmentDate" matInput [matDatepicker]="appointmentPicker"
+              placeholder="dd-mm-yyyy" />
+            <mat-datepicker-toggle matSuffix [for]="appointmentPicker"></mat-datepicker-toggle>
+            <mat-datepicker #appointmentPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+
+      </div>
+      <div class="p-b-1" fxLayout="column" fxFlex fxLayoutAlign="start">
+        <div>
+
+        </div>
+        <div>
+
+          
+          <div class="mat-custom-extra-small-form-field">
+            <label>
+              {{'order.bestAccessibility' | translate}} <span class="requiredColor"> *</span>
+            </label>
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxLayoutGap="12px">
+              <input required name="preferredTimeRangefrom" matInput [min]="'07:30 am'" [max]="'03:00 pm'" placeholder="HH:MM XM" [(ngModel)]="orderPlumbingRequestNew.preferredTimeRange.from"
+                [ngxTimepicker]="darkPicker" readonly>
+              <ngx-material-timepicker #darkPicker [theme]="darkTheme" (timeSet)="timeChange($event)"></ngx-material-timepicker>
+              <p> {{'order.to' | translate}} </p>
+              <input required name="preferredTimeRangeto" matInput [min]="toMin" [max]="'03:00 pm'" placeholder="	HH:MM XM" [(ngModel)]="orderPlumbingRequestNew.preferredTimeRange.to"
+                [ngxTimepicker]="darkPicker1" readonly>
+              <ngx-material-timepicker #darkPicker1 [theme]="darkTheme"></ngx-material-timepicker>
+              <!-- <input type="time" matInput placeholder="1:00 pm" [(ngModel)]="orderPlumbingRequestNew.preferredTimeRange.from" />
+              <p> to </p>
+              <input type="time" matInput placeholder="3:00pm" [(ngModel)]="orderPlumbingRequestNew.preferredTimeRange.to" /> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div ngClass.gt-sm="p-b-1" fxLayout="column" fxFlex>
+        <div>
+          <label>
+            {{'order.alternativeDateRange' | translate}}
+          </label>
+        </div>
+        <div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+            <mat-form-field class="smaller-input" fxFlex="50" appearance="standard"
+              [floatLabel]="floatLabelControl.value">
+              <input name="alternativeDateRangefrom" [(ngModel)]="orderPlumbingRequestNew.alternativeDateRange.from" matInput
+                [matDatepicker]="fromPicker" placeholder="dd-mm-yyyy" />
+              <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fromPicker></mat-datepicker>
+            </mat-form-field>
+            <div>{{'order.to' | translate}}</div>
+            <mat-form-field class="smaller-input" fxFlex="50" appearance="standard"
+              [floatLabel]="floatLabelControl.value">
+              <input name="alternativeDateRangeto" [(ngModel)]="orderPlumbingRequestNew.alternativeDateRange.to" matInput [matDatepicker]="toPicker"
+                placeholder="dd-mm-yyyy" />
+              <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+              <mat-datepicker #toPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div ngClass.gt-sm="p-b-1" fxLayout="column" fxFlex>
+        <div>
+          <label>
+            {{'order.plumbingReason' | translate}} <span class="red">*</span>
+          </label>
+        </div>
+        <div>
+          <mat-form-field class="full-width-input" appearance="standard" [floatLabel]="floatLabelControl.value">
+            <mat-select required [(ngModel)]="orderPlumbingRequestNew.reason" placeholder="{{'stockOverview.select' | translate}}" name="item">
+              <div *ngIf="currentMeter?.meterTypeDesc!=='HKV';else otherMeterReasons">
+                <div *ngFor="let reason of defaultDataService.DefaultData.lookUps.plumbingReason">
+                  <mat-option *ngIf="reason.code!=='ReplaceRadiator' && reason.code!=='NewRadiator'"
+                    [value]="reason.code">
+                   {{'lookup.'+utilityService.toCamelCase(reason.code) | translate}}
+                  </mat-option>
+                </div>
+              </div>
+              <ng-template #otherMeterReasons>
+                <mat-option *ngFor="let reason of defaultDataService.DefaultData.lookUps.plumbingReason"
+                  [value]="reason.code">
+                  {{'lookup.'+utilityService.toCamelCase(reason.code) | translate}}
+                </mat-option>
+              </ng-template>
+
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      
+      <div fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxLayout="row" fxLayoutGap="12px" fxLayoutAlign="space-between center">
+        <div ngClass.gt-sm="p-b-1" fxLayout="column" fxFlex="50" fxLayoutAlign="start start">
+          <div>
+            <label>
+              {{'order.telephoneNo' | translate}}<span class="red">*</span>
+            </label>
+          </div>
+          <div>
+            <mat-form-field class="full-width-input" appearance="standard" [floatLabel]="floatLabelControl.value">
+              <input maxlength="20" appNumericSpecialCharactersOnly required class="form-control" name="telephoneNo" [(ngModel)]="orderPlumbingRequestNew.phone" matInput placeholder="" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div ngClass.gt-sm="p-b-1" fxLayout="column" fxFlex="50" fxLayoutAlign="start start">
+          <div>
+            <label>
+              {{'order.emailAddress' | translate}}<span class="red">*</span>
+            </label>
+          </div>
+          <div>
+            <mat-form-field class="full-width-input" appearance="standard" [floatLabel]="floatLabelControl.value">
+              <input maxlength="100" required pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" class="form-control" type="email" name="emailAddress" [(ngModel)]="orderPlumbingRequestNew.email" matInput placeholder="" />
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div ngClass.gt-sm="p-b-1" fxLayout="column" fxFlex fxLayoutAlign="center start">
+        <div>
+          <label>
+            {{'order.comments' | translate}}
+          </label>
+        </div>
+        <div>
+          <mat-form-field class="full-width-input" appearance="standard" [floatLabel]="floatLabelControl.value">
+            <input maxlength="2000" name="comments" [(ngModel)]="orderPlumbingRequestNew.comments" matInput placeholder="" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout="column" fxFlex class="p-b-1" fxLayoutGap="12px" fxLayoutAlign="center start">
+        <div>{{'order.notifyThrough' | translate}} <span class="requiredColor"> *</span></div>
+        <div>
+          <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="32px">
+            <mat-checkbox [required]="!orderPlumbingRequestNew.communicationMode.letterInd" name="smsInd" [(ngModel)]="orderPlumbingRequestNew.communicationMode.smsInd">{{'lookup.sms' | translate}}</mat-checkbox>
+            <mat-checkbox [required]="!orderPlumbingRequestNew.communicationMode.smsInd" name="letterInd" [(ngModel)]="orderPlumbingRequestNew.communicationMode.letterInd">{{'order.letterMail' | translate}}</mat-checkbox>
+          </div>
+
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <mat-divider style="height: 100%;"
+    [vertical]="true">
+  </mat-divider>
+  <div fxFLex fxLayout="column">
+    <h4>
+      <span fxFlex fxLayout="row" fxLayoutGap="32px" fxLayoutAlign="start center">
+        <mat-checkbox name="alternativeInd" [checked]="alternativeInd" (change)="showOptions($event)">{{'order.alternateUser' | translate}}</mat-checkbox>
+      </span>
+    </h4>
+    <div class="inner-panel" fxLayout="column" fxLayoutGap="5px">
+      <div fxLayout="row" fxFlex fxLayoutGap="12px" fxLayoutAlign="space-between center">
+
+        <!-- divider -->
+        <form #altUserForm="ngForm">
+          <div fxLayout="column form-group">
+            <div fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxLayoutGap="40px" fxLayoutAlign="start center">
+
+              <div>
+                <mat-form-field class="smaller-input placeholder-text-1" appearance="standard">
+                  <mat-label class="p-l-3">{{'account.salutation' | translate}}</mat-label>
+                  <mat-select name="salutationCodeAlt" required class="placeholder-text-1" [disabled]="!alternativeInd" [required]="alternativeInd" [(ngModel)]="orderPlumbingRequestNew.alternativePerson.salutationCode" placeholder="">
+                    <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                      {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxFlex fxLayoutGap="12px" fxLayoutAlign="space-between center">
+              <div fxLayout="column" fxFlex="50">
+                <!-- <div>{{'order.firstName' | translate}}</div> -->
+                <div>
+                  <mat-form-field class="smaller-input placeholder-text-1" appearance="standard" [floatLabel]="floatLabelControl.value">
+                    <mat-label class="p-l-3">{{'order.firstName' | translate}}</mat-label>
+                    <input maxlength="50" appAlphabetOnlyDirective name="altFirstName" class="form-control" [disabled]="!alternativeInd" matInput
+                      [(ngModel)]="orderPlumbingRequestNew.alternativePerson.firstName" [required]="alternativeInd ? 'required' : null" /> </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="50">
+                <!-- <div>{{'order.lastName' | translate}}</div> -->
+                <div>
+                  <mat-form-field class="smaller-input placeholder-text-1" appearance="standard" [floatLabel]="floatLabelControl.value">
+                    <mat-label class="p-l-3">{{'order.lastName' | translate}}</mat-label>
+                    <input maxlength="50" appAlphabetOnlyDirective name="altLastName" class="form-control" [disabled]="!alternativeInd" matInput
+                      [(ngModel)]="orderPlumbingRequestNew.alternativePerson.lastName" [required]="alternativeInd ? 'required' : null"/> </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxFlex fxLayoutGap="12px" fxLayoutAlign="space-between center">
+              <div fxLayout="column" fxFlex="50">
+                <!-- <div>{{'order.telephoneNo' | translate}}</div> -->
+                <div>
+                  <mat-form-field class="smaller-input placeholder-text-1" appearance="standard" [floatLabel]="floatLabelControl.value">
+                    <mat-label class="p-l-3">{{'order.telephoneNo' | translate}}</mat-label>
+                    <input maxlength="20" appNumericSpecialCharactersOnly name="altTelephone" class="form-control" [disabled]="!alternativeInd" matInput type="tel"
+                      [(ngModel)]="orderPlumbingRequestNew.alternativePerson.phone" [required]="alternativeInd ? 'required' : null"/> </mat-form-field>
+                </div>
+              </div>
+              <div fxLayout="column" fxFlex="50">
+                <!-- <div>{{'order.mobileNo' | translate}}</div> -->
+                <div>
+                  <mat-form-field class="smaller-input placeholder-text-1" appearance="standard" [floatLabel]="floatLabelControl.value">
+                    <mat-label class="p-l-3">{{'order.mobileNo' | translate}}</mat-label>
+                    <input maxlength="20" appNumericSpecialCharactersOnly name="altMobile" class="form-control" [disabled]="!alternativeInd" matInput type="tel"
+                      [(ngModel)]="orderPlumbingRequestNew.alternativePerson.mobile" [required]="alternativeInd ? 'required' : null"/> </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div fxLayout="row" fxLayout.lt-md="column" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start center" fxFlex fxLayoutGap="12px" fxLayoutAlign="space-between center">
+              <div fxLayout="column" fxFlex="50">
+
+                <!-- <div>{{'order.emailAddress' | translate}}</div> -->
+                <div>
+                  <mat-form-field class="smaller-input placeholder-text-1" appearance="standard" [floatLabel]="floatLabelControl.value">
+                    <mat-label class="p-l-3">{{'order.emailAddress' | translate}}</mat-label>
+                    <input maxlength="100" pattern="[a-z0-9._+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="altEmail" class="form-control" [disabled]="!alternativeInd" matInput type="email"
+                      [(ngModel)]="orderPlumbingRequestNew.alternativePerson.email" [required]="alternativeInd ? 'required' : null"/> </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>
+</form>

@@ -1,0 +1,41 @@
+@import "../../styles/spacing";
+@import "../../styles/colors";
+@import "../../styles/spacing";
+@import "../../styles/typography";
+
+
+.smoke-detector-card-wrapper{
+    min-height: 255px;
+    // height: 255px;
+    padding-left: 50px;
+    padding-right: 50px;
+
+  .smoke-detector-card-icon-wrapper {
+    height: 100px;
+    width: 100px;
+    border-radius: 8px;
+
+  //   background: url("https://www.nlgja.org/wp-content/uploads/2015/01/TJ-Thomson-Square.jpg") 50% 50% no-repeat;
+    background-size: 100% auto;
+  }
+
+  .smoke-detector-card-icon-wrapper .mat-icon {
+    vertical-align: middle;
+    align-self: baseline;
+    width: 90px;
+    height: 90px;
+    font-size: 90px;
+    display: inline-flex;
+    align-items: center;
+  }
+  
+  .smoke-detector-card-big-title{
+      font-style: normal;
+      font-weight: 300;
+      font-size: 26px;
+      line-height: 30px;
+      letter-spacing: 0.05em;
+
+      color: #1D2932;
+  }
+}

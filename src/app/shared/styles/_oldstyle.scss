@@ -1,0 +1,1199 @@
+// Form Field Customization
+
+
+
+
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core();
+/**
+* Generated theme by Material Theme Generator
+* https://materialtheme.arcsine.dev
+*/
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+
+// Fonts
+@import 'https://fonts.googleapis.com/css?family=Material+Icons+Outlined';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+/**
+* Generated theme by Material Theme Generator
+* https://materialtheme.arcsine.dev
+*/
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+
+// Fonts
+@import 'https://fonts.googleapis.com/css?family=Material+Icons+Outlined';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900');
+
+$fontConfig: (display-4: mat-typography-level(36px, 36px, 900, 'Roboto', 0.0292em),
+  display-3: mat-typography-level(26px, 26px, 500, 'Roboto', 0.0404em),
+  display-2: mat-typography-level(18px, 18px, 400, 'Roboto', 0.0583em),
+  display-1: mat-typography-level(18px, 18px, 500, 'Roboto', 0.0583em),
+  headline: mat-typography-level(24px, 32px, 400, 'Roboto', 0.0000em),
+  title: mat-typography-level(18px, 32px, 900, 'Roboto', 0.0583em),
+  subheading-2: mat-typography-level(18px, 22px, 700, 'Roboto', 0.0583em),
+  subheading-1: mat-typography-level(15px, 24px, 500, 'Roboto', 0.0067em),
+  body-2: mat-typography-level(14px, 24px, 500, 'Roboto', 0.0750em),
+  body-1: mat-typography-level(12px, 16px, 400, 'Roboto', 0.0656em),
+  button: mat-typography-level(14px, 14px, 500, 'Roboto', 0.0893em),
+  caption: mat-typography-level(12px, 20px, 400, 'Roboto', 0.0333em),
+  input: mat-typography-level(inherit, 1.125, 400, 'Roboto', 1.5px));
+
+// Foreground Elements
+
+// Light Theme Text
+$dark-text: #1d2932;
+$dark-primary-text: rgba($dark-text, 0.87);
+$dark-accent-text: rgba($dark-primary-text, 0.54);
+$dark-disabled-text: rgba($dark-primary-text, 0.38);
+$dark-dividers: rgba($dark-primary-text, 0.12);
+$dark-focused: rgba($dark-primary-text, 0.12);
+
+$mat-light-theme-foreground: (base: black,
+  divider: $dark-dividers,
+  dividers: $dark-dividers,
+  disabled: $dark-disabled-text,
+  disabled-button: rgba($dark-text, 0.26),
+  disabled-text: $dark-disabled-text,
+  elevation: black,
+  secondary-text: $dark-accent-text,
+  hint-text: $dark-disabled-text,
+  accent-text: $dark-accent-text,
+  icon: $dark-accent-text,
+  icons: $dark-accent-text,
+  text: $dark-primary-text,
+  slider-min: $dark-primary-text,
+  slider-off: rgba($dark-text, 0.26),
+  slider-off-active: $dark-disabled-text,
+);
+
+// Dark Theme text
+$light-text: #ffffff;
+$light-primary-text: $light-text;
+$light-accent-text: rgba($light-primary-text, 0.7);
+$light-disabled-text: rgba($light-primary-text, 0.5);
+$light-dividers: rgba($light-primary-text, 0.12);
+$light-focused: rgba($light-primary-text, 0.12);
+
+$mat-dark-theme-foreground: (base: $light-text,
+  divider: $light-dividers,
+  dividers: $light-dividers,
+  disabled: $light-disabled-text,
+  disabled-button: rgba($light-text, 0.3),
+  disabled-text: $light-disabled-text,
+  elevation: black,
+  hint-text: $light-disabled-text,
+  secondary-text: $light-accent-text,
+  accent-text: $light-accent-text,
+  icon: $light-text,
+  icons: $light-text,
+  text: $light-text,
+  slider-min: $light-text,
+  slider-off: rgba($light-text, 0.3),
+  slider-off-active: rgba($light-text, 0.3),
+);
+
+// Background config
+// Light bg
+$light-background: #ffffff;
+$light-bg-darker-5: darken($light-background, 5%);
+$light-bg-darker-10: darken($light-background, 10%);
+$light-bg-darker-20: darken($light-background, 20%);
+$light-bg-darker-30: darken($light-background, 30%);
+$light-bg-lighter-5: lighten($light-background, 5%);
+$dark-bg-tooltip: lighten(#1d2932, 20%);
+$dark-bg-alpha-4: rgba(#1d2932, 0.04);
+$dark-bg-alpha-12: rgba(#1d2932, 0.12);
+
+$mat-light-theme-background: (background: $light-background,
+  status-bar: $light-bg-darker-20,
+  app-bar: $light-bg-darker-5,
+  hover: $dark-bg-alpha-4,
+  card: $light-bg-lighter-5,
+  dialog: $light-bg-lighter-5,
+  tooltip: $dark-bg-tooltip,
+  disabled-button: $dark-bg-alpha-12,
+  raised-button: $light-bg-lighter-5,
+  focused-button: $dark-focused,
+  selected-button: $light-bg-darker-20,
+  selected-disabled-button: $light-bg-darker-30,
+  disabled-button-toggle: $light-bg-darker-10,
+  unselected-chip: $light-bg-darker-10,
+  disabled-list-option: $light-bg-darker-10,
+);
+
+// Dark bg
+$dark-background: #1d2932;
+$dark-bg-lighter-5: lighten($dark-background, 5%);
+$dark-bg-lighter-10: lighten($dark-background, 10%);
+$dark-bg-lighter-20: lighten($dark-background, 20%);
+$dark-bg-lighter-30: lighten($dark-background, 30%);
+$light-bg-alpha-4: rgba(#ffffff, 0.04);
+$light-bg-alpha-12: rgba(#ffffff, 0.12);
+
+// Background palette for dark themes.
+$mat-dark-theme-background: (background: $dark-background,
+  status-bar: $dark-bg-lighter-20,
+  app-bar: $dark-bg-lighter-5,
+  hover: $light-bg-alpha-4,
+  card: $dark-bg-lighter-5,
+  dialog: $dark-bg-lighter-5,
+  tooltip: $dark-bg-lighter-20,
+  disabled-button: $light-bg-alpha-12,
+  raised-button: $dark-bg-lighter-5,
+  focused-button: $light-focused,
+  selected-button: $dark-bg-lighter-20,
+  selected-disabled-button: $dark-bg-lighter-30,
+  disabled-button-toggle: $dark-bg-lighter-10,
+  unselected-chip: $dark-bg-lighter-20,
+  disabled-list-option: $dark-bg-lighter-10,
+);
+
+// Compute font config
+@include mat-core($fontConfig);
+
+// Theme Config
+
+body {
+  --primary-color: #00c95d;
+  --primary-lighter-color: #b3efce;
+  --primary-darker-color: #00a253;
+  --text-primary-color: #{$dark-primary-text};
+  --text-primary-lighter-color: #{$dark-primary-text};
+  --text-primary-darker-color: #{$light-primary-text};
+}
+
+$mat-primary: (main: #00c95d,
+  lighter: #b3efce,
+  darker: #00a253,
+  200: #00c95d, // For slide toggle,
+  contrast : (main: $dark-primary-text,
+    lighter: $dark-primary-text,
+    darker: $light-primary-text,
+  ));
+$theme-primary: mat-palette($mat-primary, main, lighter, darker);
+
+body {
+  --accent-color: #00c95d;
+  --accent-lighter-color: #808080;
+  --accent-darker-color: #565656;
+  --text-accent-color: #{$dark-primary-text};
+  --text-accent-lighter-color: #{$dark-primary-text};
+  --text-accent-darker-color: #{$light-primary-text};
+}
+
+$mat-accent: (main: #00c95d,
+  lighter: #808080,
+  darker: #565656,
+  200: #00c95d, // For slide toggle,
+  contrast : (main: $dark-primary-text,
+    lighter: $dark-primary-text,
+    darker: $light-primary-text,
+  ));
+$theme-accent: mat-palette($mat-accent, main, lighter, darker);
+
+body {
+  --warn-color: #ff6161;
+  --warn-lighter-color: #ffd0d0;
+  --warn-darker-color: #ff4545;
+  --text-warn-color: #{$dark-primary-text};
+  --text-warn-lighter-color: #{$dark-primary-text};
+  --text-warn-darker-color: #{$light-primary-text};
+}
+
+$mat-warn: (main: #ff6161,
+  lighter: #ffd0d0,
+  darker: #ff4545,
+  200: #ff6161, // For slide toggle,
+  contrast : (main: $dark-primary-text,
+    lighter: $dark-primary-text,
+    darker: $light-primary-text,
+  ));
+$theme-warn: mat-palette($mat-warn, main, lighter, darker);
+;
+
+$theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
+$altTheme: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
+
+// Theme Init
+@include angular-material-theme($theme);
+
+.theme-alternate {
+  @include angular-material-theme($altTheme);
+}
+
+// Specific component overrides, pieces that are not in line with the general theming
+
+// Handle buttons appropriately, with respect to line-height
+
+
+.mat-raised-button,
+.mat-stroked-button,
+.mat-flat-button {
+  padding: 0 1.15em;
+  margin: 0 .65em;
+  min-width: 3em;
+  line-height: 36.4px
+}
+
+.mat-standard-chip {
+  padding: .5em .85em;
+  min-height: 2.5em;
+}
+
+.material-icons {
+  font-size: 24px;
+  font-family: 'Material Icons Outlined', 'Material Icons';
+
+  .mat-badge-content {
+    font-family: 'Roboto';
+  }
+}
+
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$teha-web-primary: mat-palette($mat-primary);
+$teha-web-accent: mat-palette($mat-accent, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$teha-web-warn: mat-palette($mat-warn);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$teha-web-theme: mat-light-theme((color: (primary: $teha-web-primary,
+      accent: $teha-web-accent,
+      warn: $teha-web-warn,
+    )));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($teha-web-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+/* .l-typography {
+  .header-1 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 36px;
+    line-height: 42px;
+    color: #000000;
+    border: 1px solid #000000;
+    text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  }
+
+  .disabled-input {
+    background: #DADADA;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+  }
+
+
+  .header-2 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 26px;
+    line-height: 30px;
+  }
+
+  .header-3 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 22px;
+    line-height: 26px;
+
+  }
+
+  .header-4 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px !important;
+    line-height: 21px !important;
+  }
+
+  .placeholder-text-1 {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .placeholder-text-2 {
+    font-family: Roboto;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+  }
+
+  .paragraph {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+  }
+
+  .support-text {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 14px;
+    line-height: 16px;
+  }
+} */
+
+
+.mat-header-cell {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  color: #565656;
+}
+
+.mat-cell {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  color: #565656;
+}
+
+.mat-tab-labels {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+  text-align: start;
+}
+
+.mat-tab-label {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  // font-size: 18px;
+  padding: 15px !important;
+  // line-height: 21px;
+  letter-spacing: 0.05em;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 10% !important;
+  text-align: start;
+}
+
+.mat-tab-label-active {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  // font-size: 18px;
+  // line-height: 21px;
+  letter-spacing: 0.05em;
+  color: #00C95D;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 10% !important;
+}
+
+
+
+
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.mat-dashboard-card {
+  background: #FFFFFF;
+  box-shadow: 10px 10px 20px rgba(128, 128, 128, 0.1) !important;
+  border-radius: 10px !important;
+
+}
+
+.mat-dashboard-card .mat-card-title {
+  font-size: 24px;
+  font-weight: normal;
+}
+
+a {
+  color: #016D90;
+
+}
+
+.mat-list-text {
+  overflow: hidden;
+  padding-left: 10px;
+  font-size: 13px !important;
+}
+
+
+.warning-color {
+  color: #ff6161 !important;
+}
+
+.primary-color {
+  color: #00c95d !important;
+}
+
+.mat-card-title-min-height {
+  min-height: 75px;
+}
+
+::ng-deep mat-tab-body {
+  text-align: center;
+}
+
+.primary-green-button {
+  padding-top: 12px;
+  padding-bottom: 12px;
+
+  padding-left: 12px;
+  padding-right: 12px;
+
+
+  background: #00A253;
+  border-radius: 5px;
+  color: white;
+
+  font-style: normal;
+  font-weight: normal;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+
+  .wide {
+    padding-left: 29px;
+    padding-right: 29px;
+  }
+}
+
+.primary-green-button:disabled {
+  background: #dddddd;
+}
+
+.primary-transparent-button {
+  padding-top: 12px;
+  padding-bottom: 12px;
+
+  padding-left: 12px;
+  padding-right: 12px;
+
+
+  border-radius: 5px;
+
+  font-style: normal;
+  font-weight: 300;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+
+  color: #565656;
+
+
+
+  .wide {
+    padding-left: 29px;
+    padding-right: 29px;
+  }
+}
+
+// custom scrollbar
+::-webkit-scrollbar {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  width: 12px;
+  background: #DADADA;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #A5A5A5;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #A5A5A5;
+  border-radius: 2px;
+}
+
+::ng-deep .mat-form-field-infix {
+  border-top-width: 0px;
+  // box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+  // background: #dadada;
+  display: block;
+  position: relative;
+  background-clip: border-box;
+
+  .mat-input-element:disabled {
+    border: 0px !important;
+    // font-style: normal;
+    // font-weight: 300;
+    // font-size: 18px;
+    // line-height: 21px;
+    /* identical to box height */
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+  }
+
+  .mat-input-element {
+    padding-left: 8px;
+    border: 0px !important;
+    font-style: normal;
+    // font-weight: 300;
+    // font-size: 18px;
+    // line-height: 21px;
+    // /* identical to box height */
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+  }
+}
+
+.transparent-snackbar {
+  background: transparent;
+  box-shadow: none !important;
+}
+
+.card-title-row {
+  min-height: 45px;
+  margin-bottom: 20px;
+}
+
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: start;
+}
+
+.mat-link {
+  color: #016D90;
+
+}
+
+.link {
+  cursor: pointer;
+}
+
+.body-general {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+
+  color: #565656;
+}
+
+
+.smaller-input {
+  width: 180px !important;
+}
+
+.full-width-input {
+  width: 100% !important;
+}
+
+
+.is-hidden {
+  display: none !important;
+  height: 0px !important;
+  max-height: 0px;
+}
+
+// ::ng-deep .mat-form-field {
+//   margin: 0px !important;
+//   padding: 0px !important;
+// }
+
+// Custom form-field for orders screen
+.mat-custom-form-field {
+
+
+  .extra-small-spacing {
+    p {
+      display: block;
+      height: 14px;
+      font-style: normal;
+      font-weight: 300;
+      font-size: 12px;
+      line-height: 14px;
+      letter-spacing: 0.05em;
+      color: #565656;
+      margin-bottom: 2px;
+    }
+  }
+
+  height: 35px;
+
+  .mat-label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.05em;
+    color: #565656;
+  }
+
+  input {
+
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 21px;
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+
+
+    padding-left: 12px;
+
+    height: 35px;
+
+    width: 100%;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+
+
+  }
+
+  input:disabled {
+    background: #DADADA;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  input:hover {
+    box-shadow: 0px 1px 0px #00c95d;
+  }
+}
+
+// Custom form-field for tables in orders
+.mat-custom-table-form-field {
+  position: relative;
+  display: inline-flex;
+  margin: 0 auto;
+  margin-top: 12px;
+
+  height: 35px;
+  width: 114px;
+  // .mat-label {
+  //   font-style: normal;
+  //   font-weight: normal;
+  //   font-size: 16px;
+  //   line-height: 19px;
+  //   letter-spacing: 0.05em;
+  //   color: #565656;
+  // }
+
+  input {
+
+
+    line-height: 21px;
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+
+
+    display: flex;
+    padding-left: 12px;
+    height: 35px;
+
+    position: absolute;
+    width: 114px;
+    height: 30px;
+    background: #FFFFFF;
+    border: 1px solid #808080;
+    box-sizing: border-box;
+
+
+  }
+
+  input:disabled {
+    background: #DADADA;
+    border: 1px solid #808080;
+    box-sizing: border-box;
+
+  }
+
+  input:hover {
+    box-shadow: 1px solid #00c95d;
+    box-sizing: border-box;
+
+  }
+
+
+}
+
+// Custom form-field for orders screen
+
+.small-size{
+  max-width: 114px!important;
+}
+
+.mat-custom-extra-small-form-field {
+
+ 
+
+
+  p {
+    display: block;
+    height: 14px;
+    font-style: normal;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 14px;
+    letter-spacing: 0.05em;
+    color: #565656;
+    margin-bottom: 2px;
+    margin-top: 10px;
+  }
+
+  .mat-label {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    letter-spacing: 0.05em;
+    color: #565656;
+  }
+
+  input {
+
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 21px;
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+
+
+    padding-left: 12px;
+
+    height: 35px;
+
+    width: 100%;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+
+
+  }
+
+  input:disabled {
+    background: #DADADA;
+    box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+  }
+
+  input:hover {
+    box-shadow: 0px 1px 0px #00c95d;
+  }
+
+
+}
+
+
+// Designer's screen height 1500x1000
+// We either show overflow scrollbar or
+@media only screen and (max-height: 999px) {
+
+  .mat-card-content-overflow {
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-height: 320px;
+
+  }
+}
+
+@media only screen and (min-height: 1000px) {
+  .mat-card-content-overflow {
+    overflow-y: auto;
+    overflow-x: hidden;
+
+  }
+}
+
+
+
+.extra-small-input {
+
+  width: 150px;
+}
+
+// To remove default 16px margin from mat-card-header-text
+::ng-deep .mat-card-header-text {
+  margin: 0px;
+}
+
+
+.line-h-n {
+  line-height: normal;
+}
+.h-100 {
+  height: 100%;
+}
+.w-100 {
+  width: 100%;
+}
+.x-overflow-auto {
+  overflow-x: auto;
+}
+.y-overflow-auto {
+  overflow-y: auto;
+}
+.overflow-auto {
+  overflow: auto;
+}
+.overflow-hide {
+  overflow: hidden;
+}
+.txt-align-center {
+  text-align: center;
+}
+.txt-align-start {
+  text-align: start;
+}
+.btn-lg {
+  padding: 5px 35px !important;
+}
+.doc-table {
+  height: 48vh;
+}
+.doc-tabs{
+  height: 53vh;
+}
+
+.order-table {
+  height: 51vh;
+}
+.o-wrap {
+  overflow-wrap: anywhere;
+}
+.red{
+  color:red;
+}
+
+
+@import "~@angular/material/theming";
+
+@font-face {
+  font-family: "Roboto-Black";
+  src: url("/assets/fonts/Roboto/Roboto-Black.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Roboto-Regular";
+  src: url("/assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto-Light";
+  src: url("/assets/fonts/Roboto/Roboto-Light.ttf") format("truetype");
+}
+@font-face {
+  font-family: "Roboto-LightItalic";
+  src: url("/assets/fonts/Roboto/Roboto-LightItalic.ttf") format("truetype");
+}
+
+.font-resp {
+  .header-1 {
+    font-family: Roboto-Black;
+    font-size: 36px;
+  }
+
+  .header-2 {
+    font-family: Roboto-Regular;
+    font-size: 26px;
+    line-height: normal;
+  }
+
+  .header-3 {
+    font-family: Roboto-Regular;
+    font-size: 22px;
+  }
+
+  .header-4 {
+    font-family: Roboto-Regular;
+    font-size: 18px;
+  }
+
+  .header-5 {
+    font-family: Roboto-Regular;
+    font-size: 14px;
+  }
+
+  .header-6 {
+    font-family: Roboto-Regular;
+    font-size: 11px;
+  }
+
+  .placeholder-text-1 {
+    font-family: Roboto-Light;
+    font-size: 23px;
+  }
+
+  .placeholder-text-2 {
+    font-family: Roboto-LightItalic;
+    font-size: 18px;
+  }
+
+  .paragraph {
+    font-family: Roboto-Regular;
+    font-size: 16px;
+  }
+
+  .support-text {
+    font-family: Roboto-Light;
+    font-size: 14px;
+  }
+  .l-height-n {
+    line-height: normal;
+  }
+}
+.grid-table {
+  width: 100%;
+  th {
+    font-size: 16px;
+    font-family: Roboto-Regular;
+    text-align: center;
+  }
+  td {
+    text-align: center;
+    font-size: 14px;
+    font-family: Roboto-Light;
+  }
+  a {
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    text-decoration: none;
+  }
+  .btn {
+    font-family: Roboto-Regular;
+    font-size: 14px;
+    text-decoration: none;
+  }
+}
+
+$sides: (top, bottom, left, right); // Leave this variable alone
+$counter: 0;
+$target: 21;
+
+
+
+// Generating margin and padding
+$val: 4;
+
+@for $counter from 0 to $target {
+  @each $side in $sides {
+
+    // generating margin for box sides
+    .m-#{str-slice($side, 0, 1)}-#{$counter} {
+      margin-#{$side}: #{$counter * $val}px !important;
+    }
+
+    // generating box margin
+    .m-#{$counter} {
+      margin: #{$counter * $val}px !important;
+    }
+
+    // generating padding for box sides
+    .p-#{str-slice($side, 0, 1)}-#{$counter} {
+      padding-#{$side}: #{$counter * $val}px !important;
+    }
+
+    // generating box padding
+    .p-#{$counter} {
+      padding: #{$counter * $val}px !important;
+    }
+
+    // generating box offset for absolute or fixed elements
+    .#{str-slice($side, 0, 1)}-#{$counter} {
+      #{$side}: #{$counter * $val}px !important;
+    }
+  }
+}
+
+/*
+**
+**  Color scheme
+**  You are free to override color from here, but please don't change any color in the main scss file.
+**
+*/
+$darkgreen: #00A253;
+$brightgreen : #00c95D;
+$grey : #808080;
+$darkgrey : #565656;
+$black : #1D2932;
+$white :#F8F8F8;
+$pureWhite :#FFFFFF;
+$red :#FF6161;
+$primary: #00a253;
+$secondary: #808080;
+$onPrimary: #fff;
+$bgGray: #f8f8f8;
+$yellow: #eac400;
+$blue: #016D90;
+
+.text-darkgreen {
+  color: $darkgreen;
+}
+.text-darkgrey {
+  color: $darkgrey;
+}
+.text-red {
+  color: $red;
+}
+
+.text-black {
+  color: $black;
+}
+.text-gray {
+  color: $secondary;
+}
+
+.brightgreen {
+  background: $brightgreen;
+}
+
+.darkgreen {
+  background: $darkgreen;
+}
+
+
+.text-white {
+  color: white;
+}
+
+.text-brightgreen {
+  color: $brightgreen;
+}
+
+.text-blue {
+  color: $blue;
+}
+
+
+
+
+
+.warning {
+  color: $yellow;
+}
+
+.complete {
+  color: $primary;
+}
+
+/*
+$primary: red;
+$secondary: blue;
+$onPrimary: green;
+*/
+
+.dark-green-button {
+  padding-top: 11px;
+  padding-bottom: 11px;
+  padding-left: 29px;
+  padding-right: 29px;
+  color: $pureWhite;
+  background: $darkgreen;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+}
+
+.mat-button.mat-teha {
+  color: $darkgreen;
+}
+
+.mat-raised-button.mat-teha,
+.mat-flat-button.mat-teha {
+  background-color: $darkgreen;
+  color: white;
+}
+
+.comp-tabs-title {
+    ::ng-deep {
+      .mat-tab-label-content {
+        font-size: large;
+      }
+    }
+  }
+  .comp-mat-select {
+    font-size: large;
+    ::ng-deep {
+      .mat-select-arrow {
+        visibility: hidden;
+      }
+      .select-icon {
+        position: absolute;
+        right: 5px;
+        bottom: 7px;
+        font-size: 30px !important;
+      }
+    }
+  }
+  
+  ::ng-deep {
+    .mat-column-adminUserNo, .mat-column-adminUserno {
+      white-space: pre !important;
+    }
+  }
+  
+  ::ng-deep {
+    .comp-mat-menu {
+      .mat-menu-content {
+        padding: 0 16px;
+      }
+    }
+    .mat-sort-header-container {
+      justify-content: start;
+    }
+  
+    .mat-tab-header {
+      border-bottom: none;
+    }
+  }
+  

@@ -1,0 +1,158 @@
+<div class="font-resp" fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+    <div fxFlex>
+            <div fxLayout="row" fxLayoutAlign="space-between center">
+                <mat-card-title fxFlex>
+                    <span class="header-3 m-l-2" fxFlex>{{'accounting.accountingStatusOverview' | translate}}</span>
+                </mat-card-title>
+                <div fxFlex fxLayoutAlign="end end" class="m-r-10">
+                    <app-accounting-year-selector (onPayrollYearChange)="onPayrollYearChange($event)">
+                    </app-accounting-year-selector>
+                </div>
+                <div fxFlex="25" fxLayoutAlign.lt-md="end start" fxLayoutAlign="end start">
+                    <app-search-bar class="p-b-2" placeHolder="{{'stockOverview.appSearchBarProperty' | translate}}"
+                        [searchText]="freeText" (enterPressed)="onChange($event)" (backspace)="onChange($event,true)">
+                    </app-search-bar>
+                </div>
+            </div>
+
+        <mat-card-content class="m-b-0 font-resp">
+            <div fxLayout="column">
+                    <div class=" m-b-5 y-overflow-auto" fxLayout="column" class="tableHeight table-align"
+                        fxLayoutAlign="start start">
+                        <table mat-table class="full-width-table grid-table" matSort aria-label="Elements">
+                            <ng-container matColumnDef="tehaLgNo">
+                                <th mat-header-cell *matHeaderCellDef class="sort align-c">
+                                    {{'stockOverview.tehaLgNo' | translate}}
+                                </th>
+                                <td class="align-c" mat-cell *matCellDef="let element">
+                                    <a class="link"
+                                        (click)="goForAccounting(element.id, element.payrollYearId)">{{element.tehaLgNo}}</a>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="adminLgNo">
+                                <th mat-header-cell *matHeaderCellDef class="sort align-c">
+                                    {{'stockOverview.adminLgNo' | translate}}
+                                </th>
+                                <td class="align-c" mat-cell *matCellDef="let element">
+                                    <a class="link"
+                                        (click)="goForAccounting(element.id, element.payrollYearId)">{{element.adminLgNo | replaceNullWithDash}}</a>
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="address">
+                                <th class="align-c" mat-header-cell *matHeaderCellDef>
+                                    {{'stockOverview.address' | translate}}
+                                </th>
+                                <td class="align-s" mat-cell *matCellDef="let element">{{ element.street }}, {{ element.postcode }},
+                                    {{element.place}}</td>
+                            </ng-container>
+
+
+                            <ng-container matColumnDef="accPeriod">
+                                <th class="align-c" mat-header-cell *matHeaderCellDef>
+                                    <span fxLayoutAlign="center center">
+                                        {{'accounting.accountingPeriodAccounting' | translate}}
+                                        <button mat-icon-button [matMenuTriggerFor]="filterMenu"
+                                            [matMenuTriggerData]="{element: 'monthMenu'}">
+                                            <svg *ngIf="!selectedFilter.has('monthMenu');else filledFilterIcon"
+                                                width="15" height="15" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M18.3334 2.5H1.66675L8.33342 10.3833V15.8333L11.6667 17.5V10.3833L18.3334 2.5V2.5Z"
+                                                    stroke="#565656" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </th>
+                                <td class="align-c" mat-cell *matCellDef="let element">{{ element.billingPeriod }}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="accStatus">
+                                <th class="align-c" mat-header-cell *matHeaderCellDef>
+                                    <span fxLayoutAlign="start center">
+                                        {{'accounting.accountingStatusAccounting' | translate}}
+                                        <button mat-icon-button [matMenuTriggerFor]="filterMenu"
+                                            [matMenuTriggerData]="{element: 'accountingStatus'}">
+                                            <svg *ngIf="!selectedFilter.has('accountingStatus');else filledFilterIcon"
+                                                width="15" height="15" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M18.3334 2.5H1.66675L8.33342 10.3833V15.8333L11.6667 17.5V10.3833L18.3334 2.5V2.5Z"
+                                                    stroke="#565656" stroke-width="2" stroke-linecap="round"
+                                                    stroke-linejoin="round" />
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </th>
+                                <td class="align-c filter-adj" mat-cell *matCellDef="let element">
+                                    <!-- {{ element.billingStatus }} -->
+                                    {{'lookup.'+utilityService.toCamelCase(element.billingStatus) | translate}}
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="dta">
+                                <th class="align-c" mat-header-cell *matHeaderCellDef>
+                                    {{'accounting.dta' | translate}}
+                                </th>
+                                <td class="align-c" mat-cell *matCellDef="let element">
+                                    <div fxLayout="row" fxLayoutAlign="center center">
+                                        <a *ngIf="element.dta !='N'" class="link"
+                                        (click)="onDataExchange(element.id)" skipLocationChange>
+                                            {{ element.dta | dta}}</a>
+                                        <span *ngIf="element.dta =='N'">{{ element.dta | dta}}</span>
+                                        <div class="m-t-2 m-l-3" *ngIf="element.dta =='N'" customToolTip [originX]="'start'" [offsetX]="-300"
+                                        [contentTemplate]="assemblyTooltipTemplate">
+                                            <mat-icon>info</mat-icon>
+                                        </div>
+                                    </div>
+
+                                </td>
+
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                    </div>
+                    <div fxLayout="column" fxFlexFill fxLayoutAlign="center center">
+                        <mat-paginator hidePageSize="true" #paginator (page)="onPageChange($event)"
+                            [pageIndex]="pageIndex" [pageSize]="pageSize">
+                        </mat-paginator>
+                    </div>
+            </div>
+
+
+
+            <mat-menu class="menuFilter" #filterMenu="matMenu">
+                <ng-template matMenuContent let-element="element">
+                    <div *ngIf="selectedFilter.has(element)">
+                        <button (click)="removeFilter(element)" mat-flat-button>{{'accounting.reset' |
+                            translate}}</button>
+                        <mat-divider></mat-divider>
+                    </div>
+                    <button *ngFor="let item of getFilterList(element)" mat-menu-item
+                        (click)="onFilterClick(element, item)"><span
+                            [ngClass]="{'text-darkgreen': setColor(element, item)}">
+                            {{element === 'monthMenu'? item : 'lookup.'+utilityService.toCamelCase(item.code ) |
+                            translate}}
+                        </span>
+                    </button>
+                </ng-template>
+            </mat-menu>
+
+            <ng-template #filledFilterIcon>
+                <mat-icon class="selected-filter-icon">filter_alt</mat-icon>
+            </ng-template>
+        </mat-card-content>
+    </div>
+</div>
+<ng-template #assemblyTooltipTemplate>
+    <div fxLayout="row">
+        <div class="customTooltipFlatGroup" fxLayoutGap="2px" fxLayoutAlign="center">
+            <span>{{'accounting.dtaTooltip' | translate}}</span>
+        </div>
+    </div>
+</ng-template>

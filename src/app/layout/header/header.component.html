@@ -1,0 +1,72 @@
+<mat-toolbar #RespTopbar fxLayout="row">
+  <button (click)="clickMe()" fxFlex="40px" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span fxFlex="auto" fxLayoutAlign="center center"><img src="./assets/images/teha_logo.png" class="logo" /></span>
+  <button [matMenuTriggerFor]="beforeMenu" fxFlex="40px" mat-icon-button>
+    <mat-icon>menu</mat-icon>
+  </button>
+  
+  <mat-menu class="drop-menu" #beforeMenu="matMenu" xPosition="before">
+    <mat-nav-list role="list">
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/home/">
+          <mat-icon >home</mat-icon>
+          <span>{{'miscellaneous.home' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/stockoverview/">
+          <mat-icon>assignment</mat-icon>
+          <span>{{'stockOverview.stockOverviewLabel' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/accounting/overview">
+          <mat-icon>calculate</mat-icon>
+          <span>{{'miscellaneous.accountingOverview' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/orders">
+          <mat-icon>shopping_bag</mat-icon>
+          <span class="vertical-align-center">{{'miscellaneous.myOrders' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/documentarchives">
+          <mat-icon>description</mat-icon>
+          <span>{{'miscellaneous.documentArchives' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/mycontactpeople">
+          <mat-icon> call</mat-icon>
+          <span>{{'miscellaneous.myContactPeople' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item role="listitem">
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px" routerLink="/myprofile">
+          <mat-icon>account_box</mat-icon>
+          <span>{{'miscellaneous.myProfile' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+      <mat-list-item (click)="logOut()" role="listitem" >
+        <a fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="10px">
+          <mat-icon>power_settings_new</mat-icon>
+          <span>{{'miscellaneous.logout' | translate}}</span>
+        </a>
+      </mat-list-item>
+  
+  
+    </mat-nav-list>
+  </mat-menu>
+
+</mat-toolbar>

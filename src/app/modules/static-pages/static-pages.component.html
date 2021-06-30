@@ -1,0 +1,43 @@
+<div fxLayout="column" fxLayoutGap="20px" class="m-l-5 m-r-5 font-resp">
+    <div fxLayout="row" fxLayout.lt-md="column" fxFlex fxFlex.gt-sm="25vh" fxLayoutGap="20px" fxLayoutGap.gt-sm="40px">
+        <app-shared-hello-card message="Weisen Sie Ihre Verwalter bestehenden 
+        Liegenschaften zu oder erweitern Sie hier Ihr 
+        Team." fxFlex="50" fxFlex.lt-md="100"></app-shared-hello-card>
+        <div fxLayout="column" fxFlex="50" fxLayoutGap="24px">
+            <app-map-component [isFromUser]="true" fxFlex="100"></app-map-component>
+        </div>
+    </div>
+
+    <div fxFlex="100">
+        <mat-card class="mat-dashboard-card">
+            <div fxLayout="row" fxLayoutAlign="space-between center" class="card-title-row" fxLayout.lt-md="column">
+
+                <mat-card-title fxFlex>
+                    <span fxLayout="row" fxLayoutAlign="start center">
+                        {{'info.heading' | translate}}
+                    </span>
+                    <span fxFlex></span>
+
+                </mat-card-title>
+
+            </div>
+
+            <mat-card-content class="font-resp">
+                <mat-tab-group class="comp-tabs-title" mat-align-tabs="center" #tabGroup>
+                    <mat-tab label=" {{'info.legalTextTab' | translate}}">
+                        <app-legal-text></app-legal-text>
+                    </mat-tab>
+                    <mat-tab label=" {{'info.termsConditionsTab' | translate}}">
+                        <app-terms></app-terms>
+                    </mat-tab>
+                    <mat-tab label=" {{'info.legalTextTab' | translate}}">
+                        <app-faqs></app-faqs>
+                    </mat-tab>
+                </mat-tab-group>
+
+
+            </mat-card-content>
+
+
+        </mat-card>
+    </div>

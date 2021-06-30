@@ -1,0 +1,105 @@
+<div fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="center center">
+    <div fxFlex>
+        <mat-card-header>
+
+            <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+
+                </span>
+                <span fxFlex>{{'accounting.accountingEditData' | translate}}
+                </span>
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+
+        <mat-card-content>
+            <div fxLayout="row" class="m-t-10 font-resp">
+                <div class="m-l-20" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+                    <h4 class="header-4">{{'accounting.propertyData' | translate}}</h4>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">{{'stockOverview.tehaLgNo' | translate}}</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="{{'stockOverview.tehaLgNo' | translate}}" value="">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Accounting Period</mat-label>
+                            <input class="mat-place comp-mat-select" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Accounting Period</mat-label>
+                            <input class="mat-place comp-mat-select" matInput>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="83">
+                            <mat-label class="mat-place comp-mat-select">Street</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Street" value="">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Postcode</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Postcode" value="">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">City</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="City" value="">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <mat-divider [vertical]="true"></mat-divider>
+
+                <div class="m-l-20" fxLayout="column" fxLayoutGap="40px" fxFlex="50">
+                    <h4 class="header-4">Customer Data</h4>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Customer No.</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Customer No." value="">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Property Manager/Owner</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Property Manager/Owner"
+                                value="">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Telephone</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Telephone" value="">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                        <mat-form-field fxFlex="83">
+                            <mat-label class="mat-place comp-mat-select">Street</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Street" value="">
+                        </mat-form-field>
+                    </div>
+                    <div fxLayout="row" fxLayoutGap="20px">
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">Postcode</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="Postcode" value="">
+                        </mat-form-field>
+                        <mat-form-field fxFlex="40">
+                            <mat-label class="mat-place comp-mat-select">City</mat-label>
+                            <input class="mat-place comp-mat-select" matInput placeholder="City" value="">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <div fxLayoutAlign="end end" fxLayoutGap="12px" class="m-8">
+                <button mat-button class="primary-transparent-button wide">Cancel</button>
+                <button mat-button class="primary-green-button wide">Confirm</button>
+            </div>
+        </mat-card-actions>
+    </div>
+</div>

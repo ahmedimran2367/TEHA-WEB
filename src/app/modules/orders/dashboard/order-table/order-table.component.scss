@@ -1,0 +1,62 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+@import "../../../../shared/styles/confirmationmessage";
+@import "../../../../shared/styles/orderscommon";
+@import "../../../../shared/styles/deep";
+
+
+
+.ml4 {
+  margin-left: 20px;
+}
+
+
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+.full-width-table {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-header-cell {
+  justify-content: center;
+  text-align: center;
+}
+
+
+:host ::ng-deep .mat-cell {
+  text-align: center;
+  justify-content:center;
+}
+
+.blue-text {
+  color: $blue;
+  font-weight: 500;
+}
+
+.selected-filter-icon {
+  color: $primary;
+}
+.menu-button {
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
+}
+.mat-column-actions {
+  white-space: unset !important;
+  width: 10px !important;
+}
+
+.mat-header-cell {
+  padding-right: 0px !important;
+}
+.tableHeight {
+  max-height: calc(75vh - 206px);
+  overflow: auto; 
+}
+
+.shadow-none {
+  box-shadow: none !important;
+}

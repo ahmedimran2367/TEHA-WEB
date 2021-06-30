@@ -1,0 +1,82 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/confirmationmessage";
+@import "../../../shared/styles/orderscommon";
+@import "../../../shared/styles/formfields";
+@import "../../../shared/styles/deep";
+.ml4
+{
+    margin-left: 20px;
+}
+table {
+    width: 100%;
+  }
+.is-hidden 
+{
+    display: none;
+    visibility: collapse;
+    width: 0px !important;
+    height: 0px !important;
+  }
+.is-hidden-overview-card {
+    display: none;
+    visibility: collapse;
+    width: 0px !important;
+    height: 0px !important;
+  }
+  
+  .confirmed-order p {
+    color: $primary;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 21px;
+    letter-spacing: 0.05em;
+    padding-top: 50px;
+  }
+  
+  
+  .confirmed-order svg {
+    margin-right: 25px;
+    margin-top: 32px;
+  }
+  
+  .confirmed-order {
+    margin-bottom: 30px;
+  }
+  
+  .confirm-order2 {
+    color: $secondary;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 40px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    padding-bottom: 30px;
+  }
+
+  :host ::ng-deep .mat-header-cell {
+    justify-content: center;
+    text-align: center;
+  }
+
+
+  :host ::ng-deep .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+  }
+
+  :host ::ng-deep .mat-select {
+    .mat-option {
+      background: #FFFFFF;
+      box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.25);
+      width: 120px;
+      height: 30px;
+    }
+  }
+  .align-c{
+    text-align: center;
+  }

@@ -1,0 +1,31 @@
+<mat-card class="mat-dashboard-card font-resp p-l-8 p-t-5">
+  <mat-card-title class="header-2">{{Title}}</mat-card-title>
+  <mat-card-content>
+    <div class="m-t-5" fxLayoutGap="24px" fxLayoutAlign="start center">
+      <div fxLayout="column" fxFlexFill>
+        <p fxLayout="row">
+          <mat-form-field fxFlex="90" class="placeholder-text-1" appearance="standard">
+            <mat-label>{{'home.contactPerson' | translate}}</mat-label>
+            <input value="{{ContactPersonDetail?.name}}" matInput placeholder="" readonly>
+            <mat-icon matSuffix>person</mat-icon>
+          </mat-form-field>
+        </p>
+        <p fxLayout="row">
+          <mat-form-field fxFlex="90" class="placeholder-text-1" appearance="standard">
+            <mat-label>{{'home.emailFormatted' | translate}}</mat-label>
+            <input value="{{ContactPersonDetail?.email}}" matInput placeholder="" readonly>
+            <mat-icon matSuffix>email</mat-icon>
+          </mat-form-field>
+        </p>
+        <p fxLayout="row">
+          <mat-form-field fxFlex="90" class="placeholder-text-1" appearance="standard">
+            <mat-label>{{'home.tel' | translate}}</mat-label>
+            <input value="{{ContactPersonDetail?.phone}}" matInput placeholder="" readonly>
+            <mat-icon matSuffix>call</mat-icon>
+          </mat-form-field>
+        </p>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>

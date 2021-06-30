@@ -1,0 +1,64 @@
+@import "../../../../shared/styles/spacing";
+@import "../../../../shared/styles/colors";
+@import "../../../../shared/styles/typography";
+
+
+
+table {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    max-width: 200px;
+    text-align: start;
+    span.right {
+      display: block;
+      width: 180px;
+      text-align: right !important;
+    }
+    span.center {
+      display: block;
+      width: 180px;
+      text-align: center !important;
+    }
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: start;
+    min-height: 75px;
+    span.right {
+      display: block;
+      width: 180px;
+      text-align: right !important;
+    }
+    span.center {
+      display: block;
+      width: 180px;
+      text-align: center !important;
+    }
+  }
+
+  .primaryHighlight {
+    color: $primary;
+  }
+
+  .dangerHighlight {
+    color: red;
+  }
+}
+
+
+.menuFilterForm {
+  padding: 1vw;
+}
+
+.selected-filter-icon {
+  color: $primary;
+}
+
+.cross-icon {
+  cursor: pointer
+}
+

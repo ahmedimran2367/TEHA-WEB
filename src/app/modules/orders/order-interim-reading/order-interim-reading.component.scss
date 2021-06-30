@@ -1,0 +1,194 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+@import "../../../shared/styles/confirmationmessage";
+@import "../../../shared/styles/orderscommon";
+@import "../../../shared/styles/formfields";
+@import "../../../shared/styles/deep";
+
+.ml4 {
+  margin-left: 20px;
+}
+
+.search-bar input {
+  width: 400px;
+  height: 40px;
+  border: transparent;
+  outline: none;
+}
+
+.vertical-separator {
+  // height: 250px;
+  // opacity: 0.6;
+  
+  // border: 0.75px solid #808080;
+
+  // /* Line 4 */
+
+width: 377px;
+height: 0px;
+
+border: 0.75px solid #808080;
+transform: rotate(90deg);
+  
+}
+.search-bar svg {
+  width: 15px;
+  margin-top: 10px;
+  margin-left: 15px;
+}
+
+.is-hidden-overview-card {
+  display: none;
+  visibility: collapse;
+}
+
+.is-hidden {
+  display: none;
+  visibility: collapse;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+.panel {
+  padding-left: 30px;
+  padding-top: 30px;
+
+  .inner-panel {
+    // padding-left: 10px;
+
+  }
+}
+.text-label {
+  p {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 21px;
+    /* identical to box height */
+
+    letter-spacing: 0.05em;
+
+    color: #565656;
+  }
+}
+.ml4 {
+  margin-left: 20px;
+}
+
+.mat-divider{
+  border-top-width: 2px;
+  border-top-style: dashed;
+}
+
+.search {
+  margin-top: -70px;
+}
+
+
+// .mat-card-content {
+//   overflow: scroll;
+//   min-height: 290px;
+//   overflow-x: auto;
+// }
+
+
+
+.confirmed-order {
+
+  svg {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+  }
+  
+ p {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+
+  color: #00A253 !important;
+}
+
+
+}
+
+.confirm-order2 {
+  color: $secondary;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  padding-bottom: 30px;
+}
+
+.check-box {
+  margin-top: 15px;
+}
+
+.check-box .example-margin {
+  margin-bottom: 18px;
+  margin-top: 10px;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+}
+
+.check-box .example-margin a {
+  text-decoration: none;
+}
+
+.full-width-table {
+  width: 100%;
+}
+
+// Table Centering Hack -- Issue in Angular Material, Not Centering
+:host ::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+.formFieldWidth480 .mat-form-field-infix {
+  width: 80px;
+}
+
+:host ::ng-deep .mat-header-cell {
+  justify-content: center;
+  text-align: center;
+}
+.datePickerWith{
+  width: 140px !important;
+}
+
+
+table.summaryTable {
+  width: 100%;
+
+  th {
+    min-width: 90px;
+    max-width: 120px;
+    text-align: center;
+    word-wrap: break-word;
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 150px;
+    text-align: center;
+    min-height: 75px;
+  }
+}
+.requiredColor{
+  color: red;
+}

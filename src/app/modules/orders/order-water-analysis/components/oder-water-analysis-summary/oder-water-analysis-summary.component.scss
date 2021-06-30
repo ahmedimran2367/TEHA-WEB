@@ -1,0 +1,57 @@
+@import "../../../../../shared/styles/spacing";
+@import "../../../../../shared/styles/colors";
+@import "../../../../../shared/styles/typography";
+@import "../../../../../shared/styles/confirmationmessage";
+@import "../../../../../shared/styles/orderscommon";
+@import "../../../../../shared/styles/formfields";
+
+
+
+table {
+  width: 100%;
+
+  th {
+    min-width: auto;
+    max-width: 200px;
+    text-align: center;
+  }
+
+  td {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 200px;
+    text-align: center;
+    min-height: 75px;
+  }
+}
+
+.confirmed-order svg {
+  margin-right: 25px;
+  margin-top: 32px;
+}
+
+.confirmed-order {
+  margin-bottom: 30px;
+}
+
+.confirm-order2 {
+  color: $secondary;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 40px;
+  text-align: center;
+  letter-spacing: 0.05em;
+  padding-bottom: 30px;
+}
+
+.confirmed-order p {
+  color: $primary;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 21px;
+  letter-spacing: 0.05em;
+  padding-top: 50px;
+}

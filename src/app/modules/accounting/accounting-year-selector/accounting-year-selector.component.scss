@@ -1,0 +1,50 @@
+@import "../../../shared/styles/spacing";
+@import "../../../shared/styles/colors";
+@import "../../../shared/styles/typography";
+
+
+.date-menu-date {
+  font-style: normal;
+  font-weight: 300;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  // text-shadow: 0px 4px 4   px rgba(0, 0, 0, 0.25);
+}
+
+.date-menu-year {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  margin-left: 10px;
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
+  margin-right: 10px
+}
+.date-menu-year-all {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.05em;
+  margin-left: 10px;
+  margin-right: 10px
+}
+.date-menu-year:hover {
+  border-right: 1px solid #00C95D;
+}
+
+.yeardropdown {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  cursor: pointer;
+}
+
+.yeardropdown:hover {
+  color: #00C95D;
+}
+
+.selected {
+  color: #00C95D;
+}

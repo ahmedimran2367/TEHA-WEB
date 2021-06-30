@@ -1,0 +1,71 @@
+<aside>
+  <div class="logo-container p-t-10 p-b-14">
+    <img [src]="getLogo()" [class.logo-sm]="!sidebarOpen" [class.logo-lg]="sidebarOpen" alt="logo" />
+  </div>
+  <mat-nav-list role="list">
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rlh.isActive }">
+      <a matLine routerLink="/home/" routerLinkActive="active" #rlh="routerLinkActive">
+        <mat-icon matTooltip="{{'miscellaneous.home' | translate}}" [matTooltipPosition]="'right'">home</mat-icon>
+        <span>{{'miscellaneous.home' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rls.isActive }">
+      <a matLine routerLink="/stockoverview/" routerLinkActive="active" #rls="routerLinkActive">
+        <mat-icon matTooltip="{{'stockOverview.stockOverviewLabel' | translate}}" [matTooltipPosition]="'right'">assignment</mat-icon>
+        <span>{{'stockOverview.stockOverviewLabel' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rla.isActive }">
+      <a matLine routerLink="/accounting/overview" routerLinkActive="active" #rla="routerLinkActive">
+        <mat-icon matTooltip="{{'miscellaneous.accountingOverview' | translate}}" [matTooltipPosition]="'right'">calculate</mat-icon>
+        <span>{{'miscellaneous.accountingOverview' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rlo.isActive }">
+      <a matLine routerLink="/orders" routerLinkActive="active" #rlo="routerLinkActive">
+        <mat-icon matTooltip="{{'miscellaneous.myOrders' | translate}}" [matTooltipPosition]="'right'">shopping_bag</mat-icon>
+        <span class="vertical-align-center">{{'miscellaneous.myOrders' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rld.isActive }">
+      <a matLine routerLink="/documentarchives" routerLinkActive="active" #rld="routerLinkActive">
+        <mat-icon matTooltip="{{'miscellaneous.documentArchives' | translate}}" [matTooltipPosition]="'right'">description</mat-icon>
+        <span>{{'miscellaneous.documentArchives' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rlc.isActive }">
+      <a matLine routerLink="/mycontactpeople" routerLinkActive="active" #rlc="routerLinkActive">
+        <mat-icon matTooltip="{{'miscellaneous.myContactPeople' | translate}}" [matTooltipPosition]="'right'"> call</mat-icon>
+        <span>{{'miscellaneous.myContactPeople' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <!-- <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rlc.isActive }">
+      <a matLine routerLink="/staticpages" routerLinkActive="active" #rlc="routerLinkActive">
+        <mat-icon matTooltip="" [matTooltipPosition]="'right'">description</mat-icon>
+        <span>{{'info.pages' | translate}}</span>
+      </a>
+    </mat-list-item> -->
+
+    <mat-list-item role="listitem" [ngClass]="{ 'activeSideMenu': rlp.isActive }">
+      <a matLine routerLink="/myprofile" routerLinkActive="active" #rlp="routerLinkActive">
+        <mat-icon matTooltip="{{'miscellaneous.myProfile' | translate}}" [matTooltipPosition]="'right'">account_box</mat-icon>
+        <span>{{'miscellaneous.myProfile' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+    <mat-list-item role="listitem">
+      <a matLine (click)="logOut()">
+        <mat-icon matTooltip="{{'miscellaneous.logout' | translate}}" [matTooltipPosition]="'right'">power_settings_new</mat-icon>
+        <span>{{'miscellaneous.logout' | translate}}</span>
+      </a>
+    </mat-list-item>
+
+
+  </mat-nav-list>
+</aside>

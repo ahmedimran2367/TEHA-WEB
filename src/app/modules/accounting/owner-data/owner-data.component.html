@@ -1,0 +1,95 @@
+<div fxLayout="row" class="font-resp" fxLayout.lt-md="column" fxLayoutAlign="center center">
+    <div fxFlex>
+        <mat-card-header>
+            <mat-card-title>
+                <span fxLayout="row" fxLayoutAlign="center center">
+                    <button (click)="goBackToUserData(false)" mat-icon-button>
+                        <mat-icon>arrow_back</mat-icon>
+                    </button>
+                    <span fxFlex>{{'accounting.accountingOwnerData' | translate}}</span>
+                </span>
+            </mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content class="m-l-5 m-t-5">
+
+            <form #ownerForm="ngForm">
+            <table class="m-b-10">
+                <thead>
+                    <tr>
+                        <th>{{'account.salutation' | translate}}</th>
+                        <th>{{'order.firstName' | translate}}</th>
+                        <th>{{'order.lastName' | translate}}</th>
+                        <th>{{'order.moveInDate' | translate}}</th>
+                        <th>{{'order.moveoutDate' | translate}}</th>
+                        <th>{{'order.emailAddress' | translate}}</th>
+                        <th>{{'account.phone' | translate}}</th>
+                    </tr>
+                </thead>
+                <ng-container *ngFor="let item of owners; let i = index;trackBy:trackByIdx">
+                    <tbody class="m-t-5" [attr.id]=i>
+                        <tr>
+                            <td>
+                                <mat-form-field class="comp-mat-select">
+                                    <mat-select name="secondarySalutationCode{{i}}" [disabled]="readonlyInd" class="placeholder-text-1" [(ngModel)]="item.contact.salutationCode" placeholder="">
+                                      <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                                        {{ 'miscellaneous.'+ utility.fixSalutationCode(item.code) | translate }}
+                                      </mat-option>
+                                    </mat-select>
+                                    <mat-icon class="select-icon" aria-hidden="false">keyboard_arrow_down</mat-icon>
+                                  </mat-form-field>
+                            </td>
+                            <td><input name="firstName{{i}}" [(ngModel)]="item.contact.firstName" type="text" [readonly]="readonlyInd" 
+                                [required]="item.contact.lastName != null || item.startDate != null" [ngClass]="{'errorInput' : getInputError('firstName',i)}"></td>
+                            <td><input name="lastName{{i}}" [(ngModel)]="item.contact.lastName" type="text" [readonly]="readonlyInd"
+                                [required]="item.contact.firstName != null || item.startDate != null" [ngClass]="{'errorInput' : getInputError('lastName',i)}"></td>
+                            <td class="date-input"><input name="startDate{{i}}" [ngModel]="item.startDate" (ngModelChange)="item.startDate= utility.setDateFormat($event)"
+                                 [matDatepicker]="picker" (click)="picker.open()" readonly
+                                 [min]="i == 0? null : oneDayAdd(owners[i-1].endDate)"
+                                [max]="accountingService.currentBillingPeroid.to" [required]="item.contact.lastName != null || item.contact.firstName != null"
+                                [ngClass]="{'errorInput' : getInputError('startDate',i)}">
+                                <mat-datepicker [disabled]="readonlyInd" #picker></mat-datepicker>
+                                <svg (click)="picker.open()" class="svg-date" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                    fill="#565656" />
+                            </svg>
+                            </td>
+                            <td class="date-input"><input name="endDate{{i}}" [ngModel]="item.endDate" (ngModelChange)="item.endDate= utility.setDateFormat($event)"
+                                 [matDatepicker]="picker1" (click)="picker1.open()" readonly [max]="accountingService.currentBillingPeroid.to"
+                                 [min]="oneDayAdd(item.startDate)">
+                                <mat-datepicker [disabled]="readonlyInd" #picker1></mat-datepicker>
+                                <svg *ngIf="i != owners.length -1 || item.endDate == null" (click)="picker1.open()" class="svg-date" width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.66801 4.00033H4.00134V3.16699H2.33459V5.66699H15.6679V3.16699H14.0013V4.00033H12.3346V3.16699H5.66801V4.00033ZM15.6679 7.33366H2.33459V15.667H15.6679V7.33366ZM12.3346 1.50037H5.66801V0.666992H4.00134V1.50037H2.33464C1.41416 1.50037 0.667969 2.24656 0.667969 3.16703V15.667C0.667969 16.5875 1.41416 17.3337 2.33464 17.3337H15.668C16.5884 17.3337 17.3346 16.5875 17.3346 15.667V3.16703C17.3346 2.24656 16.5884 1.50037 15.668 1.50037H14.0013V0.666992H12.3346V1.50037ZM6.50126 10.667H4.83459V9.00037H6.50126V10.667ZM8.16797 10.667H9.83464V9.00037H8.16797V10.667ZM13.168 10.667H11.5013V9.00037H13.168V10.667ZM4.83459 14.0003H6.50126V12.3336H4.83459V14.0003ZM9.83464 14.0003H8.16797V12.3336H9.83464V14.0003Z"
+                                    fill="#565656" />
+                            </svg>
+                            <mat-icon class="svg-date link" *ngIf="i == owners.length -1 && item.endDate != null" (click)="item.endDate=null">clear</mat-icon>
+                            </td>
+                            <td><input name="email{{i}}" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" [(ngModel)]="item.contact.email"
+                                 [ngClass]="{'errorInput' : !ownerForm.form.controls['email'+i]?.valid}" [readonly]="readonlyInd"></td>
+                            <td><input name="phone{{i}}" [(ngModel)]="item.contact.phone" numbersOnly="true" [readonly]="readonlyInd"></td>
+                            <td>
+                                <button *ngIf="i == 0" (click)="addNewRow(i)" mat-icon-button [disabled]="readonlyInd">
+                                    <mat-icon [matTooltip]="addNewUserTooltip" [matTooltipPosition]="'above'">add_circle_outline</mat-icon>
+                                </button>
+                                <button mat-icon-button disabled *ngIf="i != 0"></button>
+                                <button *ngIf="item.deleteInd || item.ownerId==-1" (click)="deleteRow(i)" mat-icon-button [disabled]="readonlyInd">
+                                    <img [matTooltip]="deleteTooltip" [matTooltipPosition]="'above'" src="./assets/images/trash.svg">
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </ng-container>
+            </table>
+        </form>
+        </mat-card-content>
+        <mat-card-actions>
+            <div fxLayoutAlign="end end" fxLayoutGap="12px" class="m-8">
+                <button [disabled]="!ownerForm.form.valid || readonlyInd" (click)="goBackToUserData(true)" mat-button class="primary-green-button btn-lg">{{'accounting.saveBackUserData' | translate}}</button>
+            </div>
+        </mat-card-actions>
+    </div>
+</div>

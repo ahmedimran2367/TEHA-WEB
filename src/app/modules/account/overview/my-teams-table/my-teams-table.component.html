@@ -1,0 +1,333 @@
+<!-- <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="24px">
+  <table mat-table class="full-width-table" matSort aria-label="Elements">
+    <ng-container matColumnDef="descriptionDocument">
+      <th mat-header-cell *matHeaderCellDef>
+        Description <br />
+        Document
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <a routerLink="/stockoverview/flat" [state]="element">{{ element.descriptionDocument }}</a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="creationDate">
+      <th mat-header-cell *matHeaderCellDef>
+        Creation Date
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.creationDate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="accountingPeriod">
+      <th mat-header-cell *matHeaderCellDef>
+        Accounting Period
+      </th>
+      <td mat-cell *matCellDef="let element">{{ element.accountingPeriod | replaceNullWithDash }}</td>
+    </ng-container>
+
+    
+    
+    <ng-container matColumnDef="download">
+      <th mat-header-cell *matHeaderCellDef>
+        Download
+      </th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container *ngIf="element.download; else disabledDownloadButtonTemplate">
+          <button mat-flat-button>
+            <img src="./assets/images/download-bold.svg">
+          </button>
+        </ng-container>
+        <ng-template #disabledDownloadButtonTemplate>
+          <span><img src="./assets/images/download-dis.svg"></span>
+        </ng-template>
+      </td>
+    </ng-container>
+
+    
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator #paginator [length]="dataSource?.data.length" [pageIndex]="0" [pageSize]="5"
+    [pageSizeOptions]="[5, 10]">
+  </mat-paginator>
+</div> -->
+<!-- <mat-menu #appMenu="matMenu">
+  <ng-template matMenuContent let-element="element">
+    <button mat-menu-item>Energy Performance {{element.tehaLgNo}}</button>
+    <button mat-menu-item>Drinking Water {{element.tehaLgNo}}</button>
+  </ng-template>
+</mat-menu> -->
+<mat-accordion *ngIf="!addTeamMemberInd && !assignPropertyInd" class="teams-accord font-resp">
+  <mat-expansion-panel *ngFor="let member of myTeamNew" class="m-0 p-l-8 p-r-8">
+    <mat-expansion-panel-header fxLayout="row">
+      <mat-panel-title class="m-l-10 header-3">
+        {{member.name}}
+      </mat-panel-title>
+      <mat-panel-description fxLayoutAlign="end">
+        <div fxLayout="row" fxLayoutGap="15px">
+          <mat-icon class="text-darkgrey" customToolTip [contentTemplate]="assignTooltipTemplate" (click)="assignPropertyInd = true; selectedMember = member; this.updateFormAppeard.emit({ hideBackButton: false, message: 'account.assignNewBuilding'});" fxLayoutAlign="center center">add_circle_outline</mat-icon>
+          <img src="assets/images/bulding.svg">
+          <span fxLayoutAlign="center center" class="placeholder-text-1">{{member.properties === null ?  0 : member.properties.length}}</span>
+        </div>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div fxHide.lt-md="true" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="24px"
+  class="table-resp font-resp m-t-5">
+  <table mat-table class="full-width-table grid-table table-align" mat-table matSort aria-label="Elements"
+    [dataSource]="member.properties">
+      <ng-container matColumnDef="tehaLgNum">
+        <th mat-header-cell *matHeaderCellDef>
+          {{'stockOverview.tehaLgNo' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">
+          {{element.tehaLgNo}}
+        </td>
+      </ng-container>
+  
+      <ng-container matColumnDef="adminLgNum">
+        <th mat-header-cell *matHeaderCellDef>
+          {{'stockOverview.adminLgNo' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.adminLgNo }}</td>
+      </ng-container>
+  
+      <ng-container matColumnDef="street">
+        <th mat-header-cell *matHeaderCellDef>
+          {{'stockOverview.street' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.street }}</td>
+      </ng-container>
+      <ng-container matColumnDef="zipcode">
+        <th mat-header-cell *matHeaderCellDef>
+          {{'stockOverview.postcode' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.postcode }}</td>
+      </ng-container>
+      <ng-container matColumnDef="city">
+        <th mat-header-cell *matHeaderCellDef>
+          {{'stockOverview.city' | translate}}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element.place }}</td>
+      </ng-container>
+  
+      
+      
+      <ng-container matColumnDef="download">
+        <th mat-header-cell *matHeaderCellDef>
+          
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container>
+            <button (click)="removePropertyFromMember(member.userId, element.id)" mat-button>
+              <img src="assets/images/trash.svg">
+            </button>
+          </ng-container>
+        </td>
+      </ng-container>
+  
+      
+  
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <div *ngIf="member.properties" class="font-resp m-t-4" fxHide.gt-sm="true">
+    <ng-container *ngFor="let element of member.properties; let i=index">
+      <div class="simple-card">
+        <div fxLayout="column" fxLayoutGap="20px">
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.tehaLgNo' | translate}}:<br>
+                {{ element.tehaLgNo }}
+              </div>
+            </div>
+  
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.adminLgNo' | translate}}:<br>
+                {{ element.adminLgNo }}
+              </div>
+            </div>
+          </div>
+  
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.street' | translate}}:<br>
+                {{ element.street }}
+              </div>
+            </div>
+  
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.postcode' | translate}}:<br>
+                {{ element.postcode }}
+              </div>
+            </div>
+          </div>
+  
+          <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="20px">
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                {{'stockOverview.city' | translate}}:<br>
+                {{ element.place }}
+              </div>
+            </div>
+
+            <div fxLayout="column" fxFlex="50">
+              <div class="paragraph">
+                <ng-container>
+                  <button (click)="removePropertyFromMember(member.userId, element.id)" mat-button>
+                    <img src="assets/images/trash.svg">
+                  </button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </ng-container>
+  </div>
+    <!-- <mat-paginator hidePageSize = "true" #paginator [length]="member.properties?.length" [pageIndex]="0" [pageSize]="defaultDataService.DefaultData.systemSettings.gridPageSize"
+    >
+  </mat-paginator> -->
+  </mat-expansion-panel>
+  <ng-template #assignTooltipTemplate>
+    <div class="customTooltipFlatGroup" fxFlex fxLayout="column" fxLayoutGap="2px" fxLayoutAlign="center">
+      <span> {{'account.assignNewBuilding' | translate}}</span>
+    </div>
+  </ng-template>
+</mat-accordion>
+<div *ngIf="!addTeamMemberInd && !assignPropertyInd" fxLayout="row" fxLayoutAlign="end" class="m-t-10 m-r-8 font-resp">
+  <button (click)="addTeamMemberInd = true; updateFormAppeard.emit({ hideBackButton: false, message: 'account.addNewTeamMember'});" class="text-blue header-4" mat-button>
+    <mat-icon class="add-icon">add_circle_outline</mat-icon>
+    <span class="m-l-5 p-t-2">{{'account.addNewTeamMember' | translate}}</span>
+  </button>
+</div>
+
+<div *ngIf="addTeamMemberInd"  class="add-team-member-div p-t-8 p-b-8 font-resp">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlex="50" fxLayoutGap="50px">
+      <div fxLayout="column" class="panel-members-form" fxLayoutAlign="center center" fxLayoutGap="24px">
+        <div fxFlex="100" class="m-b-10 header-4" fxFlexFill>
+          {{ 'account.newMemberDetail' | translate}}
+        </div>
+        <form #newMemberForm="ngForm">
+          <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+            
+            <mat-form-field class="placeholder-text-1" fxFlex="40" fxFlex.lt-md="100">
+              <mat-label class="header-4">{{'account.salutation' | translate}}</mat-label>
+              <mat-select name="salutation" [(ngModel)]="addMemberRequestNew.requestFor.salutationCode" class="placeholder-text-1" placeholder="">
+                <mat-option *ngFor="let item of defaultDataService.DefaultData.lookUps?.salutation" [value]="item.code">
+                  {{ 'miscellaneous.'+ utilityService.fixSalutationCode(item.code) | translate }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayout.lt-md="column" fxLayoutGap="20px">
+            <mat-form-field class="placeholder-text-1" fxFlex="50" fxFlex.lt-md="100">
+              <mat-label class="header-4"> {{'order.firstName' | translate}} </mat-label>
+              <input required maxlength="50" appAlphabetOnlyDirective name="firstName" [(ngModel)]="addMemberRequestNew.requestFor.firstName" matInput placeholder="{{'order.firstName' | translate}}">
+            </mat-form-field>
+            <mat-form-field class="placeholder-text-1" fxFlex="50" fxFlex.lt-md="100">
+              <mat-label class="header-4">{{'order.lastName' | translate}}</mat-label>
+              <input required maxlength="50" appAlphabetOnlyDirective name="lastName" [(ngModel)]="addMemberRequestNew.requestFor.lastName" matInput placeholder="{{'order.lastName' | translate}}">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+            <mat-form-field class="placeholder-text-1" fxFlex="100" >
+              <mat-label class="header-4">{{'order.emailAddress' | translate}}</mat-label>
+              <input required maxlength="100" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" type="email" name="email" email="true" [(ngModel)]="addMemberRequestNew.requestFor.email" matInput placeholder="{{'order.emailAddress' | translate}}">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+            <mat-form-field class="placeholder-text-1" fxFlex="60" fxFlex.lt-md="100">
+              <mat-label class="header-4">{{'account.phone' | translate}}</mat-label>
+              <input required maxlength="20" appNumericSpecialCharactersOnly name="phone" [(ngModel)]="addMemberRequestNew.requestFor.phone" matInput placeholder="{{'account.phone' | translate}}">
+            </mat-form-field>
+          </div>
+          <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+            <mat-form-field class="placeholder-text-1" fxFlex="60" fxFlex.lt-md="100">
+              <mat-label class="header-4">{{'account.fax' | translate}}</mat-label>
+              <input name="fax" maxlength="20" appNumericSpecialCharactersOnly [(ngModel)]="addMemberRequestNew.requestFor.fax" matInput placeholder="{{'account.fax' | translate}}">
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="assignPropertyInd"  class="add-team-member-div p-t-8 p-b-8">
+  <div fxLayout="row" fxLayoutAlign="center center">
+    <div fxLayout="row" fxLayoutAlign="center center" fxFlex="50" fxLayoutGap="50px">
+      <div fxLayout="column" class="panel-members-form" fxLayoutAlign="center center" fxLayoutGap="20px">
+        <h2 fxLayout="row" class="m-b-6 sub-title">
+          {{'account.assignPropertyData' | translate}}
+        </h2>
+        <div fxLayout="row" fxLayoutGap="20px">
+          <mat-form-field class="placeholder-text-1" fxFlex="50" >
+            <mat-label class="header-4"> {{'stockOverview.tehaLgNo' | translate}}</mat-label>
+            <input type="text"
+           placeholder="TEHA LG No."
+           aria-label="Number"
+           matInput
+           [ngModel]="assignPropertyDataNew.tehaLgNo"
+           [formControl]="tehaLgControl"
+           [matAutocomplete]="autoTeha"
+           (keyup)="onTextChange(0)">
+           <!-- <mat-icon matSuffix>expand_more</mat-icon> -->
+           <mat-autocomplete (optionSelected)="optionSelected($event.option.value)" #autoTeha="matAutocomplete">
+            <mat-option *ngFor="let option of tehaLgOptions" [value]="option.id">
+              {{option.tehaLgNo}}
+            </mat-option>
+          </mat-autocomplete>
+          </mat-form-field>
+          <mat-form-field class="placeholder-text-1" fxFlex="50" >
+            <mat-label class="header-4"> {{'stockOverview.adminLgNo' | translate}}</mat-label>
+            <input type="text"
+           placeholder="{{'stockOverview.adminLgNo' | translate}}"
+           aria-label="Number"
+           matInput
+           [ngModel]="assignPropertyDataNew.adminLgNo"
+           [formControl]="adminLgControl"
+           [matAutocomplete]="autoAdmin"
+           (keyup)="onTextChange(1)">
+           <!-- <mat-icon matSuffix>expand_more</mat-icon> -->
+           <mat-autocomplete (optionSelected)="optionSelected($event.option.value)" #autoAdmin="matAutocomplete">
+            <mat-option *ngFor="let option of adminLgOptions" [value]="option.id">
+              {{option.adminLgNo}}
+            </mat-option>
+          </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+          <mat-form-field class="placeholder-text-1" fxFlex="100" >
+            <mat-label class="header-4"> {{'stockOverview.street' | translate}}</mat-label>
+            <input disabled [(ngModel)]="assignPropertyDataNew.street" matInput placeholder="{{'stockOverview.street' | translate}}">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+          <mat-form-field class="placeholder-text-1" fxFlex="100" >
+            <mat-label class="header-4"> {{'stockOverview.postcode' | translate}}</mat-label>
+            <input disabled [(ngModel)]="assignPropertyDataNew.postcode" matInput placeholder="{{'stockOverview.postcode' | translate}}">
+          </mat-form-field>
+        </div>
+        <div fxLayout="row" fxLayoutGap="12px" fxFlexAlign="stretch">
+          <mat-form-field class="placeholder-text-1" fxFlex="100" >
+            <mat-label class="header-4">{{'stockOverview.city' | translate}}</mat-label>
+            <input disabled [(ngModel)]="assignPropertyDataNew.place" matInput placeholder="{{'stockOverview.city' | translate}}">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="addTeamMemberInd || assignPropertyInd" fxLayout="row" fxLayoutAlign="end center">
+  <button (click)="cancel()" mat-button class="primary-transparent-button wide">{{'account.cancel' | translate}}</button>
+  <button [disabled]="!newMemberForm?.form.valid && addTeamMemberInd" (click)="update(addTeamMemberInd)"  mat-button class="primary-green-button wide">{{addTeamMemberInd? ('account.add' | translate) : ('account.assign' | translate)}}</button>  
+</div>

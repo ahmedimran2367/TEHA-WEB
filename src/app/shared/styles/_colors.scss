@@ -1,0 +1,127 @@
+/*
+**
+**  Color scheme
+**  You are free to override color from here, but please don't change any color in the main scss file.
+**
+*/
+$darkgreen: #00A253;
+$brightgreen : #00c95D;
+$grey : #808080;
+$darkgrey : #565656;
+$black : #1D2932;
+$white :#F8F8F8;
+$pureWhite :#FFFFFF;
+$red :#FF6161;
+$primary: #00a253;
+$secondary: #808080;
+$onPrimary: #fff;
+$bgGray: #f8f8f8;
+$yellow: #eac400;
+$blue: #016D90;
+$trGray: rgb(230, 228, 228);
+
+.text-darkgreen {
+  color: $darkgreen;
+}
+.text-darkgrey {
+  color: $darkgrey;
+}
+.text-red {
+  color: $red;
+}
+
+.text-black {
+  color: $black;
+}
+.text-gray {
+  color: $secondary;
+}
+
+.brightgreen {
+  background: $brightgreen;
+}
+
+.darkgreen {
+  background: $darkgreen;
+}
+
+
+.text-white {
+  color: white;
+}
+
+.text-brightgreen {
+  color: $brightgreen;
+}
+
+.text-blue {
+  color: $blue;
+}
+
+
+
+
+
+.warning {
+  color: $yellow;
+}
+
+.complete {
+  color: $primary;
+}
+.link {
+  color: $blue;
+  cursor: pointer;
+}
+/*
+$primary: red;
+$secondary: blue;
+$onPrimary: green;
+*/
+
+.dark-green-button {
+  padding-top: 11px;
+  padding-bottom: 11px;
+  padding-left: 29px;
+  padding-right: 29px;
+  color: $pureWhite;
+  background: $darkgreen;
+  border-radius: 5px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 21px;
+  /* identical to box height */
+
+  letter-spacing: 0.05em;
+}
+
+.mat-button.mat-teha {
+  color: $darkgreen;
+}
+
+.mat-raised-button.mat-teha,
+.mat-flat-button.mat-teha {
+  background-color: $darkgreen;
+  color: white;
+}
+
+.warning-color {
+  color: #ff6161 !important;
+}
+
+.primary-color {
+  color: #00c95d !important;
+}
+ .grid-table {
+   tr:hover {
+     background-color: $trGray;
+   }
+   th {
+    color: $darkgrey;
+   }
+   td{
+    color: $grey;
+   }
+ }
+ 

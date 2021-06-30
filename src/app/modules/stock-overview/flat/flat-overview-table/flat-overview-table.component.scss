@@ -1,0 +1,36 @@
+@import "./../../../../shared/styles/spacing";
+@import "./../../../../shared/styles/colors";
+@import "./../../../../shared/styles/typography";
+@import "./../../../../shared/styles/deep";
+
+.selected-filter-icon {
+  color: $primary;
+}
+.menu-button {
+  padding-left: 0.7vw;
+  padding-right: 0.7vw;
+}
+.text-brightgreen.paragraph {
+  text-decoration: none;
+}
+.mat-header-cell,
+.mat-cell {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.pre-class {
+  white-space: pre;
+}
+.hint-txt {
+  font-family: Roboto-Light;
+  font-size: 14px;
+  line-height: normal;
+}
+
+.on-hold-tooltip {
+  width: 200px;
+}
+.tableHeight {
+  max-height: calc(75vh - 188px);
+  overflow: auto; 
+}

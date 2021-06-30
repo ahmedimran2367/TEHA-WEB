@@ -1,0 +1,26 @@
+@import "./../../../shared/styles/spacing";
+@import "./../../../shared/styles/colors";
+@import "./../../../shared/styles/typography";
+
+
+.map-here {
+  background: #ffffff;
+  min-height: 100px;
+  border-radius: 8px;
+  text-align: center;
+  //background-image: url("https://prodevsblog.com/uploads/blog_image/news_24_1.png");
+  background-clip: content-box;
+  padding: 12px;
+}
+agm-map {
+  height: 100%;
+}
+.mat-card-title {
+  display: flex;
+  justify-content: center;
+}
+
+.map-card {
+  height: 100%;
+}
+ 

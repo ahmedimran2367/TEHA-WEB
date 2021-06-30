@@ -1,0 +1,41 @@
+$sides: (top, bottom, left, right); // Leave this variable alone
+$counter: 0;
+$target: 21;
+
+
+
+// Generating margin and padding
+$val: 4;
+
+@for $counter from 0 to $target {
+  @each $side in $sides {
+
+    // generating margin for box sides
+    .m-#{str-slice($side, 0, 1)}-#{$counter} {
+      margin-#{$side}: #{$counter * $val}px !important;
+    }
+
+    // generating box margin
+    .m-#{$counter} {
+      margin: #{$counter * $val}px !important;
+    }
+
+    // generating padding for box sides
+    .p-#{str-slice($side, 0, 1)}-#{$counter} {
+      padding-#{$side}: #{$counter * $val}px !important;
+    }
+
+    // generating box padding
+    .p-#{$counter} {
+      padding: #{$counter * $val}px !important;
+    }
+
+    // generating box offset for absolute or fixed elements
+    .#{str-slice($side, 0, 1)}-#{$counter} {
+      #{$side}: #{$counter * $val}px !important;
+    }
+  }
+}
+.filter-pad {
+  padding-right: 10px;
+}
